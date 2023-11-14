@@ -5,16 +5,23 @@ import reportWebVitals from './reportWebVitals';
 import HeaderE from './Header';
 import Login from './Login';
 import Frontpage from './Frontpage'
+import Profilepage from './Profilepage';
 import { BrowserRouter } from "react-router-dom"
 import { Route, Routes } from "react-router-dom"
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-  <HeaderE />
-  <Routes><Route path="/login" element= {<Login/>}/><Route path="/" element= {<Frontpage/>}/></Routes>
+      <HeaderE />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Frontpage />} />
+        <Route path="/Profile" element={<Profilepage />} />
+      </Routes>
     </BrowserRouter>
   </React.StrictMode>
+  /* Remember to change Profilepage path back to #Profile */
 );
 
 // If you want to start measuring performance in your app, pass a function
