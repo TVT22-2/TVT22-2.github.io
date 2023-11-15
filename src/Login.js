@@ -9,9 +9,21 @@ export default function Login(){
     <div className="ButtonContainer"><div className="Align"><button className="LoginB" id="LoginButton" onClick={returnvalues} onKeyDown={returnvalues}>Login</button><button className="LoginB" id="LoginReset">Forgot Password?</button></div></div>
     </>
     function returnvalues(event){
-     console.log("Password: " + pass + "\n" + "Username: " + user);
-     if (event.key === 'Enter') {
-        console.log('enter was pressed to submit!');
-    }
+        
+        fetch("http://localhost:3001/login/login",{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: new URLSearchParams({
+                "username": user,
+                "password": pass
+            })
+        })
+
+        
+    
+
+        
     }
 }
