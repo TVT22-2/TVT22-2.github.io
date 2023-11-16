@@ -27,10 +27,9 @@ router.post('/register', async (req, res) => {
         res.status(404).json({ error: 'Username already taken' });
     }
 });
-router.post('/login', async (req, res) => {
+router.post('/login', upload.none(), async (req, res) => {
     const name = req.body.username;
-    let pw = req.body.password;
-    console.log(name+pw);
+    const pw = req.body.password;
     const pwCheck = await getNamedUsers(name);
     if (pwCheck) {
         const boolcorrect = await bcrypt.compare(pw, pwCheck);

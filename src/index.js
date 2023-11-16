@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import HeaderE from './Header';
-import Login from './Login';
+import Login from './components/Login';
 import Frontpage from './Frontpage'
 import Profilepage from './Profilepage';
 import { BrowserRouter } from "react-router-dom"
