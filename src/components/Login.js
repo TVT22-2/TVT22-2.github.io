@@ -11,8 +11,12 @@ export default function Login() {
         <div className="ButtonContainer"><div className="Align"><button className="LoginB" id="LoginButton" onClick={returnvalues} onKeyDown={returnvalues}>Login</button><button className="LoginB" id="LoginReset">Forgot Password?</button></div></div>
     </>
     async function returnvalues() {
+        if(password !== "" && username !== ""){
         axios.postForm('login/login', { username, password })
             .then(resp => token.value = resp.data.jwtToken)
             .catch(error => console.log(error.message))
+        } else {
+            alert("Check the input fields!")
+        }
     }
 }

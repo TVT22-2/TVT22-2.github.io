@@ -31,9 +31,7 @@ function Home() {
         <div className="DropdownItems"><Link className="dropdowntext" to={props.href} onClick={()=>setSection(props.text)}>{props.text}</Link></div>
     );
 }
-
 }
-
 function Searchbar() {
     function sumbit(event) {
         if (event.key === 'Enter') {
