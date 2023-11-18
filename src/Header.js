@@ -23,7 +23,6 @@ function Home() {
             <div></div><Searchbar /><div className="footer"><p>About us || Contact Us || Help</p></div>
             </div>
         </>
-         /* Remember to change Profile href back to #Profile */
     );
 
     function Dropdownelements(props) {

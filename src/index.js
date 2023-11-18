@@ -6,8 +6,7 @@ import HeaderE from './Header';
 import Login from './components/Login';
 import Frontpage from './Frontpage'
 import Profilepage from './Profilepage';
-import { BrowserRouter } from "react-router-dom"
-import { Route, Routes } from "react-router-dom"
+import { BrowserRouter,Route, Routes } from "react-router-dom"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,7 +14,7 @@ root.render(
     <BrowserRouter>
       <HeaderE />
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login />}/>
         <Route path="/" element={<Frontpage />} />
         <Route path="/Profile" element={<Profilepage />} />
       </Routes>
