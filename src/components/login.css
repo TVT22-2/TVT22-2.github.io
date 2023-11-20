@@ -39,3 +39,12 @@
     border: none;
     background: none;
 }
+.alert{
+    width:100%; 
+    color: red; 
+    font-weight: bold;
+    text-align: center;
+    height:30px; 
+    margin-top: 20px; 
+    background-color: rgba(242, 34, 34, 0.6);
+}
