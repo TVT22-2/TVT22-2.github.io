@@ -17,10 +17,12 @@ router.get('/', async (req, res) => {
 router.post('/register', async (req, res) => {
     const name = req.body.username;
     let pw = req.body.password;
+    const rec = req.body.recovery;
     const pwCheck = await getNamedUsers(name);
     if (!pwCheck) {
         const passHash = await bcrypt.hash(pw, 10)
-        await addenduser(name, passHash);
+        const recHash = await bcrypt.hash(rec, 10)
+        await addenduser(name, passHash, recHash);
         const token = createToken(name);
         res.status(200).json({ jwtToken: token });
     } else {
