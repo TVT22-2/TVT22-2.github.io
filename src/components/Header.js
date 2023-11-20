@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { token } from "./components/react-signals"
+import { token } from "./react-signals"
 import "./home.css"
-import nav from "./resources/navbuttonplaceholder.png"
+import nav from "../resources/navbuttonplaceholder.png"
 import { Link } from "react-router-dom"
 
 function Home() {
