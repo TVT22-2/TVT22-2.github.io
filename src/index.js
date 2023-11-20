@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import Frontpage from './Frontpage/Frontpage'
 import Profilepage from './Profilepage';
+import GroupPage from './GroupPage';
 import { BrowserRouter,Route, Routes } from "react-router-dom"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -18,6 +19,7 @@ root.render(
         <Route path="/login" element={<Login />}/>
         <Route path="/" element={<Frontpage />} />
         <Route path="/Profile" element={<Profilepage />} />
+        <Route path="/Group" element={<GroupPage />} />
       </Routes>
       <Footer/>
     </BrowserRouter>
