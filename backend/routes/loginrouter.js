@@ -30,6 +30,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', upload.none(), async (req, res) => {
     const name = req.body.username;
     const pw = req.body.password;
+    console.log(req.body.username + " / " + req.body.password);
     const pwCheck = await getNamedUsers(name);
     if (pwCheck) {
         const boolcorrect = await bcrypt.compare(pw, pwCheck);

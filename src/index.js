@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import HeaderE from './Header';
+import Footer from './Footer';
 import Login from './components/Login';
 import Frontpage from './Frontpage'
 import Profilepage from './Profilepage';
@@ -18,6 +19,7 @@ root.render(
         <Route path="/" element={<Frontpage />} />
         <Route path="/Profile" element={<Profilepage />} />
       </Routes>
+      <Footer/>
     </BrowserRouter>
   </React.StrictMode>
   /* Remember to change Profilepage path back to #Profile */

@@ -20,8 +20,9 @@ let TrendingMovies = [
 ];
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
+    const MakeApiRequests = false;
     useEffect(() => {
-        if(UpcomingMovies.length<=1){
+        if(UpcomingMovies.length<=1 && MakeApiRequests === true){
             MovieDBReg("trend");
             MovieDBReg("upcom");
         } else {
@@ -35,6 +36,7 @@ export default function Frontpage() {
      </>
     );
     } 
+    if(MakeApiRequests){
     return (
         <>
         <MovieElementHead/>
@@ -44,16 +46,29 @@ export default function Frontpage() {
         <MovieBrowser text="upcom"/>
         <HeaderElement text="recent reviews"/>
         <MovieBrowser/>
+
         <br></br>
         <br></br>
         <br></br>
     </>
     );
+    } else {
+     return (
+        <>
+        <MovieElementHead/>
+        <HeaderElement text="treding"/>
+        <HeaderElement text="upcoming"/>
+        <HeaderElement text="recent reviews"/>
+        <br></br>
+        <br></br>
+        <br></br>
+        </>
+    );
+    } 
     function MovieElementHead(props) {
-
         return (
             <li className="moviecontainer">
-                <img src={placeholder} alt="bigdogstatus" className="elementimage">
+                <img src={placeholder} alt="bigdogstatus" className="recentImage">
                 </img>
                 <article className="movieinfo">
                     <div className="title">George orwell</div>
@@ -71,9 +86,9 @@ export default function Frontpage() {
         <div className="ImageContainer">
         <img src={imageurl} alt="bigdogstatus" className="elementimage"/>
         </div>
-        <div className="verticaltext">{props.title}</div>
-        <div className="verticaltext">{props.genre}</div>
-        <div className="verticaltext">{props.popularity}</div>
+        <div className="verticaltext">Title: {props.title}</div>
+        <div className="verticaltext">GenreId: {props.genre}</div>
+        <div className="verticaltext">Popularity: {props.popularity}</div>
         </div>
         );
     }
@@ -90,11 +105,7 @@ export default function Frontpage() {
             <nav className="navBar">
             <div className="container">
             <ul className="nav">
-            <MovieElementVertical title={UpcomingMovies[1].title} genre={UpcomingMovies[1].genreid} popularity={UpcomingMovies[1].popularity} imagepath={UpcomingMovies[1].posterpath}/>
-            <MovieElementVertical title={UpcomingMovies[2].title} genre={UpcomingMovies[2].genreid} popularity={UpcomingMovies[2].popularity} imagepath={UpcomingMovies[2].posterpath}/>
-            <MovieElementVertical title={UpcomingMovies[3].title} genre={UpcomingMovies[3].genreid} popularity={UpcomingMovies[3].popularity} imagepath={UpcomingMovies[3].posterpath}/>
-            <MovieElementVertical title={UpcomingMovies[4].title} genre={UpcomingMovies[4].genreid} popularity={UpcomingMovies[4].popularity} imagepath={UpcomingMovies[4].posterpath}/>
-            <MovieElementVertical title={UpcomingMovies[5].title} genre={UpcomingMovies[5].genreid} popularity={UpcomingMovies[5].popularity} imagepath={UpcomingMovies[5].posterpath}/>
+            <MovieElementRender var = {props.text}/>
             </ul>
             </div>
             </nav>
@@ -105,19 +116,27 @@ export default function Frontpage() {
                 <nav className="navBar">
                 <div className="container">
                 <ul className="nav">
-                <MovieElementVertical title={TrendingMovies[1].title} genre={TrendingMovies[1].genreid} popularity={TrendingMovies[1].popularity} imagepath={TrendingMovies[1].posterpath}/>
-                <MovieElementVertical title={TrendingMovies[2].title} genre={TrendingMovies[2].genreid} popularity={TrendingMovies[2].popularity} imagepath={TrendingMovies[2].posterpath}/>
-                <MovieElementVertical title={TrendingMovies[3].title} genre={TrendingMovies[3].genreid} popularity={TrendingMovies[3].popularity} imagepath={TrendingMovies[3].posterpath}/>
-                <MovieElementVertical title={TrendingMovies[4].title} genre={TrendingMovies[4].genreid} popularity={TrendingMovies[4].popularity} imagepath={TrendingMovies[4].posterpath}/>
-                <MovieElementVertical title={TrendingMovies[5].title} genre={TrendingMovies[5].genreid} popularity={TrendingMovies[5].popularity} imagepath={TrendingMovies[5].posterpath}/>
+                <MovieElementRender var = {props.text}/>
                 </ul>
                 </div>
                 </nav>
                 );
         }
     }
+  function MovieElementRender(props){
+    let row = [];
+    if(props.var === "trend"){
+    for (let i = 1; i<=10;i++){
+     row.push(<MovieElementVertical title={TrendingMovies[i].title} genre={TrendingMovies[i].genreid} popularity={TrendingMovies[i].popularity} imagepath={TrendingMovies[i].posterpath}/>)
+    }
+}else if(props.var === "upcom"){
+    for (let i = 1; i<=10;i++){
+        row.push(<MovieElementVertical title={UpcomingMovies[i].title} genre={UpcomingMovies[i].genreid} popularity={UpcomingMovies[i].popularity} imagepath={UpcomingMovies[i].posterpath}/>)
+       }
+}
+    return row;
+  }
   function APIcall(saveval){
-
     let fetchresponse;
         const options = {
             method: 'GET',
@@ -138,6 +157,21 @@ export default function Frontpage() {
             return fetchresponse
           }
     }
+    function getGenreId(){
+        let fetchresponse;
+        const options = {
+            method: 'GET',
+            headers: {
+              accept: 'application/json',
+              Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YzgzMGVlZjk2NThlYWMyNmE5YmJiYTMyMDJiYzIyMSIsInN1YiI6IjY1NDM4YmZmOWNjNjdiMDBkZjkxY2FkZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YfFUMP1RQ9zgAuGJuPPFUWhcmGV-IV2NeLpJeEu4AHk'
+            }
+          };
+          
+          fetchresponse = fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
+            .then(response => fetchresponse = response.json())
+            .catch(err => console.error(err));
+        return fetchresponse;
+    }
     async function MovieDBReg(saveval){
         let moviearray = {
             title: "",
@@ -146,7 +180,7 @@ export default function Frontpage() {
             popularity: ""
             };
         let data = await APIcall(saveval);
-        for (let i = 0; i<5;i++){
+        for (let i = 0; i<10;i++){
             if(data.results[i].title === undefined){
                moviearray = 
                 {
@@ -171,7 +205,7 @@ export default function Frontpage() {
              TrendingMovies.push(moviearray);
              }
         }
-        if(UpcomingMovies.length>5 && TrendingMovies.length>5){
+        if(UpcomingMovies.length>10 && TrendingMovies.length>10){
         setLoading(false);
         }
     }
