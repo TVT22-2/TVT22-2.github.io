@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import HeaderE from './Header';
-import Footer from './Footer';
+import HeaderE from './components/Header';
+import Footer from './components/Footer';
 import Login from './components/Login';
-import Frontpage from './Frontpage'
+import Frontpage from './Frontpage/Frontpage'
 import Profilepage from './Profilepage';
 import GroupPage from './GroupPage';
 import { BrowserRouter,Route, Routes } from "react-router-dom"
