@@ -6,7 +6,7 @@ import HeaderE from './components/Header';
 import Footer from './components/Footer';
 import Login from './components/Login';
 import Frontpage from './Frontpage/Frontpage'
-import Profilepage from './Profilepage';
+import Profilepage from './Profilepage/Profilepage';
 import GroupPage from './GroupPage';
 import { BrowserRouter,Route, Routes } from "react-router-dom"
 
