@@ -1,0 +1,50 @@
+.Profilepage{
+    display: flex;
+    flex-direction: row;
+}
+
+.OwnReviews {
+    display: flex;
+    flex-direction: column;
+    width: 33%;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #030303;
+    margin: 15px 15px 15px 50px;
+}
+
+.OwnReviewsHeader {
+    background-color: orange;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #030303;
+    margin-bottom: 5px;
+}
+
+.Buttons {
+    margin-bottom: 5px;
+}
+
+.MovieTitle,
+.Rating,
+.Text {
+    border: 1px solid #030303;
+    width: 90%;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.FavouriteMovies {
+    display: flex;
+    flex-direction: column;
+    width: 28%;
+    height: 300px;
+    justify-content:center;
+    align-items: center;
+    border: 1px solid #141313;
+    margin: 15px 15px 15px 15px;
+}
+
+.MovieTitle{
+
+}
