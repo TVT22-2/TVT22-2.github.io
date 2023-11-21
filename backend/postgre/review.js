@@ -2,7 +2,7 @@ const pgPool = require('./connection');
 
 const sql = {
     INSERT_REVIEW: 'INSERT INTO review (content,date,review,iduser,idmovie) VALUES ($1,$2,$3,$4,$5)',
-    GET_RECENT_REVIEW: 'SELECT * FROM review ORDER BY date DESC LIMIT 1',
+    GET_RECENT_REVIEW: 'SELECT * FROM review ORDER BY date DESC LIMIT 5',
     GET_OWN_REVIEWS: 'SELECT * FROM review WHERE iduser = (1$)',
     GET_MOVIE_REVIEW: 'SELECT * FROM review where idmovie = (1$)'
 }
