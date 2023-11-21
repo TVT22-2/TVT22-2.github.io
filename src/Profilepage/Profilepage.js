@@ -1,12 +1,13 @@
 import React from "react";
 import "./Profilepage.css"
-import image from "../resources/placeholderimage2.jpg"
+import image from "../resources/placeholderimage3.jpg"
 
 function Profilepage() {
     return (
         <div className="Profilepage">
             <OwnReviews />
-            <FavouriteMovies />
+            <FavouriteMoviesAndGroups />
+            <PostsAndNews />
         </div>
     )
 }
@@ -16,7 +17,7 @@ function OwnReviews() {
     return (
         <div className="OwnReviews">
             <div className="OwnReviewsHeader">
-                <h1 >Own Reviews</h1>
+                <h1>Own Reviews</h1>
             </div>
             <MovieTitle />
             <Rating />
@@ -29,14 +30,70 @@ function OwnReviews() {
     );
 }
 
+function FavouriteMoviesAndGroups() {
+    return (
+        <div className="FavouriteMoviesAndGroups">
+            <FavouriteMovies />
+            <Groups />
+        </div>
+    );
+}
+
+function PostsAndNews() {
+    return (
+        <div className="PostsAndNews">
+            <Buttons />
+            <div className="PostsAndNewsHeader">
+                <h1>Posts / Newsfeed</h1>
+            </div>
+            <MovieTitle />
+            <Timestamp />
+            <Text />
+            <Image />
+            <Buttons />
+        </div>
+    );
+}
+
 function FavouriteMovies() {
     return (
         <div className="FavouriteMovies">
-            <ol>
-                <MovieTitle />
-                <MovieTitle />
-                <MovieTitle />
+            <div className="FavouriteMoviesHeader">
+                <h1>Favourite Movies</h1>
+            </div>
+            <ol className="FavouriteMoviesList">
+                <li><MovieTitle /></li>
+                <li><MovieTitle /></li>
+                <li><MovieTitle /></li>
+                <li><MovieTitle /></li>
+                <li><MovieTitle /></li>
             </ol>
+        </div>
+    );
+}
+
+function Groups() {
+    return (
+        <div className="Groups">
+            <div className="GroupsHeader">
+                <h1 >Groups</h1>
+            </div>
+            <ul className="GroupsList">
+                <li><GroupName /></li>
+                <li><GroupName /></li>
+                <li><GroupName /></li>
+                <li><GroupName /></li>
+                <li><GroupName /></li>
+            </ul>
+            <Buttons />
+        </div>
+    );
+}
+
+function GroupName() {
+    return (
+        <div className="GroupName">
+            <h2>Group</h2>
         </div>
     );
 }
@@ -44,7 +101,7 @@ function FavouriteMovies() {
 function MovieTitle() {
     return (
         <div className="MovieTitle">
-            <h2>Movie Title: Garfield</h2>
+            <h2>Title</h2>
         </div>
     );
 }
@@ -52,7 +109,7 @@ function MovieTitle() {
 function Rating() {
     return (
         <div className="Rating">
-            <h3>Rating</h3>
+            <h3>Rating: 5/5</h3>
         </div>
     );
 }
@@ -69,10 +126,26 @@ function Text() {
 function Buttons() {
     return (
         <div className="Buttons">
-            <button>Previous</button>
-            <button>Next</button>
+            <button id="ButtonPrevious">Previous</button>
+            <button id="ButtonNext">Next</button>
         </div>
     );
+}
+
+function Timestamp() {
+    return (
+        <div className="Timestamp">
+            <h2>Timestamp</h2>
+        </div>
+    );
+}
+
+function Image() {
+    return (
+        <div className="Image">
+            <img src={image} alt="placeholder" className="placeholderImage" />
+        </div>
+    )
 }
 
 export default Profilepage;
