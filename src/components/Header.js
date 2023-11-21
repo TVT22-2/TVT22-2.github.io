@@ -16,8 +16,11 @@ function Home() {
                     <img src={nav} alt="navigation button" className="navimg"></img>
                     <div className={`dropdownmenu ${open ? 'active' : 'inactive'}`}>
                         <Dropdownelements text="Home" href="/" Header="Login" />
-                        <Dropdownelements text={`${token.value.length > 0 ? 'Logout' : 'Login'}`} href="/login" Header="Login"/>
                         <Dropdownelements text="Profile" href="/Profile" Header="Profile" />
+                        <Dropdownelements text={`${token.value.length > 0 ? 'Logout' : 'Login'}`} href="/login" Header="Login"/>
+                        {token.value.length > 0 ? <></> : 
+                        <Dropdownelements text="Register" href="/Register" Header="Register" />
+                        }
                     </div>
                 </div>
             </header>

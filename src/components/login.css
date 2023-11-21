@@ -9,7 +9,7 @@
     align-items: center;
     margin-top: 80px;
 }
-.Username, .Password{
+.Username, .Password, .newPass{
     margin-top: 20px; 
     height: 40px;
     display: block;
@@ -47,4 +47,9 @@
     height:30px; 
     margin-top: 20px; 
     background-color: rgba(242, 34, 34, 0.6);
+}
+.Register{
+  display: block;
+  margin: auto;
+  align-items: center;
 }
