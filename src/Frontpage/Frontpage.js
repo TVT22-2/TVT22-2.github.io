@@ -1,4 +1,3 @@
-import placeholder from "../resources/placeholderimage.jpg"
 import placeholdergif from "../resources/Loading.gif"
 import React, { useEffect, useState } from "react";
 import "./frontpage.css"
@@ -20,7 +19,8 @@ let TrendingMovies = [
 ];
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
-    const MakeApiRequests = false;
+    let [index, setIndex] = useState(1);
+    const MakeApiRequests = true;
     useEffect(() => {
         if(UpcomingMovies.length<=1 && MakeApiRequests === true){
             MovieDBReg("trend");
@@ -37,6 +37,13 @@ export default function Frontpage() {
     );
     } 
     if(MakeApiRequests){
+        setTimeout(function() {
+            if(index<10){
+               setIndex(++index);
+            } else {
+                setIndex(1);    
+            }
+        }, 8000);
     return (
         <>
         <MovieElementHead/>
@@ -64,18 +71,20 @@ export default function Frontpage() {
         </>
     );
     } 
-    function MovieElementHead(props) {
+    function MovieElementHead() {
+        let url = "https://image.tmdb.org/t/p/w500/" + UpcomingMovies[index].posterpath;
         return (
+            <>
             <li className="moviecontainer">
-                <img src={placeholder} alt="bigdogstatus" className="recentImage">
+                <img src={url} alt="bigdogstatus" className="recentImage">
                 </img>
                 <article className="movieinfo">
-                    <div className="title">George orwell</div>
-                    <div className="title">Fantasy</div>
-                    <div className="title">3/5</div>
+                    <div className="title">{UpcomingMovies[index].title}</div>
+                    <div className="title">{UpcomingMovies[index].genreid}</div>
+                    <div className="title">{UpcomingMovies[index].popularity}</div>
                 </article>
-            </li>
-            
+            </li> 
+            </>
         );
     }
     function MovieElementVertical(props) {
@@ -141,7 +150,7 @@ export default function Frontpage() {
             method: 'GET',
             headers: {
               accept: 'application/json',
-              Authorization: 'Bearer'
+              Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YzgzMGVlZjk2NThlYWMyNmE5YmJiYTMyMDJiYzIyMSIsInN1YiI6IjY1NDM4YmZmOWNjNjdiMDBkZjkxY2FkZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YfFUMP1RQ9zgAuGJuPPFUWhcmGV-IV2NeLpJeEu4AHk'
             }
           };
           if(saveval === "upcom"){
@@ -162,7 +171,7 @@ export default function Frontpage() {
             method: 'GET',
             headers: {
               accept: 'application/json',
-              Authorization: 'Bearer'
+              Authorization: 'Bearer '
             }
           };
           
