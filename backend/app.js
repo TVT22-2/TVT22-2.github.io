@@ -11,13 +11,10 @@ app.use(cors());
 app.use(express.static('public'));
 
 app.use('/login', loginRouter);
-app.use('/get', groupRouter);
+app.use('/', groupRouter);
 
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, function(){
     console.log("Server is running on port " + PORT)
 });
-
-
-

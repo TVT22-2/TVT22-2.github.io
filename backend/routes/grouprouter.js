@@ -4,7 +4,7 @@ const upload = multer({ dest: 'upload/' });
 
 const {addGroup, getGroups} = require('../postgre/group');
 
-router.get('/', async (req,res) => {
+router.get('/getGroups', async (req,res) => {
     try{
         res.json(await getGroups());
     } catch (error){
