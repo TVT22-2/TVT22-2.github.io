@@ -1,4 +1,4 @@
-const pgPool = require('./connection');
+const pgPool = require('./connection.js');
 
 const sql = {
     INSERT_REVIEW: 'INSERT INTO review (content,date,review,iduser,idmovie) VALUES ($1,$2,$3,$4,$5)',
@@ -7,7 +7,11 @@ const sql = {
     GET_MOVIE_REVIEW: 'SELECT * FROM review where idmovie = (1$)'
 }
 
-getRecentReview();
+//TESTING
+//getRecentReview();
+//getOwnReview()
+//getMovieReview()
+
 
 async function addReview(content,date,review,iduser,idmovie){
     await pgPool.query(sql.INSERT_REVIEW, [content,date,review,iduser,idmovie])
