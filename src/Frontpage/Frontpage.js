@@ -1,6 +1,7 @@
 import placeholdergif from "../resources/Loading.gif"
 import React, { useEffect, useState } from "react";
 import "./frontpage.css"
+import customData from '../components/genreids.json';
 let UpcomingMovies = [
     {
     title: "",
@@ -17,14 +18,23 @@ let TrendingMovies = [
     popularity: ""
     }
 ];
+let RecentMovies = [
+    {
+    title: "",
+    genreid: "",
+    posterpath: "",
+    popularity: ""
+    }
+
+];
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
-    let [index, setIndex] = useState(1);
     const MakeApiRequests = true;
     useEffect(() => {
         if(UpcomingMovies.length<=1 && MakeApiRequests === true){
             MovieDBReg("trend");
             MovieDBReg("upcom");
+            MovieDBReg("recent");
         } else {
         setLoading(false);
     }
@@ -37,13 +47,6 @@ export default function Frontpage() {
     );
     } 
     if(MakeApiRequests){
-        setTimeout(function() {
-            if(index<10){
-               setIndex(++index);
-            } else {
-                setIndex(1);    
-            }
-        }, 8000);
     return (
         <>
         <MovieElementHead/>
@@ -72,16 +75,24 @@ export default function Frontpage() {
     );
     } 
     function MovieElementHead() {
-        let url = "https://image.tmdb.org/t/p/w500/" + UpcomingMovies[index].posterpath;
+        let [index, setIndex] = useState(1);
+        setTimeout(function() {
+            if(index<10){
+               setIndex(++index);
+            } else {
+                setIndex(1);    
+            }
+        }, 8000);
+        let url = "https://image.tmdb.org/t/p/w500/" + RecentMovies[index].posterpath;
         return (
             <>
             <li className="moviecontainer">
                 <img src={url} alt="bigdogstatus" className="recentImage">
                 </img>
                 <article className="movieinfo">
-                    <div className="title">{UpcomingMovies[index].title}</div>
-                    <div className="title">{UpcomingMovies[index].genreid}</div>
-                    <div className="title">{UpcomingMovies[index].popularity}</div>
+                    <div className="title">{RecentMovies[index].title}</div>
+                    <div className="title">{RecentMovies[index].genreid}</div>
+                    <div className="title">{RecentMovies[index].popularity}</div>
                 </article>
             </li> 
             </>
@@ -94,9 +105,9 @@ export default function Frontpage() {
         <div className="ImageContainer">
         <img src={imageurl} alt="bigdogstatus" className="elementimage"/>
         </div>
-        <div className="verticaltext">Title: {props.title}</div>
-        <div className="verticaltext">GenreId: {props.genre}</div>
-        <div className="verticaltext">Popularity: {props.popularity}</div>
+        <div className="verticaltext">{props.title}</div>
+        <div className="verticaltext">{props.genre}</div>
+        <div className="verticaltext">{props.popularity}</div>
         </div>
         );
     }
@@ -158,27 +169,17 @@ export default function Frontpage() {
             .then(response => fetchresponse = response.json())
             .catch(err => console.error(err));
             return fetchresponse
-          } else { 
+          } else if (saveval === "trend") { 
             fetchresponse = fetch('https://api.themoviedb.org/3/trending/all/day?language=en-US', options)
             .then(response => fetchresponse = response.json())
             .catch(err => console.error(err));
             return fetchresponse
-          }
-    }
-    function getGenreId(){
-        let fetchresponse;
-        const options = {
-            method: 'GET',
-            headers: {
-              accept: 'application/json',
-              Authorization: 'Bearer '
-            }
-          };
-          
-          fetchresponse = fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
+          } else {
+            fetchresponse = fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
             .then(response => fetchresponse = response.json())
             .catch(err => console.error(err));
-        return fetchresponse;
+            return fetchresponse
+          }
     }
     async function MovieDBReg(saveval){
         let moviearray = {
@@ -188,12 +189,18 @@ export default function Frontpage() {
             popularity: ""
             };
         let data = await APIcall(saveval);
+        let genrearray = []; 
         for (let i = 0; i<10;i++){
+            genrearray = [];
+            for(let a = 0; a<data.results[i].genre_ids.length; a++){
+                let s = customData.genres.filter(customData => customData.id === data.results[i].genre_ids[a]).map(customData => customData.name);
+                genrearray.push(a+1+ ": " + s + " ");
+            }
             if(data.results[i].title === undefined){
                moviearray = 
                 {
                 title: data.results[i].name,
-                genreid: data.results[i].genre_ids[0],
+                genreid: genrearray,
                 posterpath: data.results[i].poster_path,
                 popularity: data.results[i].popularity
                 }
@@ -201,19 +208,25 @@ export default function Frontpage() {
                 moviearray = 
                 {
                 title: data.results[i].title,
-                genreid: data.results[i].genre_ids[0],
+                genreid: genrearray,
                 posterpath: data.results[i].poster_path,
                 popularity: data.results[i].popularity
                 }
             }
-             if(saveval === "upcom"){
-             UpcomingMovies.push(moviearray);
-             } 
-             if(saveval === "trend"){
-             TrendingMovies.push(moviearray);
-             }
+            switch (saveval){
+                case "upcom": 
+                 UpcomingMovies.push(moviearray);
+                 break; 
+                case "trend":
+                 TrendingMovies.push(moviearray);  
+                 break;
+                case "recent": 
+                 RecentMovies.push(moviearray);
+                default: 
+                 break;
+             }             
         }
-        if(UpcomingMovies.length>10 && TrendingMovies.length>10){
+        if(UpcomingMovies.length>10 && TrendingMovies.length>10 && RecentMovies.length>10){
         setLoading(false);
         }
     }
