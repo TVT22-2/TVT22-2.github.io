@@ -9,6 +9,7 @@ import Frontpage from './Frontpage/Frontpage'
 import Profilepage from './Profilepage/Profilepage';
 import GroupPage from './GroupPage';
 import Moviepage from './Moviepage/Moviepage';
+import Register from './components/Register';
 import { BrowserRouter,Route, Routes } from "react-router-dom"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -22,6 +23,7 @@ root.render(
         <Route path="/Profile" element={<Profilepage />} />
         <Route path="/Group" element={<GroupPage />} />
         <Route path="/Movie" element={<Moviepage />} />
+        <Route path="/Register" element={<Register/>}/>
       </Routes>
       <Footer/>
     </BrowserRouter>
