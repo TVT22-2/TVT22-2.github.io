@@ -1,0 +1,45 @@
+.MoviePage {
+    display: flex;
+    flex-direction: row;
+    text-decoration: none;
+}
+
+.AvgScore {
+    text-align: center;
+    background-color: orange;
+    margin: auto;
+    width: 60%;
+    padding: auto;
+}
+
+.InfoFooter {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.MovieDetail {
+    border: 2px solid black;
+    padding: 10px;
+    width: 30%;
+}
+
+.Review {
+    border: 2px solid black;
+    width: 30%;
+}
+
+.AddReview {
+    border: 2px solid black;
+    width: 30%;
+}
+
+.MovieTitle {
+    border: 2px solid black;
+    width: 50%;
+}
+
+.Genres {
+    border: 2px solid black;
+    width: 50%;
+}

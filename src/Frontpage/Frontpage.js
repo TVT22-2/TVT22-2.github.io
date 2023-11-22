@@ -1,5 +1,5 @@
-import placeholder from "./resources/placeholderimage.jpg"
-import placeholdergif from "./resources/Loading.gif"
+import placeholder from "../resources/placeholderimage.jpg"
+import placeholdergif from "../resources/Loading.gif"
 import React, { useEffect, useState } from "react";
 import "./frontpage.css"
 let UpcomingMovies = [
@@ -46,7 +46,6 @@ export default function Frontpage() {
         <MovieBrowser text="upcom"/>
         <HeaderElement text="recent reviews"/>
         <MovieBrowser/>
-
         <br></br>
         <br></br>
         <br></br>
