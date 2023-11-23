@@ -1,0 +1,36 @@
+.GroupMainMenu {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Groups {
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+    justify-content: space-between;
+    align-items: left;
+    border: 1px solid #030303;
+    margin: 30px 15px 15px;
+    height: auto;
+}
+
+.CreateGroup {
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+    justify-content: space-between;
+    align-items: left;
+    border: 1px solid #030303;
+    margin: 30px 15px 15px;
+    height: auto;
+}
+
+.GroupName {
+    width: 90%;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.GroupDropdown {
+    display: flex;
+}

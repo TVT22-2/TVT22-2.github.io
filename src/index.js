@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import Frontpage from './Frontpage/Frontpage'
 import Profilepage from './Profilepage/Profilepage';
-import GroupPage from './GroupPage';
+import GroupPage from './GroupPage/GroupPage';
 import Moviepage from './Moviepage/Moviepage';
 import Register from './components/Register';
 import { BrowserRouter,Route, Routes } from "react-router-dom"
