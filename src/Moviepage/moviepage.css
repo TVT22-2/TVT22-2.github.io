@@ -19,14 +19,22 @@
 }
 
 .MovieDetail {
-    display: flex;
     border: 2px solid black;
     padding: 10px;
-    width: 30%; 
+    width: 30%;
+    
+}
+
+.MovieInformation {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    
 }
 
 .MovieDetailContent {
-    width: 70%; 
+    width: 100%; 
+    text-align: center;
 }
 
 .AddReview {
@@ -34,9 +42,10 @@
     width: 30%;
 }
 
-.MovieTitle {
+.Movie {
     border: 2px solid black;
-    width: 80%;
+    margin-bottom: 5px;
+    width: 90%;
 }
 
 .ThumbnailContainer {
@@ -54,7 +63,7 @@
 
 .Description {
     line-break: strict;
-    text-align: center;
+    text-align: left;
     width: 100%;
     align-items: flex-end; 
 }
