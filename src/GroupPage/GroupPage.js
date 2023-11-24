@@ -21,16 +21,16 @@ function GroupsL() {
                 </select>
             </div>
                 <ul className="GroupList">
-                    <li><GroupName /></li>
-                    <li><GroupName /></li>
-                    <li><GroupName /></li>
-                    <li><GroupName /></li>
-                    <li><GroupName /></li>
-                    <li><GroupName /></li>
-                    <li><GroupName /></li>
-                    <li><GroupName /></li>
-                    <li><GroupName /></li>
-                    <li><GroupName /></li>
+                    <li><GroupNameG /></li>
+                    <li><GroupNameG /></li>
+                    <li><GroupNameG /></li>
+                    <li><GroupNameG /></li>
+                    <li><GroupNameG /></li>
+                    <li><GroupNameG /></li>
+                    <li><GroupNameG /></li>
+                    <li><GroupNameG /></li>
+                    <li><GroupNameG /></li>
+                    <li><GroupNameG /></li>
                 </ul>
 
 
