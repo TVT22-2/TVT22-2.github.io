@@ -47,7 +47,7 @@ router.post('/forgot', upload.none(), async (req, res) => {
 router.put('/change', upload.none(), async (req, res) => {
     let pw = req.body.password;
     let name = req.body.username;
-    console.log(name     + "/" + pw)
+    console.log(name   + "/" + pw)
     const passHash = await bcrypt.hash(pw, 10)
     const check = await getNamedUsers(name);
     const passCheck = await bcrypt.compare(pw, check)

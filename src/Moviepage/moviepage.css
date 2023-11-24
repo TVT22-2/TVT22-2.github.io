@@ -22,11 +22,19 @@
     border: 2px solid black;
     padding: 10px;
     width: 30%;
+    
 }
 
-.Review {
-    border: 2px solid black;
-    width: 30%;
+.MovieInformation {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    
+}
+
+.MovieDetailContent {
+    width: 100%; 
+    text-align: center;
 }
 
 .AddReview {
@@ -34,12 +42,39 @@
     width: 30%;
 }
 
-.MovieTitle {
+.Movie {
     border: 2px solid black;
-    width: 50%;
+    margin-bottom: 5px;
+    width: 90%;
 }
 
-.Genres {
+.ThumbnailContainer {
+    display: flex;
+    align-items: flex-start; 
+    text-align: right;
+    width: 30%;
+    height: 100px;
+}
+
+.thumbnail-image {
+    width: 100%; 
+    height: auto; 
+}
+
+.Description {
+    line-break: strict;
+    text-align: left;
+    width: 100%;
+    align-items: flex-end; 
+}
+
+.Review {
     border: 2px solid black;
-    width: 50%;
+    width: 30%; 
+}
+
+.ReviewsHeader {
+    text-align: center;
+    background-color: orange;
+    height: 50px;
 }
