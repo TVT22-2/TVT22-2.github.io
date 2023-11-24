@@ -1,43 +1,21 @@
 import placeholdergif from "../resources/Loading.gif"
 import React, { useEffect, useState } from "react";
-import "./frontpage.css"
-import customData from '../components/genreids.json';
-let UpcomingMovies = [
-    {
-    title: "",
-    genreid: "",
-    posterpath: "",
-    popularity: ""
-    }
-];
-let TrendingMovies = [
-    {
-    title: "",
-    genreid: "",
-    posterpath: "",
-    popularity: ""
-    }
-];
-let RecentMovies = [
-    {
-    title: "",
-    genreid: "",
-    posterpath: "",
-    popularity: ""
-    }
-
-];
+import "./frontpage.css" 
+import { MovieDBRegData, UpcomingMovies, TrendingMovies, RecentMovies  } from'../components/DataLoader';
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
     const MakeApiRequests = true;
     useEffect(() => {
         if(UpcomingMovies.length<=1 && MakeApiRequests === true){
-            MovieDBReg("trend");
-            MovieDBReg("upcom");
-            MovieDBReg("recent");
+            MovieDBRegData("trend");
+            MovieDBRegData("upcom");
+            MovieDBRegData("recent");
         } else {
         setLoading(false);
     }
+    setTimeout(function() {
+        setLoading(false)
+       }, 1000);
     }, []);
     if (isLoading) {
     return (
@@ -137,97 +115,22 @@ export default function Frontpage() {
                 <ul className="nav">
                 <MovieElementRender var = {props.text}/>
                 </ul>
-                </div>
+                </div>  
                 </nav>
                 );
         }
     }
   function MovieElementRender(props){
     let row = [];
+    let array = [];
     if(props.var === "trend"){
-    for (let i = 1; i<=10;i++){
-     row.push(<MovieElementVertical title={TrendingMovies[i].title} genre={TrendingMovies[i].genreid} popularity={TrendingMovies[i].popularity} imagepath={TrendingMovies[i].posterpath}/>)
+    array = TrendingMovies;
+    }else if(props.var === "upcom"){
+    array = UpcomingMovies;
     }
-}else if(props.var === "upcom"){
-    for (let i = 1; i<=10;i++){
-        row.push(<MovieElementVertical title={UpcomingMovies[i].title} genre={UpcomingMovies[i].genreid} popularity={UpcomingMovies[i].popularity} imagepath={UpcomingMovies[i].posterpath}/>)
-       }
-}
+for (let i = 1; i<=10;i++){
+    row.push(<MovieElementVertical title={array[i].title} genre={array[i].genreid} popularity={array[i].popularity} imagepath={array[i].posterpath}/>)
+   }
     return row;
   }
-  function APIcall(saveval){
-    let fetchresponse;
-        const options = {
-            method: 'GET',
-            headers: {
-              accept: 'application/json',
-              Authorization: 'Bearer '
-            }
-          };
-          if(saveval === "upcom"){
-            fetchresponse = fetch('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1', options)
-            .then(response => fetchresponse = response.json())
-            .catch(err => console.error(err));
-            return fetchresponse
-          } else if (saveval === "trend") { 
-            fetchresponse = fetch('https://api.themoviedb.org/3/trending/all/day?language=en-US', options)
-            .then(response => fetchresponse = response.json())
-            .catch(err => console.error(err));
-            return fetchresponse
-          } else {
-            fetchresponse = fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
-            .then(response => fetchresponse = response.json())
-            .catch(err => console.error(err));
-            return fetchresponse
-          }
-    }
-    async function MovieDBReg(saveval){
-        let moviearray = {
-            title: "",
-            genreid: "",
-            posterpath: "",
-            popularity: ""
-            };
-        let data = await APIcall(saveval);
-        let genrearray = []; 
-        for (let i = 0; i<10;i++){
-            genrearray = [];
-            for(let a = 0; a<data.results[i].genre_ids.length; a++){
-                let s = customData.genres.filter(customData => customData.id === data.results[i].genre_ids[a]).map(customData => customData.name);
-                genrearray.push(a+1+ ": " + s + " ");
-            }
-            if(data.results[i].title === undefined){
-               moviearray = 
-                {
-                title: data.results[i].name,
-                genreid: genrearray,
-                posterpath: data.results[i].poster_path,
-                popularity: data.results[i].popularity
-                }
-            } else {
-                moviearray = 
-                {
-                title: data.results[i].title,
-                genreid: genrearray,
-                posterpath: data.results[i].poster_path,
-                popularity: data.results[i].popularity
-                }
-            }
-            switch (saveval){
-                case "upcom": 
-                 UpcomingMovies.push(moviearray);
-                 break; 
-                case "trend":
-                 TrendingMovies.push(moviearray);  
-                 break;
-                case "recent": 
-                 RecentMovies.push(moviearray);
-                default: 
-                 break;
-             }             
-        }
-        if(UpcomingMovies.length>10 && TrendingMovies.length>10 && RecentMovies.length>10){
-        setLoading(false);
-        }
-    }
 }

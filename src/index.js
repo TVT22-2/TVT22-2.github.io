@@ -9,24 +9,24 @@ import Frontpage from './Frontpage/Frontpage'
 import Profilepage from './Profilepage/Profilepage';
 import GroupPage from './GroupPage';
 import Register from './components/Register';
-import { BrowserRouter,Route, Routes } from "react-router-dom"
-
+import Browser from './Browserpage/Browser';
+import { BrowserRouter,Route, Routes } from "react-router-dom" 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <HeaderE />
+      <HeaderE/>
       <Routes>
         <Route path="/login" element={<Login />}/>
         <Route path="/" element={<Frontpage />} />
         <Route path="/Profile" element={<Profilepage />} />
         <Route path="/Group" element={<GroupPage />} />
         <Route path="/Register" element={<Register/>}/>
+        <Route path="/Browse" element={<Browser/>}/>
       </Routes>
       <Footer/>
     </BrowserRouter>
   </React.StrictMode>
-  /* Remember to change Profilepage path back to #Profile */
 );
 
 // If you want to start measuring performance in your app, pass a function
