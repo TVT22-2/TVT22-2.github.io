@@ -4,15 +4,15 @@ import "./GroupPage.css"
 function GroupMainMenu() {
     return (
         <div className="GroupMainMenu">
-            <Groups />
+            <GroupsL />
             <CreateGroup />
         </div>
     )
 }
 
-function Groups() {
+function GroupsL() {
     return (
-        <div className="Groups">
+        <div className="GroupsL">
             <div className="GroupDropdown">
                 <select>
                     <option value="AllGroups">All groups</option>
@@ -79,9 +79,9 @@ function GroupInput() {
     )
 }
 
-function GroupName() {
+function GroupNameG() {
     return (
-        <div className="GroupName">
+        <div className="GroupNameG">
             <h2>Group</h2>
         </div>
     );
