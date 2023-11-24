@@ -1,8 +1,6 @@
 import { effect, signal } from "@preact/signals-react";
 import axios from "axios";
-
 axios.defaults.baseURL = 'http://localhost:3001';
-
 export const token = signal(getSessionToken());
 function getSessionToken(){
     const t = sessionStorage.getItem('token');

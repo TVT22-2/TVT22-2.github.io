@@ -1,0 +1,74 @@
+.elementcontainer{
+    display: flex;
+    flex-basis: 100%;
+    flex-grow: 1;
+    flex-direction: column;
+}
+.HeaderContainer h{
+ font-size: 20px;
+ font-weight: bold;
+ flex-grow: 1;
+ text-align: center;
+ flex-basis: 100%;
+}
+.HeaderContainer{
+    order:1;
+    display: flex;
+    flex-grow: 1;
+    background-color: orange;
+    height: 30px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.placeholderimage{
+    width: 200px;
+    height: 200px;
+}
+.Moviecontainer{
+    order:2;
+    display: flex;
+    margin-bottom: 20px;
+}
+.BrowserInfo{
+    display: flex; 
+    flex-grow: 1;
+    border-style: double;
+    border-color: orange;
+    border-width: 1px;
+    justify-content: center;
+}
+.infocontainer{
+    display: flex;
+    flex-basis: 40%;
+    margin-left: 10px;
+    flex-direction: column;
+    flex-grow: 1;
+    border-style: double;
+    border-color: orange;
+    border-width: 1px;
+}
+.buttoncontainer{
+    display: flex;
+    flex-basis: 100%;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+.buttoncontainer button{
+    width: 30%;
+}
+.buttonright{
+    float:right;
+    align-items: flex-end;
+}
+.buttonleft{
+    float:left;
+    align-items: flex-start;
+}
+.buttonrighttext{
+    text-align: right; 
+    float:right;
+}
+.buttonlefttext{
+    text-align: left; 
+    float:left;
+}

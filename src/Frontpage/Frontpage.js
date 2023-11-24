@@ -1,33 +1,21 @@
-import placeholder from "../resources/placeholderimage.jpg"
 import placeholdergif from "../resources/Loading.gif"
 import React, { useEffect, useState } from "react";
-import "./frontpage.css"
-let UpcomingMovies = [
-    {
-    title: "",
-    genreid: "",
-    posterpath: "",
-    popularity: ""
-    }
-];
-let TrendingMovies = [
-    {
-    title: "",
-    genreid: "",
-    posterpath: "",
-    popularity: ""
-    }
-];
+import "./frontpage.css" 
+import { MovieDBRegData, UpcomingMovies, TrendingMovies, RecentMovies  } from'../components/DataLoader';
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
-    const MakeApiRequests = false;
+    const MakeApiRequests = true;
     useEffect(() => {
         if(UpcomingMovies.length<=1 && MakeApiRequests === true){
-            MovieDBReg("trend");
-            MovieDBReg("upcom");
+            MovieDBRegData("trend");
+            MovieDBRegData("upcom");
+            MovieDBRegData("recent");
         } else {
         setLoading(false);
     }
+    setTimeout(function() {
+        setLoading(false)
+       }, 1000);
     }, []);
     if (isLoading) {
     return (
@@ -64,18 +52,28 @@ export default function Frontpage() {
         </>
     );
     } 
-    function MovieElementHead(props) {
+    function MovieElementHead() {
+        let [index, setIndex] = useState(1);
+        setTimeout(function() {
+            if(index<10){
+               setIndex(++index);
+            } else {
+                setIndex(1);    
+            }
+        }, 8000);
+        let url = "https://image.tmdb.org/t/p/w500/" + RecentMovies[index].posterpath;
         return (
+            <>
             <li className="moviecontainer">
-                <img src={placeholder} alt="bigdogstatus" className="recentImage">
+                <img src={url} alt="bigdogstatus" className="recentImage">
                 </img>
                 <article className="movieinfo">
-                    <div className="title">George orwell</div>
-                    <div className="title">Fantasy</div>
-                    <div className="title">3/5</div>
+                    <div className="title">{RecentMovies[index].title}</div>
+                    <div className="title">{RecentMovies[index].genreid}</div>
+                    <div className="title">{RecentMovies[index].popularity}</div>
                 </article>
-            </li>
-            
+            </li> 
+            </>
         );
     }
     function MovieElementVertical(props) {
@@ -85,9 +83,9 @@ export default function Frontpage() {
         <div className="ImageContainer">
         <img src={imageurl} alt="bigdogstatus" className="elementimage"/>
         </div>
-        <div className="verticaltext">Title: {props.title}</div>
-        <div className="verticaltext">GenreId: {props.genre}</div>
-        <div className="verticaltext">Popularity: {props.popularity}</div>
+        <div className="verticaltext">{props.title}</div>
+        <div className="verticaltext">{props.genre}</div>
+        <div className="verticaltext">{props.popularity}</div>
         </div>
         );
     }
@@ -117,95 +115,22 @@ export default function Frontpage() {
                 <ul className="nav">
                 <MovieElementRender var = {props.text}/>
                 </ul>
-                </div>
+                </div>  
                 </nav>
                 );
         }
     }
   function MovieElementRender(props){
     let row = [];
+    let array = [];
     if(props.var === "trend"){
-    for (let i = 1; i<=10;i++){
-     row.push(<MovieElementVertical title={TrendingMovies[i].title} genre={TrendingMovies[i].genreid} popularity={TrendingMovies[i].popularity} imagepath={TrendingMovies[i].posterpath}/>)
+    array = TrendingMovies;
+    }else if(props.var === "upcom"){
+    array = UpcomingMovies;
     }
-}else if(props.var === "upcom"){
-    for (let i = 1; i<=10;i++){
-        row.push(<MovieElementVertical title={UpcomingMovies[i].title} genre={UpcomingMovies[i].genreid} popularity={UpcomingMovies[i].popularity} imagepath={UpcomingMovies[i].posterpath}/>)
-       }
-}
+for (let i = 1; i<=10;i++){
+    row.push(<MovieElementVertical title={array[i].title} genre={array[i].genreid} popularity={array[i].popularity} imagepath={array[i].posterpath}/>)
+   }
     return row;
   }
-  function APIcall(saveval){
-    let fetchresponse;
-        const options = {
-            method: 'GET',
-            headers: {
-              accept: 'application/json',
-              Authorization: 'Bearer'
-            }
-          };
-          if(saveval === "upcom"){
-            fetchresponse = fetch('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1', options)
-            .then(response => fetchresponse = response.json())
-            .catch(err => console.error(err));
-            return fetchresponse
-          } else { 
-            fetchresponse = fetch('https://api.themoviedb.org/3/trending/all/day?language=en-US', options)
-            .then(response => fetchresponse = response.json())
-            .catch(err => console.error(err));
-            return fetchresponse
-          }
-    }
-    function getGenreId(){
-        let fetchresponse;
-        const options = {
-            method: 'GET',
-            headers: {
-              accept: 'application/json',
-              Authorization: 'Bearer'
-            }
-          };
-          
-          fetchresponse = fetch('https://api.themoviedb.org/3/genre/movie/list?language=en', options)
-            .then(response => fetchresponse = response.json())
-            .catch(err => console.error(err));
-        return fetchresponse;
-    }
-    async function MovieDBReg(saveval){
-        let moviearray = {
-            title: "",
-            genreid: "",
-            posterpath: "",
-            popularity: ""
-            };
-        let data = await APIcall(saveval);
-        for (let i = 0; i<10;i++){
-            if(data.results[i].title === undefined){
-               moviearray = 
-                {
-                title: data.results[i].name,
-                genreid: data.results[i].genre_ids[0],
-                posterpath: data.results[i].poster_path,
-                popularity: data.results[i].popularity
-                }
-            } else {
-                moviearray = 
-                {
-                title: data.results[i].title,
-                genreid: data.results[i].genre_ids[0],
-                posterpath: data.results[i].poster_path,
-                popularity: data.results[i].popularity
-                }
-            }
-             if(saveval === "upcom"){
-             UpcomingMovies.push(moviearray);
-             } 
-             if(saveval === "trend"){
-             TrendingMovies.push(moviearray);
-             }
-        }
-        if(UpcomingMovies.length>10 && TrendingMovies.length>10){
-        setLoading(false);
-        }
-    }
 }
