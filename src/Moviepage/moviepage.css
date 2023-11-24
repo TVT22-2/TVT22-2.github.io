@@ -1,0 +1,71 @@
+.MoviePage {
+    display: flex;
+    flex-direction: row;
+    text-decoration: none;
+}
+
+.AvgScore {
+    text-align: center;
+    background-color: orange;
+    margin: auto;
+    width: 60%;
+    padding: auto;
+}
+
+.InfoFooter {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.MovieDetail {
+    display: flex;
+    border: 2px solid black;
+    padding: 10px;
+    width: 30%; 
+}
+
+.MovieDetailContent {
+    width: 70%; 
+}
+
+.AddReview {
+    border: 2px solid black;
+    width: 30%;
+}
+
+.MovieTitle {
+    border: 2px solid black;
+    width: 80%;
+}
+
+.ThumbnailContainer {
+    display: flex;
+    align-items: flex-start; 
+    text-align: right;
+    width: 30%;
+    height: 100px;
+}
+
+.thumbnail-image {
+    width: 100%; 
+    height: auto; 
+}
+
+.Description {
+    line-break: strict;
+    text-align: center;
+    width: 100%;
+    align-items: flex-end; 
+}
+
+.Review {
+    border: 2px solid black;
+    width: 30%; 
+}
+
+.ReviewsHeader {
+    text-align: center;
+    background-color: orange;
+    height: 50px;
+}
