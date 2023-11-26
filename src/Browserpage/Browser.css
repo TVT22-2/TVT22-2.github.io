@@ -15,19 +15,20 @@
     order:1;
     display: flex;
     flex-grow: 1;
-    background-color: orange;
-    height: 30px;
+    background-color: rgba(255,166,0,0.7);
+    height: 50px;
     align-items: center;
     margin-bottom: 20px;
 }
 .placeholderimage{
     width: 200px;
-    height: 200px;
+    height: 250px;
 }
 .Moviecontainer{
     order:2;
     display: flex;
     margin-bottom: 20px;
+    
 }
 .BrowserInfo{
     display: flex; 
@@ -36,25 +37,29 @@
     border-color: orange;
     border-width: 1px;
     justify-content: center;
+    font-weight: bold;
+    font-size: 15px;
+    background-color: rgba(255, 166, 0,0.5);
 }
 .infocontainer{
+    background-color: rgba(255, 166, 0,0.3);
     display: flex;
     flex-basis: 40%;
     margin-left: 10px;
     flex-direction: column;
     flex-grow: 1;
-    border-style: double;
-    border-color: orange;
-    border-width: 1px;
 }
 .buttoncontainer{
     display: flex;
     flex-basis: 100%;
+    height: 40px;
     flex-grow: 1;
     justify-content: space-between;
+    margin-bottom: 20px;
 }
 .buttoncontainer button{
     width: 30%;
+    background-color: orange;
 }
 .buttonright{
     float:right;
@@ -71,4 +76,7 @@
 .buttonlefttext{
     text-align: left; 
     float:left;
+}
+.BrowserGenre{
+    width: 100%;
 }

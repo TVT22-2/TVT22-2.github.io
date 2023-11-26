@@ -4,15 +4,10 @@ import "./frontpage.css"
 import { MovieDBRegData, UpcomingMovies, TrendingMovies, RecentMovies  } from'../components/DataLoader';
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
-    const MakeApiRequests = true;
     useEffect(() => {
-        if(UpcomingMovies.length<=1 && MakeApiRequests === true){
-            MovieDBRegData("trend");
-            MovieDBRegData("upcom");
-            MovieDBRegData("recent");
-        } else {
-        setLoading(false);
-    }
+            MovieDBRegData("trend", 1,1);
+            MovieDBRegData("upcom", 1,1);
+            MovieDBRegData("recent", 1,1);
     setTimeout(function() {
         setLoading(false)
        }, 1000);
@@ -20,11 +15,9 @@ export default function Frontpage() {
     if (isLoading) {
     return (
      <>
-     <img src={placeholdergif} alt="gif"></img>
      </>
     );
-    } 
-    if(MakeApiRequests){
+    }
     return (
         <>
         <MovieElementHead/>
@@ -38,18 +31,6 @@ export default function Frontpage() {
         <br></br>
         <br></br>
     </>
-    );
-    } else {
-     return (
-        <>
-        <MovieElementHead/>
-        <HeaderElement text="treding"/>
-        <HeaderElement text="upcoming"/>
-        <HeaderElement text="recent reviews"/>
-        <br></br>
-        <br></br>
-        <br></br>
-        </>
     );
     } 
     function MovieElementHead() {
@@ -87,7 +68,7 @@ export default function Frontpage() {
         <div className="verticaltext">{props.genre}</div>
         <div className="verticaltext">{props.popularity}</div>
         </div>
-        );
+        );  
     }
     function HeaderElement(props) {
         return (
@@ -133,4 +114,4 @@ for (let i = 1; i<=10;i++){
    }
     return row;
   }
-}
+

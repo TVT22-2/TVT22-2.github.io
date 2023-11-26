@@ -33,10 +33,10 @@ export default function Login() {
                                 :
                                 <button className="LoginB" id="LoginButton" onClick={returnvalues} onKeyDown={returnvalues}>Login</button>
                             }
-                            <button className="LoginB" id="LoginReset" onClick={() => setForgot(!forgot)}>Forgot Password?</button>
+                            <button className="LoginB" id="LoginReset" onClick={() => setForgot(!forgot) + setUsername("") + setPassword("")}>Forgot Password?</button>
                         </div>
                     </div>
-                    {alertmes.length > 1 ? <div className="alert">{alertmes}</div> : <></>}
+                    {alertmes.length > 3 ? <div className="alert">{alertmes}</div> : <></>}
                 </>
             }
 
@@ -46,7 +46,9 @@ export default function Login() {
         if (password !== "" && username !== "") {
             await axios.postForm('login/login', { username, password })
                 .then(resp => token.value = resp.data.jwtToken)
-                .catch(error => setAlert(error.message + ". Please try again later!"))
+                .catch(error => console.log(error) + setAlert(error.message + ". Please try again later!") + setTimeout(function() {
+                    setAlert("")
+                   }, 6000))
         } else {
             alert("Check the input fields!")
         }
@@ -61,7 +63,9 @@ export default function Login() {
         if (stage === 1) {
             await axios.postForm('login/forgot', { username, recovery })
                 .then(resp => success = resp.data.Success)
-                .catch(error => setAlert(error.message + ". Please try again later!"))
+                .catch(error => setAlert(error.message + ". Please try again later!") + setTimeout(function() {
+                    setAlert("")
+                   }, 6000))
             console.log(success);
             if (success === true) {
                 success = false;
@@ -77,11 +81,14 @@ export default function Login() {
                 console.log("Password: " + password)
                 await axios.putForm('login/change', { username, password })
                     .then(resp => success = resp.data.Success)
-                    .catch(error => setAlert(error.message + ". Please try again later!"))
+                    .catch(error => setAlert(error.message + ". Please try again later!") +setTimeout(function() {
+                        setAlert("")
+                       }, 6000))
             } else {
-                alert("passwords are not the same!");
-                setPassword("");
-                setPassword2("");
+                setAlert("Passwords are not the same!")
+                setTimeout(function() {
+                    setAlert("")
+                   }, 6000)
             }
             if (success === true) {
                 stage = 1;
@@ -91,7 +98,10 @@ export default function Login() {
                 setForgot(false);
                 reset();
             } else {
-                alert("New password cannot be same as old password! ");
+                setAlert("New password cannot be same as old password! ")
+                setTimeout(function() {
+                    setAlert("")
+                   }, 6000)
                 stage = 1;
                 success = false;
                 setPass(false);
