@@ -25,16 +25,17 @@ function InfoFooter() {
     return (
         <div className="InfoFooter">
             <div className="MovieDetail">
+            <div className="MovieInformation">
                 <div className="MovieDetailContent">
-                    <MovieTitle />
+                    <Movie />
                     <Genres />
                     <PG />
                     <ReleaseDate />
-                    <Description />
                 </div>
                     <Thumbnail />
                 </div>
-            
+                    <Description />
+                </div>
                 <div className="Review">
                     <ReviewsHeader />
                 </div>
@@ -46,17 +47,18 @@ function InfoFooter() {
 }
 
 
-function MovieTitle() {
+function Movie() {
     return (
-        <div className="MovieTitle">
+        <div className="Movie">
             <h5>Title</h5>
         </div>
     );
 }
 
+
 function Genres() {
     return (
-        <div className="MovieTitle">
+        <div className="Movie">
             <h5>Genres</h5>
         </div>
     );
@@ -64,7 +66,7 @@ function Genres() {
 
 function PG() {
     return (
-        <div className="MovieTitle">
+        <div className="Movie">
             <h5>Meant for adults??</h5>
         </div>
     );
@@ -72,7 +74,7 @@ function PG() {
 
 function ReleaseDate() {
     return (
-        <div className="MovieTitle">
+        <div className="Movie">
             <h5>Release date</h5>
         </div>
     );
