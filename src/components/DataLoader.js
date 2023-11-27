@@ -1,6 +1,8 @@
 import customData from '../components/genreids.json';
+let amountoffetches = 0;
  let UpcomingMovies = [
     {
+    id: "",
     title: "",
     genreid: "",
     posterpath: "",
@@ -9,6 +11,7 @@ import customData from '../components/genreids.json';
 ];
  let TrendingMovies = [
     {
+    id: "",
     title: "",
     genreid: "",
     posterpath: "",
@@ -17,6 +20,7 @@ import customData from '../components/genreids.json';
 ];
  let RecentMovies = [
     {
+    id: "",
     title: "",
     genreid: "",
     posterpath: "",
@@ -25,30 +29,78 @@ import customData from '../components/genreids.json';
 ];
  let TopratedMovies = [
     {
+    id: "",
     title: "",
     genreid: "",
     posterpath: "",
     popularity: ""
     }
 ];
-export async function MovieDBRegData(saveval){
+ async function MovieDBRegData(saveval, amount, page){ 
+  amountoffetches = amountoffetches + amount;
+  if(amountoffetches>0){
+  switch (saveval){
+    case "upcom": 
+     UpcomingMovies = [
+      {
+      title: "",
+      genreid: "",
+      posterpath: "",
+      popularity: ""
+      }
+  ];
+     break; 
+    case "trend":
+      TrendingMovies = [
+        {
+        title: "",
+        genreid: "",
+        posterpath: "",
+        popularity: ""
+        }
+    ];
+     break;
+    case "recent": 
+    RecentMovies = [
+      {
+      title: "",
+      genreid: "",
+      posterpath: "",
+      popularity: ""
+      }
+  ];
+    break;
+    case "toprated": 
+    TopratedMovies = [
+      {
+      title: "",
+      genreid: "",
+      posterpath: "",
+      popularity: ""
+      }
+  ];
+     break;
+    default: 
+     break;
+ }             
     let moviearray = {
         title: "",
         genreid: "",
         posterpath: "",
         popularity: ""
         };
-    let data = await APIcall(saveval);
+    let data = await APIcall(saveval, page);
     let genrearray = []; 
     for (let i = 0; i<data.results.length;i++){
         genrearray = [];
         for(let a = 0; a<data.results[i].genre_ids.length; a++){
             let s = customData.genres.filter(customData => customData.id === data.results[i].genre_ids[a]).map(customData => customData.name);
-            genrearray.push(a+1+ ": " + s + " ");
+            genrearray.push(a+1+ ": " + s + "    ");
         }
         if(data.results[i].title === undefined){
            moviearray = 
             {
+            id: data.results[i].id,
             title: data.results[i].name,
             genreid: genrearray,
             posterpath: data.results[i].poster_path,
@@ -57,6 +109,7 @@ export async function MovieDBRegData(saveval){
         } else {
             moviearray = 
             {
+            id: data.results[i].id,
             title: data.results[i].title,
             genreid: genrearray,
             posterpath: data.results[i].poster_path,
@@ -72,14 +125,17 @@ export async function MovieDBRegData(saveval){
              break;
             case "recent": 
              RecentMovies.push(moviearray);
+             break;
             case "toprated": 
             TopratedMovies.push(moviearray);
+            break;
             default: 
              break;
          }             
     }
+  }
 }
-function APIcall(saveval){
+function APIcall(saveval, page){
     let fetchresponse;
         const options = {
             method: 'GET',
@@ -89,7 +145,7 @@ function APIcall(saveval){
             }
           };
           if(saveval === "upcom"){
-            fetchresponse = fetch('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1', options)
+            fetchresponse = fetch('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page='+page, options)
             .then(response => fetchresponse = response.json())
             .catch(err => console.error(err));
             return fetchresponse
@@ -99,15 +155,15 @@ function APIcall(saveval){
             .catch(err => console.error(err));
             return fetchresponse
           } else if (saveval === "recent") {
-            fetchresponse = fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
+            fetchresponse = fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page='+page, options)
             .then(response => fetchresponse = response.json())
             .catch(err => console.error(err));
             return fetchresponse
           } else {
-            fetchresponse = fetch('https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1', options)
+            fetchresponse = fetch('https://api.themoviedb.org/3/movie/top_rated?language=en-US&page='+page, options)
             .then(response => fetchresponse = response.json())
             .catch(err => console.error(err));
             return fetchresponse
           }
     }
-    export {TopratedMovies, RecentMovies, TrendingMovies, UpcomingMovies};
+    export {TopratedMovies, RecentMovies, TrendingMovies, UpcomingMovies, MovieDBRegData};
