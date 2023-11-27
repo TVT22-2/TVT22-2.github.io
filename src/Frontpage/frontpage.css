@@ -32,8 +32,7 @@
     flex-basis: 66%;
     width: 150px;
 }
-.title{
-    text-align: center;
+.title{ 
     flex-grow:1;
     font-weight: bold;
     margin-top: 20px;
@@ -46,7 +45,9 @@
  text-align: center;
 }
 .headingelement{
+    justify-content: center;
     background-color: orange;
+    height:60px;
     margin-top: 10px;
     margin-bottom: 10px;
     width: 100%;
@@ -110,4 +111,56 @@
     border-style: double;
     height: 50px;   
     background-color: rgba(255, 166, 0,0.5);
+}
+.verticaltextTitle{
+    overflow: hidden;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center; 
+    margin:auto;
+    flex-basis: 10%;
+    width: 250px;
+    border-color:orange;
+    border-style: double;
+    height: 50px;   
+    background-color: rgba(255, 166, 0,0.5);
+    margin-bottom: 20px;
+}
+.verticaltextScore{
+    display: flex;
+    overflow: hidden;
+    font-weight: bold;
+    justify-content: center;
+    text-align: center;
+    align-items: center; 
+    width: 150px;
+    border-color:orange;
+    border-style: double;
+    height: 50px;   
+    background-color: rgba(255, 166, 0,0.5);
+    margin-bottom: 20px;
+}
+.verticaltextReview{
+    display: flex;
+    overflow: hidden;
+    font-weight: bold;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    display: inline-block;
+    flex-basis: 100%;
+    width: 250px;
+    border-color:orange;
+    border-style: double;
+    height: 100px;   
+    background-color: rgba(255, 166, 0,0.5);
+}
+.FrontpageReviewContainer{
+display: flex; 
+align-items: center;
+justify-content: center;
+flex-direction: column;
+  margin-right:60px;
 }

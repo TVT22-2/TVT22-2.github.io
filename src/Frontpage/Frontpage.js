@@ -1,13 +1,14 @@
 import placeholdergif from "../resources/Loading.gif"
 import React, { useEffect, useState } from "react";
 import "./frontpage.css" 
-import { MovieDBRegData, UpcomingMovies, TrendingMovies, RecentMovies  } from'../components/DataLoader';
+import { MovieDBRegData,ReviewGetter, UpcomingMovies, TrendingMovies, RecentMovies, ReviewArray  } from'../components/DataLoader';
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
     useEffect(() => {
             MovieDBRegData("trend", 1,1);
             MovieDBRegData("upcom", 1,1);
             MovieDBRegData("recent", 1,1);
+            ReviewGetter();
     setTimeout(function() {
         setLoading(false)
        }, 1000);
@@ -26,13 +27,34 @@ export default function Frontpage() {
         <HeaderElement text="upcoming"/>
         <MovieBrowser text="upcom"/>
         <HeaderElement text="recent reviews"/>
-        <MovieBrowser/>
+        <nav className="navBar">
+            <div className="container">
+            <ul className="nav">
+        <Reviews/>
+        </ul>
+        </div>
+        </nav>
         <br></br>
         <br></br>
         <br></br>
     </>
     );
     } 
+    function Reviews(){
+        let reviews = [];
+        
+        for(let i = 1; i<5; i++){
+         reviews.push(
+        <div className="FrontpageReviewContainer">
+        <div className="verticaltextTitle">{ReviewArray[i].movietitle}</div>
+        <div className="verticaltextScore">5/{ReviewArray[i].review}</div>
+        <div className="verticaltextReview">{ReviewArray[i].content}</div>
+        </div>
+         );
+        }
+    return reviews;
+        
+    }
     function MovieElementHead() {
         let [index, setIndex] = useState(1);
         setTimeout(function() {
@@ -114,4 +136,5 @@ for (let i = 1; i<=10;i++){
    }
     return row;
   }
+
 

@@ -53,3 +53,20 @@
   margin: auto;
   align-items: center;
 }
+.LoginQuery{
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+.LoginButtonYes, .LoginButtonNo{
+    background-color: orange;
+    height: 40px;
+    width: 80px;
+    font-size: 15px;
+}
+.LoginButtonYes{
+    margin-right:20px;
+}
+.LoginButtonNo{
+    margin-left: 20px;
+}

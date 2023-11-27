@@ -21,7 +21,6 @@ async function getRecentReview(){
     const result = await pgPool.query(sql.GET_RECENT_REVIEW);
     const rows = result.rows;
     return rows;
-
 }
 
 async function getOwnReview(){
