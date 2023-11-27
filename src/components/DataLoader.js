@@ -1,4 +1,6 @@
+
 import customData from '../components/genreids.json';
+import axios from "axios";
 let amountoffetches = 0;
  let UpcomingMovies = [
     {
@@ -36,6 +38,48 @@ let amountoffetches = 0;
     popularity: ""
     }
 ];
+let ReviewArray = [
+{
+  review: "",
+  content: "", 
+  movietitle:"",
+}
+]
+async function idParser(movie_id){
+  let fetchresponse;
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YzgzMGVlZjk2NThlYWMyNmE5YmJiYTMyMDJiYzIyMSIsInN1YiI6IjY1NDM4YmZmOWNjNjdiMDBkZjkxY2FkZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YfFUMP1RQ9zgAuGJuPPFUWhcmGV-IV2NeLpJeEu4AHk'
+    }
+  };
+  fetchresponse = fetch('https://api.themoviedb.org/3/movie/'+movie_id+'?language=en-US', options)
+    .then(response => fetchresponse = response.json())
+    .catch(err => console.error(err));
+    console.log(fetchresponse);
+   return fetchresponse;
+}
+ async function ReviewGetter(){
+  let data = await Reviewreg();
+  data.forEach(async element => {
+    let title = await idParser(element.idmovie);
+    let review = 
+    {
+      review: element.review,
+      content: element.content, 
+      movietitle: title.title
+    }
+    ReviewArray.push(review);
+  });
+  console.log(ReviewArray)
+ }
+ async function Reviewreg(){
+  let data;
+  await fetch("http://localhost:3001/getrecentreview")
+  .then(response => data = response.json())
+  return data; 
+ }
  async function MovieDBRegData(saveval, amount, page){ 
   amountoffetches = amountoffetches + amount;
   if(amountoffetches>0){
@@ -166,4 +210,4 @@ function APIcall(saveval, page){
             return fetchresponse
           }
     }
-    export {TopratedMovies, RecentMovies, TrendingMovies, UpcomingMovies, MovieDBRegData};
+    export {TopratedMovies, RecentMovies, TrendingMovies, UpcomingMovies, MovieDBRegData, ReviewGetter,ReviewArray};

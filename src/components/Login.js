@@ -16,7 +16,7 @@ export default function Login() {
     return (
 
         <div>
-            {token.value.length > 0 && pass === false ? <><h2>Are you sure?</h2> <button onClick={() => token.value = undefined + console.log(token.value) + navigate("/")}>yes</button><button onClick={() => navigate("/")}>no</button></> :
+            {token.value.length > 3 && pass === false ? <><div className="LoginQuery"><h2>Are you sure?</h2><button className="LoginButtonYes"Click={() => token.value = "" + console.log(token.value) + navigate("/")}>yes</button><button className="LoginButtonNo" onClick={() => navigate("/")}>no</button></div></> :
                 <>
                     <div className="inputcontainer">
                         {pass === true ? <><input className="newPass" type="text" placeholder="New password" value={password} onChange={e => setPassword(e.target.value)}></input><input className="newPass" type="text" placeholder="New password" value={password2} onChange={e => setPassword2(e.target.value)}></input></> : <>
