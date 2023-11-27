@@ -1,15 +1,78 @@
-
-import React from "react";
+import placeholdergif from "../resources/Loading.gif"
+import React, { useState, useEffect } from 'react';
 import "./moviepage.css"
 
 
-function moviepage() {
-    return (
-        <div className="Moviepage">
-            <AvgScore />
-            <InfoFooter />
-        </div>
-    )
+var movieid = 3052;
+
+let MovieDatas = [
+    {
+    title: "",
+    genreid: "",
+    PG:"",
+    ReleaseDate:"",
+    posterpath: "",
+    overview: "",
+    }
+];
+
+function Test(){
+
+    const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer '
+        }
+      };
+    
+      let fetchresult;
+      fetchresult = fetch('https://api.themoviedb.org/3/movie/'+ movieid, options)
+      .then(response => fetchresult = response.json())
+      .catch(err => console.error(err));
+      return fetchresult;
+}
+
+async function GetDatas(){
+
+    let get = await Test();
+    MovieDatas = {
+        title: get.title,
+        genreid: "",
+        PG: get.adult,
+        ReleaseDate: get.release_date,
+        overview: get.overview,
+        posterpath: get.poster_path
+    }
+    console.log(MovieDatas);
+    console.log(get)
+}
+
+
+function Moviepage() {
+    
+    const [isLoading, setLoading] = useState(true); 
+    useEffect(() => {
+    GetDatas();
+    setTimeout(function() {
+        setLoading(false)
+       }, 1000);
+    }, []);
+    if (isLoading) {
+        return (
+         <>
+         <img src={placeholdergif} alt="gif"></img>
+         </>
+        );
+        } else{
+            return (
+                <div className="Moviepage">
+                    <AvgScore />
+                    <InfoFooter />
+                </div>
+            )
+        }
+
 }
 
 function AvgScore() {
@@ -40,17 +103,18 @@ function InfoFooter() {
                     <ReviewsHeader />
                 </div>
                 <div className="AddReview">
-                    <h5>Add Review</h5>
+                    <AddReviewsHeader />
                 </div>
         </div>
     );
 }
 
 
+
 function Movie() {
     return (
         <div className="Movie">
-            <h5>Title</h5>
+            <h5>{MovieDatas.title}</h5>
         </div>
     );
 }
@@ -67,7 +131,7 @@ function Genres() {
 function PG() {
     return (
         <div className="Movie">
-            <h5>Meant for adults??</h5>
+            {MovieDatas.PG === true ? <h5>Tarkoitettu aikuisille</h5> : <h5>Kaiken ikäisille</h5>}
         </div>
     );
 }
@@ -75,15 +139,18 @@ function PG() {
 function ReleaseDate() {
     return (
         <div className="Movie">
-            <h5>Release date</h5>
+            <h5>{MovieDatas.ReleaseDate}</h5>
         </div>
     );
 }
 
 function Thumbnail() {
+    let MovieURL = "https://image.tmdb.org/t/p/w500/" + MovieDatas.posterpath;
     return (
         <div className="ThumbnailContainer">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Test.svg" alt="Thumbnail" className="thumbnail-image" />
+            <div className="img">
+                <img src={MovieURL} alt="Poster not found" className="thumbnail-image" />
+            </div>
         </div>
     );
 }
@@ -91,7 +158,7 @@ function Thumbnail() {
 function Description() {
     return (
         <div className="Description">
-            <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h5>
+            <h5>{MovieDatas.overview}</h5>
         </div>
     );
 }
@@ -104,4 +171,12 @@ function ReviewsHeader() {
     );
 }
 
-export default moviepage;
+function AddReviewsHeader() {
+    return (
+        <div className="AddReviewsHeader">
+            <h4>Add Reviews</h4>
+        </div>
+    );
+}
+
+export default Moviepage;
