@@ -130,3 +130,10 @@ ul.GroupsList {
     margin: 0;
     height: 100%;
 }
+
+/*Child container (Parent: OwnReviews)*/
+.ProfilePageReview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

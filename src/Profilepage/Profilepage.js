@@ -1,6 +1,7 @@
 import React from "react";
 import "./Profilepage.css"
 import image from "../resources/placeholderimage3.jpg"
+import { ReviewGetter, ReviewArray } from '../components/DataLoader';
 
 function Profilepage() {
     return (
@@ -13,21 +14,26 @@ function Profilepage() {
 }
 
 function OwnReviews() {
+    const renderedReviews = [];
+
+    for (let i = 1; i < 3; i++) {
+        renderedReviews.push(
+            <div key={i} className="ProfilePageReview">
+                <MovieTitle Title={ReviewArray[i].movietitle} />
+                <Rating Rating={ReviewArray[i].review} />
+                <Text Content={ReviewArray[i].content} />
+            </div>
+        );
+    }
 
     return (
         <div className="OwnReviews">
             <div className="OwnReviewsHeader">
                 <h1>Own Reviews</h1>
             </div>
-            <MovieTitle />
-            <Rating />
-            <Text />
-            <MovieTitle />
-            <Rating />
-            <Text />
+            {renderedReviews}
             <Buttons ButtonLeft="Previous" ButtonRight="Next" />
-        </div>
-    );
+        </div>);
 }
 
 function FavouriteMoviesAndGroups() {
@@ -46,9 +52,9 @@ function PostsAndNews() {
             <div className="PostsAndNewsHeader">
                 <h1>Posts / Newsfeed</h1>
             </div>
-            <MovieTitle />
+            <MovieTitle Title = 'Placeholder' />
             <Timestamp />
-            <Text />
+            <Text Content= "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
             <Image />
             <Buttons ButtonLeft="Previous" ButtonRight="Next" />
         </div>
@@ -62,11 +68,11 @@ function FavouriteMovies() {
                 <h1>Favourite Movies</h1>
             </div>
             <ol className="FavouriteMoviesList">
-                <li><MovieTitle /></li>
-                <li><MovieTitle /></li>
-                <li><MovieTitle /></li>
-                <li><MovieTitle /></li>
-                <li><MovieTitle /></li>
+                <li><MovieTitle Title = 'Placeholder'/></li>
+                <li><MovieTitle Title = 'Placeholder' /></li>
+                <li><MovieTitle Title = 'Placeholder' /></li>
+                <li><MovieTitle Title = 'Placeholder' /></li>
+                <li><MovieTitle Title = 'Placeholder' /></li>
             </ol>
         </div>
     );
@@ -98,27 +104,26 @@ function GroupName() {
     );
 }
 
-function MovieTitle() {
+function MovieTitle({ Title }) {
     return (
         <div className="MovieTitle">
-            <h2>Title</h2>
+            <h2>{Title}</h2>
         </div>
     );
 }
 
-function Rating() {
+function Rating({ Rating }) {
     return (
         <div className="Rating">
-            <h3>Rating: 5/5</h3>
+            <h3>{Rating}/5</h3>
         </div>
     );
 }
 
-function Text() {
+function Text({ Content }) {
     return (
         <div className="Text">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>{Content}</p>
         </div>
     );
 }
