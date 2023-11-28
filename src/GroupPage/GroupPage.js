@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import "./GroupPage.css"
+import GroupListG from "./GroupList";
 
 function GroupMainMenu() {
     return (
@@ -11,6 +12,18 @@ function GroupMainMenu() {
 }
 
 function GroupsL() {
+    const [groups, setGroups] = useState(null);
+
+    useEffect(() => {
+        fetch('http://localhost:3001/Groups')
+            .then(res => {
+                return res.json();
+            })
+            .then(data => {
+                setGroups(data);
+            });
+    }, []);
+
     return (
         <div className="GroupsL">
             <div className="GroupDropdown">
@@ -20,18 +33,9 @@ function GroupsL() {
 
                 </select>
             </div>
-                <ul className="GroupList">
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                </ul>
+            <ul className="GroupList">
+                {groups && <GroupListG groups={groups}></GroupListG>}
+            </ul>
 
 
 
@@ -45,7 +49,7 @@ function CreateGroup() {
             <div className="CreateGroupHeader">
                 <h1>Create group</h1>
             </div>
-                <GroupInput/>
+            <GroupInput />
         </div>
     )
 }
@@ -57,21 +61,28 @@ function GroupInput() {
     })
 
     const handleChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setDetails((prev) => {
-            return {...prev, [name]: value}
+            return { ...prev, [name]: value }
         })
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(details);
+
+        fetch('http://localhost:3001/Groups', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(details)
+        }).then(() => {
+            console.log('new group added');
+        })
     }
 
     return (
         <div className="GroupInput">
             <form onSubmit={handleSubmit}>
-                <h3>Group name:</h3> <input type='name' name="name" onChange={handleChange}/>
+                <h3>Group name:</h3> <input type='name' name="name" onChange={handleChange} />
                 <h3>Group description:</h3> <textarea name="description" onChange={handleChange}></textarea>
                 <button type="create">Create group</button>
             </form>
