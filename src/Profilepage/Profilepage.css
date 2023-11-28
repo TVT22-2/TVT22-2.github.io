@@ -11,7 +11,7 @@
     flex-direction: column;
     width: 30%;
     justify-content: space-between;
-    text-align: center;
+    align-items: center;
     border: 1px solid #030303;
     margin: 15px 15px 15px 50px;
 }
@@ -79,14 +79,18 @@
 }
 
 .PostsAndNews .Buttons {
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+    align-items: center;
     margin: 5px 0px 5px 0px;
 }
 
 .OwnReviews .Buttons {
     display: flex;
-    flex-direction: row;
+    width: 90%;
     justify-content: space-between;
-    align-items: left;
+    align-items: center;
     margin: 0px 40px 5px 40px;
 }
 
@@ -98,8 +102,8 @@
     margin: 0px 40px 5px 40px;
 }
 
-#ButtonPrevious,
-#ButtonNext {
+#ButtonLeft,
+#ButtonRight {
     background-color: orange;
     border: 1px solid #030303;
 }
@@ -125,4 +129,11 @@ ul.GroupsList {
     list-style-type: none;
     margin: 0;
     height: 100%;
+}
+
+/*Child container (Parent: OwnReviews)*/
+.ProfilePageReview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
