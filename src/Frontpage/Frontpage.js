@@ -1,7 +1,9 @@
 import placeholdergif from "../resources/Loading.gif"
 import React, { useEffect, useState } from "react";
+import { userID } from "../components/react-signals"
 import "./frontpage.css" 
 import { MovieDBRegData,ReviewGetter, UpcomingMovies, TrendingMovies, RecentMovies, ReviewArray  } from'../components/DataLoader';
+import { Link } from "react-router-dom";
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
     useEffect(() => {
@@ -11,7 +13,7 @@ export default function Frontpage() {
             ReviewGetter();
     setTimeout(function() {
         setLoading(false)
-       }, 3000);
+       }, 2000);
     }, []);
     if (isLoading) {
     return (
@@ -34,6 +36,7 @@ export default function Frontpage() {
         </ul>
         </div>
         </nav>
+        <button onClick={()=>console.log(userID)}>Joku</button>
         <br></br>
         <br></br>
         <br></br>
@@ -42,11 +45,12 @@ export default function Frontpage() {
     } 
     function Reviews(){
         let reviews = [];
-        
         for(let i = 1; i<5; i++){
          reviews.push(
         <div className="FrontpageReviewContainer">
+        <Link to={"http://localhost:3000/movie/?" + ReviewArray[i].id}>
         <div className="verticaltextTitle">{ReviewArray[i].movietitle}</div>
+        </Link>
         <div className="verticaltextScore">5/{ReviewArray[i].review}</div>
         <div className="verticaltextReview">{ReviewArray[i].content}</div>
         </div>
@@ -84,7 +88,9 @@ export default function Frontpage() {
         return (
         <div className="verticalcontainer">
         <div className="ImageContainer">
+        <Link to={"http://localhost:3000/movie/?" + props.id}>
         <img src={imageurl} alt="bigdogstatus" className="elementimage"/>
+        </Link>
         </div>
         <div className="verticaltext">{props.title}</div>
         <div className="verticaltext">{props.genre}</div>
@@ -132,7 +138,7 @@ export default function Frontpage() {
     array = UpcomingMovies;
     }
 for (let i = 1; i<=10;i++){
-    row.push(<MovieElementVertical title={array[i].title} genre={array[i].genreid} popularity={array[i].popularity} imagepath={array[i].posterpath}/>)
+    row.push(<MovieElementVertical title={array[i].title} genre={array[i].genreid} popularity={array[i].popularity} imagepath={array[i].posterpath} id={array[i].id}/>)
    }
     return row;
   }

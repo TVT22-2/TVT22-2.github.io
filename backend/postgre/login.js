@@ -3,7 +3,7 @@ const pgPool = require("./connection.js")
 const sql = {
     INSERT_USER: 'INSERT INTO end_user (username,password,recovery) values ($1, $2, $3)',
     GET_USERS: 'SELECT * from end_user',
-    GET_NUSERS: 'SELECT password from end_user WHERE username=($1)',
+    GET_NUSERS: 'SELECT * from end_user WHERE username=($1)',
     GET_NUSERSREC: 'SELECT recovery from end_user WHERE username=($1)',
     PUT_PASS: 'UPDATE end_user SET password=($1) WHERE username=($2)'
 }
@@ -18,7 +18,7 @@ async function getUsers(){
 async function getNamedUsers(name){
     const result = await pgPool.query(sql.GET_NUSERS,[name]);     
     if(result.rows.length > 0){
-       return result.rows[0].password;
+       return result.rows;
     } else {
        return null;
     }

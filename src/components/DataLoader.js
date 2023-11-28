@@ -1,6 +1,5 @@
 
 import customData from '../components/genreids.json';
-import axios from "axios";
 let amountoffetches = 0;
  let UpcomingMovies = [
     {
@@ -40,6 +39,7 @@ let amountoffetches = 0;
 ];
 let ReviewArray = [
 {
+  id: "",
   review: "",
   content: "", 
   movietitle:"",
@@ -57,7 +57,6 @@ async function idParser(movie_id){
   fetchresponse = fetch('https://api.themoviedb.org/3/movie/'+movie_id+'?language=en-US', options)
     .then(response => fetchresponse = response.json())
     .catch(err => console.error(err));
-    console.log(fetchresponse);
    return fetchresponse;
 }
  async function ReviewGetter(){
@@ -66,13 +65,13 @@ async function idParser(movie_id){
     let title = await idParser(element.idmovie);
     let review = 
     {
+      id: element.idmovie,
       review: element.review,
       content: element.content, 
       movietitle: title.title
     }
     ReviewArray.push(review);
   });
-  console.log(ReviewArray)
  }
  async function Reviewreg(){
   let data;
@@ -185,7 +184,7 @@ function APIcall(saveval, page){
             method: 'GET',
             headers: {
               accept: 'application/json',
-              Authorization: 'Bearer '
+              Authorization: 'Bearer'
             }
           };
           if(saveval === "upcom"){
