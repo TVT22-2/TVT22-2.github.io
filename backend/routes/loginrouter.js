@@ -63,13 +63,14 @@ router.put('/change', upload.none(), async (req, res) => {
 router.post('/login', upload.none(), async (req, res) => {
     const name = req.body.username;
     const pw = req.body.password;
-    const pwCheck = await getNamedUsers(name);
-    console.log("Login");
+    const array = await getNamedUsers(name);
+    const pwCheck = array[0].password;
+    const userId = array[0].id;
     if (pwCheck) {
         const boolcorrect = await bcrypt.compare(pw, pwCheck);
         if (boolcorrect) {
             const token = createToken(name);
-            res.status(200).json({ jwtToken: token });
+            res.status(200).json({ jwtToken: token , UserID: userId });
         } else {
             res.status(401).json({ error: 'Password or Username incorrect' })
         }

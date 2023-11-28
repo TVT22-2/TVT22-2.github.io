@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { MovieDBRegData, TopratedMovies, UpcomingMovies, RecentMovies } from '../components/DataLoader';
 import "./Browser.css"
 let curpage1 = 1;
@@ -51,8 +52,9 @@ const [index3, setIndex3] = useState(1);
             let url = "https://image.tmdb.org/t/p/w500/" + props.var[i].posterpath;
             row.push(
                 <div className="Moviecontainer">
-                    <img src={url} className="placeholderimage" alt="Hello">
-                    </img>
+                    <Link to={"http://localhost:3000/movie/?" + props.var[i].id}>
+                    <img src={url} className="placeholderimage" alt="Hello"></img>
+                    </Link>
                     <div className='infocontainer'>
                         <p className='BrowserInfo'>{props.var[i].title}</p>
                         <p className='BrowserInfo'>{props.var[i].genreid}</p>
