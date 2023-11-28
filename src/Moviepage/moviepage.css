@@ -37,15 +37,12 @@
     text-align: center;
 }
 
-.AddReview {
-    border: 2px solid black;
-    width: 30%;
-}
-
 .Movie {
     border: 2px solid black;
     margin-bottom: 5px;
     width: 90%;
+    text-align: center;
+    
 }
 
 .ThumbnailContainer {
@@ -70,16 +67,31 @@
 .Review {
     border: 2px solid black;
     width: 30%; 
+    
 }
 
 .ReviewsHeader {
     text-align: center;
     background-color: orange;
     height: 50px;
+    margin-bottom: 5px;
+}
+
+.ReviewsTitle {
+    text-align: center;
+    width: 100%;
+    
+}
+
+.AddReview {
+    border: 2px solid black;
+    width: 30%;
+    margin-bottom: 5px;
 }
 
 .AddReviewsHeader {
     text-align: center;
     background-color: orange;
     height: 50px;
+    margin-bottom: 5px;
 }

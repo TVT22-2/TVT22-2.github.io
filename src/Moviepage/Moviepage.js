@@ -1,77 +1,81 @@
 import placeholdergif from "../resources/Loading.gif"
 import React, { useState, useEffect } from 'react';
 import "./moviepage.css"
+import "../components/genreids.json"
 
 
-var movieid = 3052;
+var movieid = 872585;
 
 let MovieDatas = [
     {
-    title: "",
-    genreid: "",
-    PG:"",
-    ReleaseDate:"",
-    posterpath: "",
-    overview: "",
+        title: "",
+        genreid: "",
+        PG: "",
+        ReleaseDate: "",
+        posterpath: "",
+        overview: "",
     }
 ];
 
-function Test(){
+function Fetch() {
 
     const options = {
         method: 'GET',
         headers: {
-          accept: 'application/json',
-          Authorization: 'Bearer '
+            accept: 'application/json',
+            Authorization: 'Bearer '
         }
-      };
-    
-      let fetchresult;
-      fetchresult = fetch('https://api.themoviedb.org/3/movie/'+ movieid, options)
-      .then(response => fetchresult = response.json())
-      .catch(err => console.error(err));
-      return fetchresult;
+    };
+
+    let fetchresult;
+    fetchresult = fetch('https://api.themoviedb.org/3/movie/' + movieid, options)
+        .then(response => fetchresult = response.json())
+        .catch(err => console.error(err));
+    return fetchresult;
 }
 
-async function GetDatas(){
+async function GetDatas() {
 
-    let get = await Test();
+    let get = await Fetch();
+
     MovieDatas = {
         title: get.title,
-        genreid: "",
+        genreid: get.genres,
         PG: get.adult,
         ReleaseDate: get.release_date,
         overview: get.overview,
         posterpath: get.poster_path
     }
+
+
     console.log(MovieDatas);
     console.log(get)
 }
 
 
 function Moviepage() {
-    
-    const [isLoading, setLoading] = useState(true); 
+
+    const [isLoading, setLoading] = useState(true);
     useEffect(() => {
-    GetDatas();
-    setTimeout(function() {
-        setLoading(false)
-       }, 1000);
+        GetDatas();
+        setTimeout(function () {
+            setLoading(false)
+        }, 1000);
     }, []);
     if (isLoading) {
         return (
-         <>
-         <img src={placeholdergif} alt="gif"></img>
-         </>
+            <>
+                <img src={placeholdergif} alt="gif"></img>
+            </>
         );
-        } else{
-            return (
-                <div className="Moviepage">
-                    <AvgScore />
-                    <InfoFooter />
-                </div>
-            )
-        }
+    } else {
+        return (
+            <div className="Moviepage">
+                <AvgScore />
+                <InfoFooter />
+            </div>
+        )
+    }
 
 }
 
@@ -79,8 +83,8 @@ function AvgScore() {
 
     return (
         <div className="AvgScore">
-                <h2>Average score: </h2>
-            </div>
+            <h2>Average score: </h2>
+        </div>
     );
 }
 
@@ -88,23 +92,25 @@ function InfoFooter() {
     return (
         <div className="InfoFooter">
             <div className="MovieDetail">
-            <div className="MovieInformation">
-                <div className="MovieDetailContent">
-                    <Movie />
-                    <Genres />
-                    <PG />
-                    <ReleaseDate />
-                </div>
+                <div className="MovieInformation">
+                    <div className="MovieDetailContent">
+                        <Movie />
+                        <Genres />
+                        <PG />
+                        <ReleaseDate />
+                    </div>
                     <Thumbnail />
                 </div>
-                    <Description />
-                </div>
-                <div className="Review">
-                    <ReviewsHeader />
-                </div>
-                <div className="AddReview">
-                    <AddReviewsHeader />
-                </div>
+                <Description />
+            </div>
+            <div className="Review">
+                <ReviewsHeader />
+                <ReviewsTitle />
+            </div>
+            
+            <div className="AddReview">
+                <AddReviewsHeader />
+            </div>
         </div>
     );
 }
@@ -114,24 +120,36 @@ function InfoFooter() {
 function Movie() {
     return (
         <div className="Movie">
-            <h5>{MovieDatas.title}</h5>
+            <h2>{MovieDatas.title}</h2>
         </div>
     );
 }
 
 
 function Genres() {
-    return (
-        <div className="Movie">
-            <h5>Genres</h5>
-        </div>
-    );
+    const genreIds = MovieDatas.genreid;
+
+    if (Array.isArray(genreIds) && genreIds.length > 0) {
+        const genreNames = genreIds.map(genre => genre.name);
+
+        return (
+            <div className="Movie">
+                <h5>{genreNames.join(', ')}</h5>
+            </div>
+        );
+    } else {
+        return (
+            <div className="Movie">
+                <h5>Unknown Genre</h5>
+            </div>
+        );
+    }
 }
 
 function PG() {
     return (
         <div className="Movie">
-            {MovieDatas.PG === true ? <h5>Tarkoitettu aikuisille</h5> : <h5>Kaiken ikäisille</h5>}
+            {MovieDatas.PG === true ? <h5>Tarkoitettu aikuisille: Kyllä</h5> : <h5>Tarkoitettu aikuisille: Ei</h5>}
         </div>
     );
 }
@@ -158,7 +176,7 @@ function Thumbnail() {
 function Description() {
     return (
         <div className="Description">
-            <h5>{MovieDatas.overview}</h5>
+            <h6>{MovieDatas.overview}</h6>
         </div>
     );
 }
@@ -166,7 +184,15 @@ function Description() {
 function ReviewsHeader() {
     return (
         <div className="ReviewsHeader">
-            <h4>Reviews</h4>
+            <h2>Reviews</h2>
+        </div>
+    );
+}
+
+function ReviewsTitle() {
+    return (
+        <div className="ReviewsTitle">
+            <h4>{MovieDatas.title}</h4>
         </div>
     );
 }
