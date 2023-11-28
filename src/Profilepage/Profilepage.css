@@ -55,9 +55,9 @@
 .placeholderImage {
     width: 90%;
     text-align: center;
+    align-items: center;
     margin-bottom: 5px;
 }
-
 
 /*Fix later*/
 .placeholderImage {
@@ -136,4 +136,34 @@ ul.GroupsList {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+/*Mobile*/
+@media only screen and (max-width: 768px) {
+
+    /*Main container*/
+    .Profilepage {
+        flex-direction: column;
+    }
+
+    .OwnReviews {
+        margin: 15px 0px 15px 0px;
+        width: 100%;
+    }
+
+    .FavouriteMoviesAndGroups {
+        margin: 15px 0px 15px 0px;
+        width: 100%;
+    }
+
+    .PostsAndNews {
+        margin: 15px 0px 15px 0px;
+        width: 100%;
+    }
+
+    /*Fix later*/
+    .placeholderImage {
+        margin-left: 15px;
+    }
+    
 }

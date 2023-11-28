@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Profilepage.css"
 import image from "../resources/placeholderimage3.jpg"
 import { ReviewGetter, ReviewArray } from '../components/DataLoader';
 
 function Profilepage() {
+
+    const [isLoading, setLoading] = useState(true);
+
+    setTimeout(function () {
+        setLoading(false)
+    }, 2000);
+    if (isLoading) {
+        return (
+            <>
+            </>
+        );
+    }
+
     return (
         <div className="Profilepage">
             <OwnReviews />
@@ -52,9 +65,9 @@ function PostsAndNews() {
             <div className="PostsAndNewsHeader">
                 <h1>Posts / Newsfeed</h1>
             </div>
-            <MovieTitle Title = 'Placeholder' />
+            <MovieTitle Title='Placeholder' />
             <Timestamp />
-            <Text Content= "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
+            <Text Content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
             <Image />
             <Buttons ButtonLeft="Previous" ButtonRight="Next" />
         </div>
@@ -68,11 +81,11 @@ function FavouriteMovies() {
                 <h1>Favourite Movies</h1>
             </div>
             <ol className="FavouriteMoviesList">
-                <li><MovieTitle Title = 'Placeholder'/></li>
-                <li><MovieTitle Title = 'Placeholder' /></li>
-                <li><MovieTitle Title = 'Placeholder' /></li>
-                <li><MovieTitle Title = 'Placeholder' /></li>
-                <li><MovieTitle Title = 'Placeholder' /></li>
+                <li><MovieTitle Title='Placeholder' /></li>
+                <li><MovieTitle Title='Placeholder' /></li>
+                <li><MovieTitle Title='Placeholder' /></li>
+                <li><MovieTitle Title='Placeholder' /></li>
+                <li><MovieTitle Title='Placeholder' /></li>
             </ol>
         </div>
     );
