@@ -1,7 +1,7 @@
 
 import "./login.css"
 import { useNavigate } from "react-router-dom";
-import { token } from "./react-signals"
+import { token, setUserid } from "./react-signals"
 import axios from "axios";
 import { useState } from "react";
 let stage = 1;
@@ -16,7 +16,7 @@ export default function Login() {
     return (
 
         <div>
-            {token.value.length > 3 && pass === false ? <><div className="LoginQuery"><h2>Are you sure?</h2><button className="LoginButtonYes"Click={() => token.value = "" + console.log(token.value) + navigate("/")}>yes</button><button className="LoginButtonNo" onClick={() => navigate("/")}>no</button></div></> :
+            {token.value.length > 3 && pass === false ? <><div className="LoginQuery"><h2>Are you sure?</h2><button className="LoginButtonYes" onClick={() => token.value = undefined + navigate("/")}>yes</button><button className="LoginButtonNo" onClick={() => navigate("/")}>no</button></div></> :
                 <>
                     <div className="inputcontainer">
                         {pass === true ? <><input className="newPass" type="text" placeholder="New password" value={password} onChange={e => setPassword(e.target.value)}></input><input className="newPass" type="text" placeholder="New password" value={password2} onChange={e => setPassword2(e.target.value)}></input></> : <>
@@ -44,11 +44,12 @@ export default function Login() {
     )
     async function returnvalues() {
         if (password !== "" && username !== "") {
-            await axios.postForm('login/login', { username, password })
-                .then(resp => token.value = resp.data.jwtToken)
+            let response = await axios.postForm('login/login', { username, password })
                 .catch(error => console.log(error) + setAlert(error.message + ". Please try again later!") + setTimeout(function() {
                     setAlert("")
                    }, 6000))
+                   setUserid(await response.data.UserID);
+                   token.value = await response.data.jwtToken
         } else {
             alert("Check the input fields!")
         }
@@ -58,7 +59,6 @@ export default function Login() {
     }
     async function recoveryfunc() {
         let success = false;
-        console.log(stage);
         let recovery = password;
         if (stage === 1) {
             await axios.postForm('login/forgot', { username, recovery })
@@ -66,7 +66,6 @@ export default function Login() {
                 .catch(error => setAlert(error.message + ". Please try again later!") + setTimeout(function() {
                     setAlert("")
                    }, 6000))
-            console.log(success);
             if (success === true) {
                 success = false;
                 stage = 2;
@@ -76,9 +75,6 @@ export default function Login() {
             }
         } else {
             if (password === password2) {
-                console.log("passcheck")
-                console.log("Username: " + username)
-                console.log("Password: " + password)
                 await axios.putForm('login/change', { username, password })
                     .then(resp => success = resp.data.Success)
                     .catch(error => setAlert(error.message + ". Please try again later!") +setTimeout(function() {
