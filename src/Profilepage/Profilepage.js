@@ -25,7 +25,7 @@ function OwnReviews() {
             <MovieTitle />
             <Rating />
             <Text />
-            <Buttons />
+            <Buttons ButtonLeft="Previous" ButtonRight="Next" />
         </div>
     );
 }
@@ -42,7 +42,7 @@ function FavouriteMoviesAndGroups() {
 function PostsAndNews() {
     return (
         <div className="PostsAndNews">
-            <Buttons />
+            <Buttons ButtonLeft="Posts" ButtonRight="Newsfeed" />
             <div className="PostsAndNewsHeader">
                 <h1>Posts / Newsfeed</h1>
             </div>
@@ -50,7 +50,7 @@ function PostsAndNews() {
             <Timestamp />
             <Text />
             <Image />
-            <Buttons />
+            <Buttons ButtonLeft="Previous" ButtonRight="Next" />
         </div>
     );
 }
@@ -85,7 +85,7 @@ function Groups() {
                 <li><GroupName /></li>
                 <li><GroupName /></li>
             </ul>
-            <Buttons />
+            <Buttons ButtonLeft="Previous" ButtonRight="Next" />
         </div>
     );
 }
@@ -123,11 +123,11 @@ function Text() {
     );
 }
 
-function Buttons() {
+function Buttons({ ButtonLeft, ButtonRight }) {
     return (
         <div className="Buttons">
-            <button id="ButtonPrevious">Previous</button>
-            <button id="ButtonNext">Next</button>
+            <button id="ButtonLeft">{ButtonLeft}</button>
+            <button id="ButtonRight">{ButtonRight}</button>
         </div>
     );
 }

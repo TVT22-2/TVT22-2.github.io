@@ -11,7 +11,7 @@ export default function Frontpage() {
             ReviewGetter();
     setTimeout(function() {
         setLoading(false)
-       }, 1000);
+       }, 3000);
     }, []);
     if (isLoading) {
     return (
