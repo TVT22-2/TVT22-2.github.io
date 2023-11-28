@@ -1,10 +1,10 @@
 const pgPool = require("./connection")
 
 const sql = {
-    GET_POST: 'SELECT * from posts WHERE id=($1)',
+    GET_POST: 'SELECT * from posts',
     GET_POST_BY_USER: 'SELECT * from posts WHERE end_user_id=($1)',
     GET_POST_BY_GROUP: 'SELECT * from posts WHERE group_id=($1)',
-    GET_POSTS_BY_DATE_USER: 'SELECT * from posts WHERE end_user_id=(1) order by date DESC',
+    GET_POSTS_BY_DATE_USER: 'SELECT * from posts WHERE end_user_id=($1) order by date DESC',
     GET_POSTS_BY_DATE_GROUP: 'SELECT * from posts WHERE group_id=($1) order by date DESC',
     INSERT_POST_USER: 'INSERT INTO posts (title, posttext, date, end_user_id) values ($1, $2, $3, $4)',
     INSERT_POST_GROUP: 'INSERT INTO posts (title, posttext, date, group_id) values ($1, $2, $3, $4)',
@@ -26,29 +26,29 @@ async function getPost(){
     return rows;
 }
 
-async function getPostByUser(){
-    const result = await pgPool.query(sql.GET_POST_BY_USER);
+async function getPostByUser(end_user_id){
+    const result = await pgPool.query(sql.GET_POST_BY_USER, [end_user_id]);
     const rows = result.rows;
     console.log(rows);
     return rows;
 }
 
-async function getPostByGroup(){
-    const result = await pgPool.query(sql.GET_POST_BY_GROUP);
+async function getPostByGroup(group_id){
+    const result = await pgPool.query(sql.GET_POST_BY_GROUP, [group_id]);
     const rows = result.rows;
     console.log(rows);
     return rows;
 }
 
-async function getPostsByDateUser(){
-    const result = await pgPool.query(sql.GET_POSTS_BY_DATE_USER);
+async function getPostsByDateUser(end_user_id){
+    const result = await pgPool.query(sql.GET_POSTS_BY_DATE_USER, [end_user_id]);
     const rows = result.rows;
     console.log(rows);
     return rows;
 }
 
-async function getPostsByDateGroup(){
-    const result = await pgPool.query(sql.GET_POSTS_BY_DATE_GROUP);
+async function getPostsByDateGroup(group_id){
+    const result = await pgPool.query(sql.GET_POSTS_BY_DATE_GROUP, [group_id]);
     const rows = result.rows;
     console.log(rows);
     return rows;
