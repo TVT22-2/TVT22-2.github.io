@@ -24,9 +24,9 @@ router.post('/Groups', async (req,res) => {
       }
 });
 
-router.get('/getUserGroups', async (req,res) => {
+router.get('/Groups/:id', async (req,res) => {
     try{
-        res.json(await getUserGroups());
+        res.json(await getUserGroups(req.params.id));
     } catch (error){
         res.status(500).json({error: error.message})
     }

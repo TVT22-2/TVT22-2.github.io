@@ -2,9 +2,11 @@ const GroupListG = (props) => {
     const groups = props.groups;
     return (
         <div className="group-list">
+            <ul>
             {groups.map(group => (
-                <li>{group.name}</li>
+                <li key={group.id}>{group.name}</li>
             ))}
+            </ul>
         </div>
     );
 }
