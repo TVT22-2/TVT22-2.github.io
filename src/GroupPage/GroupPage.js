@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./GroupPage.css"
 import GroupListG from "./GroupList";
+import { userID } from "../components/react-signals"
 
 function GroupMainMenu() {
     return (
         <div className="GroupMainMenu">
-            <GroupsL />
+            <GroupsL userID={userID}/>
             <CreateGroup />
         </div>
     )
@@ -13,9 +14,10 @@ function GroupMainMenu() {
 
 function GroupsL() {
     const [groups, setGroups] = useState(null);
+    console.log('userid:'+userID);
 
     useEffect(() => {
-        fetch('http://localhost:3001/Groups')
+        fetch('http://localhost:3001/Groups/')
             .then(res => {
                 return res.json();
             })
@@ -70,7 +72,7 @@ function GroupInput() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        fetch('http://localhost:3001/Groups', {
+        fetch('http://localhost:3001/Groups/'+userID, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(details)
