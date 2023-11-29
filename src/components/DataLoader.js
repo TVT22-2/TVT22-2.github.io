@@ -51,7 +51,7 @@ async function idParser(movie_id){
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YzgzMGVlZjk2NThlYWMyNmE5YmJiYTMyMDJiYzIyMSIsInN1YiI6IjY1NDM4YmZmOWNjNjdiMDBkZjkxY2FkZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YfFUMP1RQ9zgAuGJuPPFUWhcmGV-IV2NeLpJeEu4AHk'
+      Authorization: 'Bearer '
     }
   };
   fetchresponse = fetch('https://api.themoviedb.org/3/movie/'+movie_id+'?language=en-US', options)
@@ -184,7 +184,7 @@ function APIcall(saveval, page){
             method: 'GET',
             headers: {
               accept: 'application/json',
-              Authorization: 'Bearer'
+              Authorization: 'Bearer '
             }
           };
           if(saveval === "upcom"){

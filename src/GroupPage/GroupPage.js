@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./GroupPage.css"
 import GroupListG from "./GroupList";
-import { userID } from "../components/react-signals" 
+import { userID } from "../components/react-signals"
 
 function GroupMainMenu() {
     return (

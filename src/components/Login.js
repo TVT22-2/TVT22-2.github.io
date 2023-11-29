@@ -1,7 +1,7 @@
 
 import "./login.css"
 import { useNavigate } from "react-router-dom";
-import { token, setUserid } from "./react-signals"
+import { token, userID } from "./react-signals"
 import axios from "axios";
 import { useState } from "react";
 let stage = 1;
@@ -48,7 +48,7 @@ export default function Login() {
                 .catch(error => console.log(error) + setAlert(error.message + ". Please try again later!") + setTimeout(function() {
                     setAlert("")
                    }, 6000))
-                   setUserid(await response.data.UserID);
+                   userID.value = await response.data.UserID;
                    token.value = await response.data.jwtToken
         } else {
             alert("Check the input fields!")
