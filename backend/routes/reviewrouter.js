@@ -20,9 +20,9 @@ router.get('/getownreview', async (req,res) => {
     }
 });
 
-router.get('/getmoviereview', async (req,res) => {
+router.get('/getmoviereview/:idmovie', async (req,res) => {
     try{
-        res.json(await getMovieReview());
+        res.json(await getMovieReview(req.params.idmovie));
     } catch (error){
         res.status(500).json({error: error.message})
     }

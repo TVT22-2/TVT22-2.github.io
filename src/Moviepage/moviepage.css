@@ -83,6 +83,12 @@
     
 }
 
+.MovieRating{
+    text-align: center;
+    width: 100%;
+    
+}
+
 .AddReview {
     border: 2px solid black;
     width: 30%;
@@ -95,3 +101,21 @@
     height: 50px;
     margin-bottom: 5px;
 }
+
+.buttonStyle {
+    padding: 10px;
+    background-color: #007BFF;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .buttonContainer{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .ReviewsContent{
+    text-align: left;
+  }

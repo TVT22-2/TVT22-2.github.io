@@ -88,7 +88,7 @@ export default function Frontpage() {
         return (
         <div className="verticalcontainer">
         <div className="ImageContainer">
-        <Link to={"http://localhost:3000/movie/?" + props.id}>
+        <Link to={"http://localhost:3000/movie/" + props.id}>
         <img src={imageurl} alt="bigdogstatus" className="elementimage"/>
         </Link>
         </div>

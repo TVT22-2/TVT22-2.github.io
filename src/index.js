@@ -21,7 +21,7 @@ root.render(
         <Route path="/" element={<Frontpage />} />
         <Route path="/Profile" element={<Profilepage />} />
         <Route path="/Group" element={<GroupPage />} />
-        <Route path="/Movie" element={<Moviepage />} />
+        <Route path="/movie/:movieId" element={<Moviepage />} />
         <Route path="/Register" element={<Register/>}/>
         <Route path="/Browse" element={<Browser/>}/>
       </Routes>
