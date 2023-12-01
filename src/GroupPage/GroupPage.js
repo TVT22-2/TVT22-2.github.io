@@ -1,7 +1,7 @@
 import React, { useState, useEffect, } from "react";
 import "./GroupPage.css"
 import GroupListG from "./GroupList";
-import { userID, } from "../components/react-signals"
+import { userID } from "../components/react-signals"
 
 function GroupMainMenu() {
     return (
@@ -12,39 +12,48 @@ function GroupMainMenu() {
     )
 }
 
+let selectedOption = 'AllGroups';
+
 function GroupsL() {
     const [groups, setGroups] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedOption, setSelectedOption] = useState('AllGroups');
-    const handleSelectChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
 
     useEffect(() => {
+        getGroups();
+    }, []);
+
+    async function getGroups() {
+
         const fetchData = async () => {
             setLoading(true);
-            try {
-                let url = 'http://localhost:3001/Groups/';
-                if (selectedOption === 'OwnGroups') {
-                    url = `http://localhost:3001/Groups/${userID}`;
-                }
-
-                const response = await fetch(url);
-                const data = await response.json();
-                setGroups(data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            } finally {
-                setLoading(false);
+            console.log('set loading true'+selectedOption);
+            let data = "";
+            let url = 'http://localhost:3001/Groups/';
+            if (selectedOption === 'OwnGroups') {
+                url = `http://localhost:3001/Groups/${userID.value}`;
             }
+
+            data = await fetch(url)
+                .then(
+                    response => data = response.json()
+                )
+                .catch(err => console.error(err));
+            setGroups(data);
+
         };
-        fetchData();
-    }, [selectedOption]);
+        await fetchData();
+        setLoading(false);
+    }
+
+    function buttonHandler(event) {
+        selectedOption=event.target.value;
+        getGroups();
+    }
 
     return (
         <div className="GroupsL">
             <div className="GroupDropdown">
-                <select onChange={handleSelectChange} value={selectedOption}>
+                <select onChange={buttonHandler}>
                     <option value="AllGroups">All groups</option>
                     <option value="OwnGroups">Own groups</option>
                 </select>
