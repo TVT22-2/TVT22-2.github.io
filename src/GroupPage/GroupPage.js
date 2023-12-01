@@ -1,49 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, } from "react";
 import "./GroupPage.css"
 import GroupListG from "./GroupList";
-import { userID } from "../components/react-signals"
+import { userID, } from "../components/react-signals"
 
 function GroupMainMenu() {
     return (
         <div className="GroupMainMenu">
-            <GroupsL userID={userID}/>
+            <GroupsL />
             <CreateGroup />
         </div>
     )
 }
 
 function GroupsL() {
-    const [groups, setGroups] = useState(null);
-    console.log('userid:'+userID);
+    const [groups, setGroups] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedOption, setSelectedOption] = useState('AllGroups');
+    const handleSelectChange = (event) => {
+        setSelectedOption(event.target.value);
+    };
 
     useEffect(() => {
-        fetch('http://localhost:3001/Groups/')
-            .then(res => {
-                return res.json();
-            })
-            .then(data => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                let url = 'http://localhost:3001/Groups/';
+                if (selectedOption === 'OwnGroups') {
+                    url = `http://localhost:3001/Groups/${userID}`;
+                }
+
+                const response = await fetch(url);
+                const data = await response.json();
                 setGroups(data);
-            });
-    }, []);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [selectedOption]);
 
     return (
         <div className="GroupsL">
             <div className="GroupDropdown">
-                <select>
+                <select onChange={handleSelectChange} value={selectedOption}>
                     <option value="AllGroups">All groups</option>
                     <option value="OwnGroups">Own groups</option>
-
                 </select>
+
+                {loading ? (
+                    <p>Loading...</p>
+                ) : (
+                    <GroupListG groups={groups} />
+                )}
             </div>
-            <ul className="GroupList">
-                {groups && <GroupListG groups={groups}></GroupListG>}
-            </ul>
-
-
-
         </div>
-    )
-}
+    );
+};
 
 function CreateGroup() {
     return (
@@ -72,7 +86,7 @@ function GroupInput() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        fetch('http://localhost:3001/Groups/'+userID, {
+        fetch('http://localhost:3001/Groups/', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(details)
@@ -90,14 +104,6 @@ function GroupInput() {
             </form>
         </div>
     )
-}
-
-function GroupNameG() {
-    return (
-        <div className="GroupNameG">
-            <h2>Group</h2>
-        </div>
-    );
 }
 
 export default GroupMainMenu;
