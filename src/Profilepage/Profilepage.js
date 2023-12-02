@@ -74,7 +74,6 @@ function OwnReviews() {
         fetchTitles();
     }, [reviews]); // Update the reviews whenever the 'reviews' state changes
 
-
     const handleNextPage = () => {
         if (currentPage < totalPages) {
             setCurrentPage(prevPage => prevPage + 1);
@@ -101,6 +100,7 @@ function OwnReviews() {
                 <p>Loading...</p>
             ) : (
                 displayedReviews.map((review, index) => (
+                    /* Map the reviews to the page */
                     <div key={index} className="ProfilePageReview">
                         <ProfileMovieTitle Title={review.title} />
                         <Rating Rating={review.review} />
