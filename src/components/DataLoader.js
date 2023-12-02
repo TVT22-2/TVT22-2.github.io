@@ -1,4 +1,4 @@
-
+import { BearerToken } from './react-signals'
 import customData from '../components/genreids.json';
 let amountoffetches = 0;
  let UpcomingMovies = [
@@ -51,7 +51,7 @@ async function idParser(movie_id){
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer '
+      Authorization: 'Bearer '+BearerToken
     }
   };
   fetchresponse = fetch('https://api.themoviedb.org/3/movie/'+movie_id+'?language=en-US', options)
@@ -74,8 +74,7 @@ async function idParser(movie_id){
   });
  }
  async function Reviewreg(){
-  let data;
-  await fetch("http://localhost:3001/getrecentreview")
+  let data = fetch("http://localhost:3001/getrecentreview")
   .then(response => data = response.json())
   return data; 
  }
@@ -184,7 +183,7 @@ function APIcall(saveval, page){
             method: 'GET',
             headers: {
               accept: 'application/json',
-              Authorization: 'Bearer '
+              Authorization: 'Bearer '+ BearerToken
             }
           };
           if(saveval === "upcom"){

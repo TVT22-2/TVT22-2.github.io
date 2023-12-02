@@ -1,19 +1,18 @@
-import placeholdergif from "../resources/Loading.gif"
+
 import React, { useEffect, useState } from "react";
-import { userID } from "../components/react-signals"
 import "./frontpage.css" 
 import { MovieDBRegData,ReviewGetter, UpcomingMovies, TrendingMovies, RecentMovies, ReviewArray  } from'../components/DataLoader';
 import { Link } from "react-router-dom";
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
     useEffect(() => {
-            MovieDBRegData("trend", 1,1);
-            MovieDBRegData("upcom", 1,1);
-            MovieDBRegData("recent", 1,1);
-            ReviewGetter();
-    setTimeout(function() {
-        setLoading(false)
-       }, 2000);
+        const fetchdata = async () => {
+            await MovieDBRegData("trend", 1,1)
+             .then(()=> MovieDBRegData("upcom", 1,1))
+             .then(()=> MovieDBRegData("recent", 1,1))
+             .then(()=> setLoading(false))
+        }
+        fetchdata();
     }, []);
     if (isLoading) {
     return (
@@ -32,11 +31,9 @@ export default function Frontpage() {
         <nav className="navBar">
             <div className="container">
             <ul className="nav">
-        <Reviews/>
         </ul>
         </div>
         </nav>
-        <button onClick={()=>console.log(userID)}>Joku</button>
         <br></br>
         <br></br>
         <br></br>

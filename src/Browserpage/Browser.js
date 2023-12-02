@@ -7,17 +7,18 @@ let curpage1 = 1;
 let curpage2 = 1;
 let curpage3 = 1;
 function Browser() {
-    const [isLoading, setLoading] = useState(true);
+const [isLoading, setLoading] = useState(true);
 const [index1, setIndex1] = useState(1);
 const [index2, setIndex2] = useState(1);
 const [index3, setIndex3] = useState(1);
     useEffect(() => {
-            MovieDBRegData("toprated", 1,1);
-            MovieDBRegData("recent", 1,1);
-            MovieDBRegData("upcom", 1,1);
-         setTimeout(function() {
-        setLoading(false)
-       }, 1000);
+        async function loader(){
+            await MovieDBRegData("toprated", 1,1);
+            await MovieDBRegData("recent", 1,1);
+            await MovieDBRegData("upcom", 1,1);
+            setLoading(false)
+        }
+        loader();
     }, []);
  if(!isLoading){
     return (
@@ -29,7 +30,7 @@ const [index3, setIndex3] = useState(1);
             </div>
         </>
     );
-    }else {
+    } else {
         return (
             <>
             </>
