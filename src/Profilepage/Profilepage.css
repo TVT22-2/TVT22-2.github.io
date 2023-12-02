@@ -48,7 +48,7 @@
     margin-bottom: 5px;
 }
 
-.MovieTitle,
+.ProfileMovieTitle,
 .Rating,
 .Text,
 .GroupName,
@@ -64,13 +64,13 @@
     margin-left: 30px;
 }
 
-.OwnReviews .MovieTitle,
-.PostsAndNews .MovieTitle {
+.OwnReviews .ProfileMovieTitle,
+.PostsAndNews .ProfileMovieTitle {
     border: 1px solid #030303;
     align-items: center;
 }
 
-.FavouriteMovies .MovieTitle {
+.FavouriteMovies .ProfileMovieTitle {
     text-align: left;
 }
 

@@ -12,9 +12,9 @@ router.get('/getrecentreview', async (req,res) => {
     }
 });
 
-router.get('/getownreview', async (req,res) => {
+router.get('/getownreview/:id', async (req,res) => {
     try{
-        res.json(await getOwnReview());
+        res.json(await getOwnReview(req.params.id));
     } catch (error){
         res.status(500).json({error: error.message})
     }

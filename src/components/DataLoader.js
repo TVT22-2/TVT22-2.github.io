@@ -209,4 +209,4 @@ function APIcall(saveval, page){
             return fetchresponse
           }
     }
-    export {TopratedMovies, RecentMovies, TrendingMovies, UpcomingMovies, MovieDBRegData, ReviewGetter, ReviewArray};
+    export {TopratedMovies, RecentMovies, TrendingMovies, UpcomingMovies, MovieDBRegData, ReviewGetter, ReviewArray, idParser};
