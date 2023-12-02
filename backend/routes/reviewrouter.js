@@ -12,17 +12,17 @@ router.get('/getrecentreview', async (req,res) => {
     }
 });
 
-router.get('/getownreview', async (req,res) => {
+router.get('/getownreview/:id', async (req,res) => {
     try{
-        res.json(await getOwnReview());
+        res.json(await getOwnReview(req.params.id));
     } catch (error){
         res.status(500).json({error: error.message})
     }
 });
 
-router.get('/getmoviereview', async (req,res) => {
+router.get('/getmoviereview/:idmovie', async (req,res) => {
     try{
-        res.json(await getMovieReview());
+        res.json(await getMovieReview(req.params.idmovie));
     } catch (error){
         res.status(500).json({error: error.message})
     }

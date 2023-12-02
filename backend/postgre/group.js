@@ -12,13 +12,13 @@ async function addGroup(gname, desc){
 async function getGroups(){
     const result = await pgPool.query(sql.GET_GROUPS);
     const rows =  result.rows;
-    console.log('groups:',rows);
+    //console.log('groups:',rows);
     return rows;
 }
-async function getUserGroups(userid){
-    const result = await pgPool.query(sql.GET_USER_GROUPS,[userid]);     
+async function getUserGroups(end_user_id){
+    const result = await pgPool.query(sql.GET_USER_GROUPS,[end_user_id]);     
     const rows =  result.rows;
-    console.log('groups:',rows);
+    //console.log('groups:',rows);
     return rows;
 }
 

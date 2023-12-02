@@ -1,5 +1,7 @@
-import React, {useState} from "react";
+import React, { useState, useEffect, } from "react";
 import "./GroupPage.css"
+import GroupListG from "./GroupList";
+import { userID } from "../components/react-signals"
 
 function GroupMainMenu() {
     return (
@@ -10,34 +12,61 @@ function GroupMainMenu() {
     )
 }
 
+let selectedOption = 'AllGroups';
+
 function GroupsL() {
+    const [groups, setGroups] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getGroups();
+    }, []);
+
+    async function getGroups() {
+
+        const fetchData = async () => {
+            setLoading(true);
+            console.log('set loading true'+selectedOption);
+            let data = "";
+            let url = 'http://localhost:3001/Groups/';
+            if (selectedOption === 'OwnGroups') {
+                url = `http://localhost:3001/Groups/${userID.value}`;
+            }
+
+            data = await fetch(url)
+                .then(
+                    response => data = response.json()
+                )
+                .catch(err => console.error(err));
+            setGroups(data);
+
+        };
+        await fetchData();
+        setLoading(false);
+    }
+
+    function buttonHandler(event) {
+        selectedOption=event.target.value;
+        getGroups();
+    }
+
     return (
         <div className="GroupsL">
             <div className="GroupDropdown">
-                <select>
+                <select onChange={buttonHandler}>
                     <option value="AllGroups">All groups</option>
                     <option value="OwnGroups">Own groups</option>
-
                 </select>
+
+                {loading ? (
+                    <p>Loading...</p>
+                ) : (
+                    <GroupListG groups={groups} />
+                )}
             </div>
-                <ul className="GroupList">
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                    <li><GroupNameG /></li>
-                </ul>
-
-
-
         </div>
-    )
-}
+    );
+};
 
 function CreateGroup() {
     return (
@@ -45,7 +74,7 @@ function CreateGroup() {
             <div className="CreateGroupHeader">
                 <h1>Create group</h1>
             </div>
-                <GroupInput/>
+            <GroupInput />
         </div>
     )
 }
@@ -57,34 +86,33 @@ function GroupInput() {
     })
 
     const handleChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setDetails((prev) => {
-            return {...prev, [name]: value}
+            return { ...prev, [name]: value }
         })
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(details);
+
+        fetch('http://localhost:3001/Groups/', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(details)
+        }).then(() => {
+            console.log('new group added');
+        })
     }
 
     return (
         <div className="GroupInput">
             <form onSubmit={handleSubmit}>
-                <h3>Group name:</h3> <input type='name' name="name" onChange={handleChange}/>
+                <h3>Group name:</h3> <input type='name' name="name" onChange={handleChange} />
                 <h3>Group description:</h3> <textarea name="description" onChange={handleChange}></textarea>
                 <button type="create">Create group</button>
             </form>
         </div>
     )
-}
-
-function GroupNameG() {
-    return (
-        <div className="GroupNameG">
-            <h2>Group</h2>
-        </div>
-    );
 }
 
 export default GroupMainMenu;

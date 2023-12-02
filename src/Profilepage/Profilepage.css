@@ -11,7 +11,7 @@
     flex-direction: column;
     width: 30%;
     justify-content: space-between;
-    text-align: center;
+    align-items: center;
     border: 1px solid #030303;
     margin: 15px 15px 15px 50px;
 }
@@ -48,29 +48,29 @@
     margin-bottom: 5px;
 }
 
-.MovieTitle,
+.ProfileMovieTitle,
 .Rating,
 .Text,
 .GroupName,
 .placeholderImage {
     width: 90%;
     text-align: center;
+    align-items: center;
     margin-bottom: 5px;
 }
-
 
 /*Fix later*/
 .placeholderImage {
     margin-left: 30px;
 }
 
-.OwnReviews .MovieTitle,
-.PostsAndNews .MovieTitle {
+.OwnReviews .ProfileMovieTitle,
+.PostsAndNews .ProfileMovieTitle {
     border: 1px solid #030303;
     align-items: center;
 }
 
-.FavouriteMovies .MovieTitle {
+.FavouriteMovies .ProfileMovieTitle {
     text-align: left;
 }
 
@@ -79,14 +79,18 @@
 }
 
 .PostsAndNews .Buttons {
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+    align-items: center;
     margin: 5px 0px 5px 0px;
 }
 
 .OwnReviews .Buttons {
     display: flex;
-    flex-direction: row;
+    width: 90%;
     justify-content: space-between;
-    align-items: left;
+    align-items: center;
     margin: 0px 40px 5px 40px;
 }
 
@@ -98,8 +102,8 @@
     margin: 0px 40px 5px 40px;
 }
 
-#ButtonPrevious,
-#ButtonNext {
+#ButtonLeft,
+#ButtonRight {
     background-color: orange;
     border: 1px solid #030303;
 }
@@ -125,4 +129,41 @@ ul.GroupsList {
     list-style-type: none;
     margin: 0;
     height: 100%;
+}
+
+/*Child container (Parent: OwnReviews)*/
+.ProfilePageReview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*Mobile*/
+@media only screen and (max-width: 768px) {
+
+    /*Main container*/
+    .Profilepage {
+        flex-direction: column;
+    }
+
+    .OwnReviews {
+        margin: 15px 0px 15px 0px;
+        width: 100%;
+    }
+
+    .FavouriteMoviesAndGroups {
+        margin: 15px 0px 15px 0px;
+        width: 100%;
+    }
+
+    .PostsAndNews {
+        margin: 15px 0px 15px 0px;
+        width: 100%;
+    }
+
+    /*Fix later*/
+    .placeholderImage {
+        margin-left: 15px;
+    }
+    
 }
