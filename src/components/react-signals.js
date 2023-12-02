@@ -2,9 +2,11 @@ import { effect, signal } from "@preact/signals-react";
 import axios from "axios";
 axios.defaults.baseURL = 'http://localhost:3001';
 export const token = signal(getSessionToken());
-export let userID = "";
-export function setUserid(val){
-    userID = val;
+export const userID = signal(getUserID());
+export const BearerToken = ""
+function getUserID(){
+    const t = sessionStorage.getItem('userID');
+    return t===null || t==='null' ? '' : t;
 }
 function getSessionToken(){
     const t = sessionStorage.getItem('token');
@@ -12,4 +14,5 @@ function getSessionToken(){
 }
 effect(()=>{
     sessionStorage.setItem('token', token.value);
+    sessionStorage.setItem('UserID', userID.value);
 });
