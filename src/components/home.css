@@ -117,6 +117,8 @@
 }
 .searchoption{
     justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
 }
 .searchoption.active{
     visibility:visible;
@@ -163,4 +165,20 @@
 }
 .SearchButtonNext{
     float: right;
+}
+.SearchInputyear{
+    display:flex;
+    text-align: center;
+}
+.SearchSelect{
+    display: flex;
+    text-align: center;
+}
+.DropdownelementContainer{
+    display: flex;
+    flex-direction: column;
+    flex-basis: 50%;
+}
+.DropdownelementContainer h{
+    text-align: center;
 }

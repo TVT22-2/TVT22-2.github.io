@@ -79,6 +79,7 @@ async function idParser(movie_id){
   return data; 
  }
  async function MovieDBRegData(saveval, amount, page){ 
+  if(BearerToken.length>5){
   amountoffetches = amountoffetches + amount;
   if(amountoffetches>0){
   switch (saveval){
@@ -176,6 +177,9 @@ async function idParser(movie_id){
          }             
     }
   }
+} else {
+  console.log("Error with the connection")
+}
 }
 function APIcall(saveval, page){
     let fetchresponse;

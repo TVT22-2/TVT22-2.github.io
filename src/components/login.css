@@ -49,9 +49,7 @@
     background-color: rgba(242, 34, 34, 0.6);
 }
 .Register{
-  display: block;
-  margin: auto;
-  align-items: center;
+    margin-top:20px;
 }
 .LoginQuery{
     width: 100%;
@@ -69,4 +67,9 @@
 }
 .LoginButtonNo{
     margin-left: 20px;
+}
+.RegisterContainer{
+    display: flex;
+    flex:100%;
+    justify-content: center;
 }
