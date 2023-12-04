@@ -5,6 +5,7 @@ var loginRouter = require('./routes/loginrouter');
 var groupRouter = require('./routes/grouprouter');
 var ReviewRouter = require('./routes/reviewrouter');
 var PostsRouter = require('./routes/postsrouter');
+var FavoritesRouter = require('./routes/favoritesrouter');
 var app = express();
 
 app.use(express.urlencoded({extended: true}));
@@ -16,6 +17,7 @@ app.use('/login', loginRouter);
 app.use('/', groupRouter);
 app.use('/', ReviewRouter);
 app.use('/post', PostsRouter);
+app.use('/favorites', FavoritesRouter);
 
 const PORT = process.env.PORT || 3001;
 

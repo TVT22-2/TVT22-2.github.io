@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./Profilepage.css"
 import image from "../resources/placeholderimage3.jpg"
-import { idParser, ReviewGetter, ReviewArray } from '../components/DataLoader';
-import { userID, } from "../components/react-signals"
+import { idParser } from '../components/DataLoader';
+import { BearerToken, userID } from "../components/react-signals";
 
 function Profilepage() {
 
@@ -31,6 +31,7 @@ function OwnReviews() {
 
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [reviewsWithTitles, setReviewsWithTitles] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const reviewsPerPage = 2; // Number of reviews to display per page
     const [totalPages, setTotalPages] = useState(1);
@@ -59,16 +60,25 @@ function OwnReviews() {
     /* Get and Map titles to reviews */
     useEffect(() => {
         const fetchTitles = async () => {
-            const reviewsWithTitles = await Promise.all(
-                reviews.map(async (review) => {
-                    const movieDetails = await idParser(review.idmovie);
-                    return {
-                        ...review,
-                        title: movieDetails.title,
-                    };
-                })
-            );
-            setReviews(reviewsWithTitles);
+            try {
+                console.log('Before fetching titles:', reviews);
+
+                const reviewsWithTitles = await Promise.all(
+                    reviews.map(async (review) => {
+                        const movieDetails = await idParser(review.idmovie);
+                        return {
+                            ...review,
+                            title: movieDetails.title,
+                        };
+                    })
+                );
+
+                console.log('After fetching titles:', reviewsWithTitles);
+
+                setReviewsWithTitles(reviewsWithTitles);
+            } catch (error) {
+                console.error('Error fetching titles:', error);
+            }
         };
 
         fetchTitles();
@@ -88,7 +98,7 @@ function OwnReviews() {
 
     const startIndex = (currentPage - 1) * reviewsPerPage;
     const endIndex = startIndex + reviewsPerPage;
-    const displayedReviews = reviews.slice(startIndex, endIndex);
+    const displayedReviews = reviewsWithTitles.slice(startIndex, endIndex);
 
     return (
         <div className="OwnReviews">
