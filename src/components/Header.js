@@ -89,9 +89,9 @@ function Home() {
                 <>
                     <Result state={state} />
                     <div className="SearchButtonContainer">
-                        <button onClick={() => curpage < totalpages ? refresh() : console.log("hello")} className="SearchButtonNext">next</button>
+                    <button onClick={() => uiPage !== 1 ? refreshminus() : console.log("hello")} className="SearchButtonPrev">prev</button>
                         <p>{uiPage + "/" + totalpages * multiplication}</p>
-                        <button onClick={() => uiPage !== 1 ? refreshminus() : console.log("hello")} className="SearchButtonPrev">prev</button>
+                        <button onClick={() => curpage < totalpages ? refresh() : console.log("hello")} className="SearchButtonNext">next</button>
                     </div>
                 </>
                 :

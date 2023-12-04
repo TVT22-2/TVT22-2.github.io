@@ -51,7 +51,7 @@ async function idParser(movie_id){
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer '+BearerToken
+      Authorization: 'Bearer '+ BearerToken
     }
   };
   fetchresponse = fetch('https://api.themoviedb.org/3/movie/'+movie_id+'?language=en-US', options)
@@ -61,6 +61,7 @@ async function idParser(movie_id){
 }
  async function ReviewGetter(){
   let data = await Reviewreg();
+  if(data!== undefined){
   data.forEach(async element => {
     let title = await idParser(element.idmovie);
     let review = 
@@ -71,11 +72,14 @@ async function idParser(movie_id){
       movietitle: title.title
     }
     ReviewArray.push(review);
+  
   });
+}
  }
  async function Reviewreg(){
   let data = fetch("http://localhost:3001/getrecentreview")
   .then(response => data = response.json())
+  .catch(error => console.log(error.message));
   return data; 
  }
  async function MovieDBRegData(saveval, amount, page){ 

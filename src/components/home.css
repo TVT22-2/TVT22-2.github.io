@@ -162,6 +162,7 @@
     width: 100px;
     text-align: center;
     display: block;
+    background-color: orange;
 }
 .SearchButtonNext{
     float: right;
