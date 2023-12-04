@@ -48,29 +48,29 @@
     margin-bottom: 5px;
 }
 
-.MovieTitle,
+.ProfileMovieTitle,
 .Rating,
 .Text,
 .GroupName,
 .placeholderImage {
     width: 90%;
     text-align: center;
+    align-items: center;
     margin-bottom: 5px;
 }
-
 
 /*Fix later*/
 .placeholderImage {
     margin-left: 30px;
 }
 
-.OwnReviews .MovieTitle,
-.PostsAndNews .MovieTitle {
+.OwnReviews .ProfileMovieTitle,
+.PostsAndNews .ProfileMovieTitle {
     border: 1px solid #030303;
     align-items: center;
 }
 
-.FavouriteMovies .MovieTitle {
+.FavouriteMovies .ProfileMovieTitle {
     text-align: left;
 }
 
@@ -136,4 +136,34 @@ ul.GroupsList {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+/*Mobile*/
+@media only screen and (max-width: 768px) {
+
+    /*Main container*/
+    .Profilepage {
+        flex-direction: column;
+    }
+
+    .OwnReviews {
+        margin: 15px 0px 15px 0px;
+        width: 100%;
+    }
+
+    .FavouriteMoviesAndGroups {
+        margin: 15px 0px 15px 0px;
+        width: 100%;
+    }
+
+    .PostsAndNews {
+        margin: 15px 0px 15px 0px;
+        width: 100%;
+    }
+
+    /*Fix later*/
+    .placeholderImage {
+        margin-left: 15px;
+    }
+    
 }

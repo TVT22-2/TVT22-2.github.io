@@ -1,4 +1,4 @@
-
+import { BearerToken } from './react-signals'
 import customData from '../components/genreids.json';
 let amountoffetches = 0;
  let UpcomingMovies = [
@@ -51,7 +51,7 @@ async function idParser(movie_id){
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer '
+      Authorization: 'Bearer '+ BearerToken
     }
   };
   fetchresponse = fetch('https://api.themoviedb.org/3/movie/'+movie_id+'?language=en-US', options)
@@ -61,6 +61,7 @@ async function idParser(movie_id){
 }
  async function ReviewGetter(){
   let data = await Reviewreg();
+  if(data!== undefined){
   data.forEach(async element => {
     let title = await idParser(element.idmovie);
     let review = 
@@ -71,15 +72,18 @@ async function idParser(movie_id){
       movietitle: title.title
     }
     ReviewArray.push(review);
+  
   });
+}
  }
  async function Reviewreg(){
-  let data;
-  await fetch("http://localhost:3001/getrecentreview")
+  let data = fetch("http://localhost:3001/getrecentreview")
   .then(response => data = response.json())
+  .catch(error => console.log(error.message));
   return data; 
  }
  async function MovieDBRegData(saveval, amount, page){ 
+  if(BearerToken.length>5){
   amountoffetches = amountoffetches + amount;
   if(amountoffetches>0){
   switch (saveval){
@@ -177,6 +181,9 @@ async function idParser(movie_id){
          }             
     }
   }
+} else {
+  console.log("Error with the connection")
+}
 }
 function APIcall(saveval, page){
     let fetchresponse;
@@ -184,7 +191,7 @@ function APIcall(saveval, page){
             method: 'GET',
             headers: {
               accept: 'application/json',
-              Authorization: 'Bearer '
+              Authorization: 'Bearer '+ BearerToken
             }
           };
           if(saveval === "upcom"){
@@ -209,4 +216,4 @@ function APIcall(saveval, page){
             return fetchresponse
           }
     }
-    export {TopratedMovies, RecentMovies, TrendingMovies, UpcomingMovies, MovieDBRegData, ReviewGetter, ReviewArray};
+    export {TopratedMovies, RecentMovies, TrendingMovies, UpcomingMovies, MovieDBRegData, ReviewGetter, ReviewArray, idParser};
