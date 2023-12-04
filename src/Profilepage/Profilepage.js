@@ -156,17 +156,72 @@ function PostsAndNews() {
 
 /*Profiilisivun komponentti*/
 function FavouriteMovies() {
+
+    const [favorites, setFavorites] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [favoritesWithTitles, setfavoritesWithTitles] = useState([]);
+
+    /* Get favorites from the database */
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                let url = `http://localhost:3001/favorites/${userID}`;
+                console.log(url);
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log(data);
+
+                // Limit to 5 favorites
+                const limitedFavorites = data.slice(0, 5);
+                setFavorites(limitedFavorites);
+            } catch (error) {
+                console.error('Error fetching data at FavouriteMovies:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+     /* Get and Map titles to favorites */
+     useEffect(() => {
+        const fetchTitles = async () => {
+            try {
+                console.log('Before fetching titles:', favorites);
+
+                const favoritesWithTitles = await Promise.all(
+                    favorites.map(async (favorite) => {
+                        const movieDetails = await idParser(favorite.movie_id);
+                        return {
+                            ...favorite,
+                            title: movieDetails.title,
+                        };
+                    })
+                );
+
+                console.log('After fetching titles:', favoritesWithTitles);
+
+                setfavoritesWithTitles(favoritesWithTitles);
+            } catch (error) {
+                console.error('Error fetching titles:', error);
+            }
+        };
+
+        fetchTitles();
+    }, [favorites]); // Update the favorites whenever the 'favorites' state changes
+
     return (
         <div className="FavouriteMovies">
             <div className="FavouriteMoviesHeader">
                 <h1>Favourite Movies</h1>
             </div>
             <ol className="FavouriteMoviesList">
-                <li><ProfileMovieTitle Title='Placeholder' /></li>
-                <li><ProfileMovieTitle Title='Placeholder' /></li>
-                <li><ProfileMovieTitle Title='Placeholder' /></li>
-                <li><ProfileMovieTitle Title='Placeholder' /></li>
-                <li><ProfileMovieTitle Title='Placeholder' /></li>
+            {favoritesWithTitles.map((favorite, index) => (
+                    <li key={index}>
+                        <ProfileMovieTitle Title={favorite.title} />
+                    </li>
+                ))}
             </ol>
         </div>
     );
