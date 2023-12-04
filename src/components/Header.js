@@ -8,7 +8,7 @@ import customData from '../components/genreids.json';
 import { useEffect } from "react";
 let searcharray = [{
 }];
-let index = 20;
+let index = 5;
 let totalpages;
 let adult = false;
 let year = "";
@@ -16,6 +16,7 @@ let curpage = 1;
 let uiPage = 1;
 let statevar = 1;
 let multiplication = 1;
+let movietv = "movie";
 function Home() {
     const location = useLocation();
     useEffect(() => {
@@ -56,16 +57,30 @@ function Home() {
                 </div>
             </div>
             {searchbaropen ? <div className={`searchoption ${searchbaropen ? 'active' : 'inactive'}`}>
-                <input placeholder="release year" maxLength="4" onChange={(event) => year = event.target.value}></input>
-                <lable>
-                    <input type="checkbox" onClick={adultsetter} />
-                    adult
-                </lable>
-                <select onChange={indexsetter}>
+                <div className="DropdownelementContainer">
+                <h>Release Year</h>
+                <input className="SearchInputyear" placeholder="release year" maxLength="4" onChange={(event) => year = event.target.value}></input>
+                </div>
+                <div className="DropdownelementContainer">
+                <h>Adult Content</h>
+                <input type="checkbox" id="checkbox"onClick={adultsetter} />
+                </div>
+                <div className="DropdownelementContainer">
+                <h>Results per page</h>
+                <select className="SearchSelect"  onChange={indexsetter}>
                     <option value={20}>20</option>
                     <option value={10}>10</option>
                     <option value={5}>5</option>
                 </select>
+                </div>
+                <div className="DropdownelementContainer">
+                <h>Movie/TV</h>
+                <select className="SearchSelect"  onChange={(event)=>movietv = event.target.value}>
+                    <option value={"movie"}></option> 
+                    <option value={"movie"}>Movie</option>
+                    <option value={"tv"}>TV-Show</option>
+                </select>
+                </div>
             </div>
                 :
                 <>
@@ -74,9 +89,9 @@ function Home() {
                 <>
                     <Result state={state} />
                     <div className="SearchButtonContainer">
-                        <button onClick={() => curpage < totalpages ? refresh() : console.log("hello")} className="SearchButtonNext">next</button>
+                    <button onClick={() => uiPage !== 1 ? refreshminus() : console.log("hello")} className="SearchButtonPrev">prev</button>
                         <p>{uiPage + "/" + totalpages * multiplication}</p>
-                        <button onClick={() => uiPage !== 1 ? refreshminus() : console.log("hello")} className="SearchButtonPrev">prev</button>
+                        <button onClick={() => curpage < totalpages ? refresh() : console.log("hello")} className="SearchButtonNext">next</button>
                     </div>
                 </>
                 :
@@ -128,7 +143,6 @@ function Home() {
         } else {
             statevar--;
         }
-        console.log("Statevar: " + statevar);
         getter();
         async function getter() {
             setState(!state);
@@ -143,7 +157,6 @@ function Home() {
         } else {
             statevar++;
         }
-        console.log("Statevar: " + statevar);
         getter();
         async function getter() {
             setState(!state);
@@ -184,6 +197,16 @@ function Home() {
         let data = await datagetter();
         totalpages = data.total_pages;
         searcharray = [];
+        if(movietv === "tv"){
+        for (let i = 0; i < data.results.length; i++) {
+            let array = {
+                title: data.results[i].name,
+                id: data.results[i].id,
+                posterpath: data.results[i].poster_path
+            }
+            searcharray.push(array);
+        }
+        } else {
         for (let i = 0; i < data.results.length; i++) {
             let array = {
                 title: data.results[i].title,
@@ -192,6 +215,7 @@ function Home() {
             }
             searcharray.push(array);
         }
+    }
     }
     function datagetter() {
         let fetchresponse;
@@ -203,7 +227,7 @@ function Home() {
                 Authorization: 'Bearer '+BearerToken
             }
         };
-        url = 'https://api.themoviedb.org/3/search/movie?query=' + message + '&include_adult=' + adult + '&language=en-US&page=' + curpage + '&year=' + year;
+        url = 'https://api.themoviedb.org/3/search/'+movietv+'?query=' + message + '&include_adult=' + adult + '&language=en-US&page=' + curpage + '&year=' + year;
         fetchresponse = fetch(url, options)
             .then(response => fetchresponse = response.json())
             .catch(err => console.error(err));

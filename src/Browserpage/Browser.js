@@ -50,6 +50,7 @@ const [index3, setIndex3] = useState(1);
     function MovieContainer(props) {
         let row = [];
         for (let i = props.index; i <= props.index+4; i++) {
+            if(props.var[i]!==undefined){
             let url = "https://image.tmdb.org/t/p/w500/" + props.var[i].posterpath;
             row.push(
                 <div className="Moviecontainer">
@@ -63,6 +64,12 @@ const [index3, setIndex3] = useState(1);
                     </div>
                 </div>
                 )
+            } else{
+                row.push(
+                    <>Connection error</>
+                )
+                break;
+            }
         }
         return row;
     }

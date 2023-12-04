@@ -12,7 +12,7 @@ return(
     <input className="Password" type="password" placeholder="Password" onChange={e => password = e.target.value}></input>
     <input className="Password" type="password" placeholder="RecoveryKey" onChange={e => recovery = e.target.value}></input>
 </div>
-        <button className="Register" id="LoginButton" onClick={register}>Register</button> 
+        <div className="RegisterContainer"><button className="Register" id="LoginButton" onClick={register}>Register</button></div>
 </>
 );
 async function register(){

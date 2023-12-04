@@ -7,6 +7,7 @@ export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
     useEffect(() => {
         const fetchdata = async () => {
+            await ReviewGetter();   
             await MovieDBRegData("trend", 1,1)
              .then(()=> MovieDBRegData("upcom", 1,1))
              .then(()=> MovieDBRegData("recent", 1,1))
@@ -16,7 +17,7 @@ export default function Frontpage() {
     }, []);
     if (isLoading) {
     return (
-     <>
+     <> 
      </>
     );
     }
@@ -31,6 +32,7 @@ export default function Frontpage() {
         <nav className="navBar">
             <div className="container">
             <ul className="nav">
+                <Reviews/>
         </ul>
         </div>
         </nav>
@@ -42,7 +44,9 @@ export default function Frontpage() {
     } 
     function Reviews(){
         let reviews = [];
+        
         for(let i = 1; i<5; i++){
+        if(ReviewArray[i]!==undefined){
          reviews.push(
         <div className="FrontpageReviewContainer">
         <Link to={"http://localhost:3000/movie/?" + ReviewArray[i].id}>
@@ -52,6 +56,10 @@ export default function Frontpage() {
         <div className="verticaltextReview">{ReviewArray[i].content}</div>
         </div>
          );
+        } else {
+            reviews.push(<>Error with database connection</>)
+            break;
+        }
         }
     return reviews;
         
@@ -65,12 +73,14 @@ export default function Frontpage() {
                 setIndex(1);    
             }
         }, 8000);
+        if(RecentMovies[index]!==undefined){
         let url = "https://image.tmdb.org/t/p/w500/" + RecentMovies[index].posterpath;
         return (
             <>
             <li className="moviecontainer">
-                <img src={url} alt="bigdogstatus" className="recentImage">
-                </img>
+                <Link to={"http://localhost:3000/movie/" + RecentMovies[index].id}>
+                <img src={url} alt="bigdogstatus" className="recentImage"></img>
+                </Link>
                 <article className="movieinfo">
                     <div className="title">{RecentMovies[index].title}</div>
                     <div className="title">{RecentMovies[index].genreid}</div>
@@ -79,6 +89,9 @@ export default function Frontpage() {
             </li> 
             </>
         );
+        } else {
+            return <>Error with database connection</>
+        }
     }
     function MovieElementVertical(props) {
         let imageurl = "https://image.tmdb.org/t/p/w500/"+ props.imagepath;
@@ -134,8 +147,13 @@ export default function Frontpage() {
     }else if(props.var === "upcom"){
     array = UpcomingMovies;
     }
-for (let i = 1; i<=10;i++){
+   for (let i = 1; i<=10;i++){
+    if(array[i]!==undefined){
     row.push(<MovieElementVertical title={array[i].title} genre={array[i].genreid} popularity={array[i].popularity} imagepath={array[i].posterpath} id={array[i].id}/>)
+    } else {
+        row.push(<>Error with the connection</>)
+        break;
+    }
    }
     return row;
   }
