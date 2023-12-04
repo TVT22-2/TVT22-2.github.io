@@ -3,6 +3,12 @@
     .moviecontainer{
         height: 300px;
     }
+    .nav{
+    width: fit-content;
+    }
+    .navBar{
+        width: fit-content;
+    }
 }
 .moviecontainer{
     display: flex;
@@ -14,6 +20,7 @@
     align-items: center;
     width: 99%;
     height:auto;
+    background-color: rgba(255, 166, 0,0.5);
 }
 .recentImage{
     margin-left: auto;
@@ -31,13 +38,14 @@
 .movieinfo{
     flex-basis: 66%;
     width: 150px;
+
 }
 .title{ 
     flex-grow:1;
     font-weight: bold;
     margin-top: 20px;
     border-style: double;
-    border-width: 1px;
+    border-width: 2px;
     border-color: orange;
 }
 .Movieheading{
@@ -45,22 +53,26 @@
  text-align: center;
 }
 .headingelement{
-    justify-content: center;
+    display: flex;
     background-color: orange;
     height:60px;
     margin-top: 10px;
     margin-bottom: 10px;
     width: 100%;
-    font-size:15px;
+    font-size:25px;
+    justify-content: center;
     align-items: center;
     text-align: center;
 }
 .container {
-    max-width: 800px;
-}
-.nav {
-    list-style: none;
+    width: 99vw;
     display: flex;
+    max-width: fit-content;
+}
+.nav { 
+    display: flex;
+    flex-direction: row;
+    flex-basis: 100%;
     overflow-x:scroll;
     height: 500px;
 }
@@ -99,13 +111,11 @@
     left:20px;
 }
 .verticaltext{
-    overflow: hidden;
     font-weight: bold;
     display: flex;
     text-align: center;
     align-items: center;
-    display: inline-block;
-    flex-basis: 100%;
+    flex-grow: 1;
     width: 250px;
     border-color:orange;
     border-style: double;
@@ -163,4 +173,10 @@ align-items: center;
 justify-content: center;
 flex-direction: column;
   margin-right:60px;
+}
+.navBar{
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 100%;
+    flex-wrap: wrap;
 }

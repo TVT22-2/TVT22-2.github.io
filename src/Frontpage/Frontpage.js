@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "./frontpage.css" 
 import { MovieDBRegData,ReviewGetter, UpcomingMovies, TrendingMovies, RecentMovies, ReviewArray  } from'../components/DataLoader';
+import { userID } from'../components/react-signals';
 import { Link } from "react-router-dom";
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
@@ -36,6 +37,7 @@ export default function Frontpage() {
         </ul>
         </div>
         </nav>
+        <button onClick={()=>console.log(userID)}>button</button>
         <br></br>
         <br></br>
         <br></br>
@@ -147,7 +149,7 @@ export default function Frontpage() {
     }else if(props.var === "upcom"){
     array = UpcomingMovies;
     }
-   for (let i = 1; i<=10;i++){
+   for (let i = 1; i<=20;i++){
     if(array[i]!==undefined){
     row.push(<MovieElementVertical title={array[i].title} genre={array[i].genreid} popularity={array[i].popularity} imagepath={array[i].posterpath} id={array[i].id}/>)
     } else {

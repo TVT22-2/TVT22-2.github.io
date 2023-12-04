@@ -16,7 +16,7 @@ export default function Login() {
     return (
 
         <div>
-            {token.value.length > 3 && pass === false ? <><div className="LoginQuery"><h2>Are you sure?</h2><button className="LoginButtonYes" onClick={() => token.value = undefined + navigate("/")}>yes</button><button className="LoginButtonNo" onClick={() => navigate("/")}>no</button></div></> :
+            {token.value.length > 3 && pass === false ? <><div className="LoginQuery"><h2>Are you sure?</h2><button className="LoginButtonYes" onClick={LogOut}>yes</button><button className="LoginButtonNo" onClick={() => navigate("/")}>no</button></div></> :
                 <>
                     <div className="inputcontainer">
                         {pass === true ? <><input className="newPass" type="text" placeholder="New password" value={password} onChange={e => setPassword(e.target.value)}></input><input className="newPass" type="text" placeholder="New password" value={password2} onChange={e => setPassword2(e.target.value)}></input></> : <>
@@ -42,13 +42,18 @@ export default function Login() {
 
         </div>
     )
+    function LogOut(){
+        token.value="";
+        userID.value="";
+        navigate("/")
+    }
     async function returnvalues() {
         if (password !== "" && username !== "") {
             let response = await axios.postForm('login/login', { username, password })
                 .catch(error => console.log(error) + setAlert(error.message + ". Please try again later!") + setTimeout(function() {
                     setAlert("")
                    }, 6000))
-                   userID.value = await response.data.userID;
+                   userID.value = await response.data.UserID;
                    token.value = await response.data.jwtToken
         } else {
             alert("Check the input fields!")
