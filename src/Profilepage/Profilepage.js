@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./Profilepage.css"
 import image from "../resources/placeholderimage3.jpg"
-import { idParser, ReviewGetter, ReviewArray } from '../components/DataLoader';
-import { userID, } from "../components/react-signals"
+import { idParser } from '../components/DataLoader';
+import { userID } from "../components/react-signals";
 
 function Profilepage() {
 
@@ -18,19 +18,28 @@ function Profilepage() {
         );
     }
 
-    return (
-        <div className="Profilepage">
-            <OwnReviews />
-            <FavouriteMoviesAndGroups />
-            <PostsAndNews />
-        </div>
-    )
+    if (userID.value === "") {
+        return (
+            <div className="Profilepage">
+                <h1>You must be logged in to view this page</h1>
+            </div>
+        )
+    } else {
+        return (
+            <div className="Profilepage">
+                <OwnReviews />
+                <FavouriteMoviesAndGroups />
+                <PostsAndNews />
+            </div>
+        )
+    }
 }
 
 function OwnReviews() {
 
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [reviewsWithTitles, setReviewsWithTitles] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const reviewsPerPage = 2; // Number of reviews to display per page
     const [totalPages, setTotalPages] = useState(1);
@@ -59,16 +68,25 @@ function OwnReviews() {
     /* Get and Map titles to reviews */
     useEffect(() => {
         const fetchTitles = async () => {
-            const reviewsWithTitles = await Promise.all(
-                reviews.map(async (review) => {
-                    const movieDetails = await idParser(review.idmovie);
-                    return {
-                        ...review,
-                        title: movieDetails.title,
-                    };
-                })
-            );
-            setReviews(reviewsWithTitles);
+            try {
+                console.log('Before fetching titles:', reviews);
+
+                const reviewsWithTitles = await Promise.all(
+                    reviews.map(async (review) => {
+                        const movieDetails = await idParser(review.idmovie);
+                        return {
+                            ...review,
+                            title: movieDetails.title,
+                        };
+                    })
+                );
+
+                console.log('After fetching titles:', reviewsWithTitles);
+
+                setReviewsWithTitles(reviewsWithTitles);
+            } catch (error) {
+                console.error('Error fetching titles:', error);
+            }
         };
 
         fetchTitles();
@@ -88,7 +106,7 @@ function OwnReviews() {
 
     const startIndex = (currentPage - 1) * reviewsPerPage;
     const endIndex = startIndex + reviewsPerPage;
-    const displayedReviews = reviews.slice(startIndex, endIndex);
+    const displayedReviews = reviewsWithTitles.slice(startIndex, endIndex);
 
     return (
         <div className="OwnReviews">
@@ -146,17 +164,72 @@ function PostsAndNews() {
 
 /*Profiilisivun komponentti*/
 function FavouriteMovies() {
+
+    const [favorites, setFavorites] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [favoritesWithTitles, setfavoritesWithTitles] = useState([]);
+
+    /* Get favorites from the database */
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                let url = `http://localhost:3001/favorites/${userID}`;
+                console.log(url);
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log(data);
+
+                // Limit to 5 favorites
+                const limitedFavorites = data.slice(0, 5);
+                setFavorites(limitedFavorites);
+            } catch (error) {
+                console.error('Error fetching data at FavouriteMovies:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+     /* Get and Map titles to favorites */
+     useEffect(() => {
+        const fetchTitles = async () => {
+            try {
+                console.log('Before fetching titles:', favorites);
+
+                const favoritesWithTitles = await Promise.all(
+                    favorites.map(async (favorite) => {
+                        const movieDetails = await idParser(favorite.movie_id);
+                        return {
+                            ...favorite,
+                            title: movieDetails.title,
+                        };
+                    })
+                );
+
+                console.log('After fetching titles:', favoritesWithTitles);
+
+                setfavoritesWithTitles(favoritesWithTitles);
+            } catch (error) {
+                console.error('Error fetching titles:', error);
+            }
+        };
+
+        fetchTitles();
+    }, [favorites]); // Update the favorites whenever the 'favorites' state changes
+
     return (
         <div className="FavouriteMovies">
             <div className="FavouriteMoviesHeader">
                 <h1>Favourite Movies</h1>
             </div>
             <ol className="FavouriteMoviesList">
-                <li><ProfileMovieTitle Title='Placeholder' /></li>
-                <li><ProfileMovieTitle Title='Placeholder' /></li>
-                <li><ProfileMovieTitle Title='Placeholder' /></li>
-                <li><ProfileMovieTitle Title='Placeholder' /></li>
-                <li><ProfileMovieTitle Title='Placeholder' /></li>
+            {favoritesWithTitles.map((favorite, index) => (
+                    <li key={index}>
+                        <ProfileMovieTitle Title={favorite.title} />
+                    </li>
+                ))}
             </ol>
         </div>
     );
