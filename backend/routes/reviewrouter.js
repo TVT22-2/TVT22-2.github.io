@@ -12,9 +12,9 @@ router.get('/getrecentreview', async (req,res) => {
     }
 });
 
-router.get('/getownreview', async (req,res) => {
+router.get('/getownreview/:id', async (req,res) => {
     try{
-        res.json(await getOwnReview());
+        res.json(await getOwnReview(req.params.id));
     } catch (error){
         res.status(500).json({error: error.message})
     }
@@ -30,11 +30,14 @@ router.get('/getmoviereview/:idmovie', async (req,res) => {
 
 
 router.post('/addReview', async (req,res) => {
-    const gname = req.body.name;
-    const desc = req.body.description;
+        const content = req.body.content;
+        const date = req.body.date;
+        const review = req.body.review;
+        const iduser = req.body.iduser;
+        const idmovie = req.body.idmovie;
 
     try {
-        await addReview();
+        await addReview(content, date, review, iduser, idmovie);
         res.status(201).json({ message: 'Review added successfully' });
       } catch (error) {
         res.status(500).json({ error: 'Failed to add review' });

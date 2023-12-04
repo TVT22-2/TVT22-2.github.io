@@ -48,7 +48,7 @@ export default function Login() {
                 .catch(error => console.log(error) + setAlert(error.message + ". Please try again later!") + setTimeout(function() {
                     setAlert("")
                    }, 6000))
-                   userID.value = await response.data.UserID;
+                   userID.value = await response.data.userID;
                    token.value = await response.data.jwtToken
         } else {
             alert("Check the input fields!")

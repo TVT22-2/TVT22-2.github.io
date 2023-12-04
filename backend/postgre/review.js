@@ -17,8 +17,8 @@ async function getRecentReview(){
     return rows;
 }
 
-async function getOwnReview(){
-    const result = await pgPool.query(sql.GET_OWN_REVIEWS);
+async function getOwnReview(iduser){
+    const result = await pgPool.query(sql.GET_OWN_REVIEWS, [iduser]);
     const rows = result.rows;
     return rows;
 
