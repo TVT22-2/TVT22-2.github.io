@@ -1,14 +1,19 @@
 const pgPool = require("./connection.js")
 
 const sql = {
-    INSERT_GROUP: 'INSERT INTO groups (name,description) values ($1, $2)',
+    INSERT_GROUP: 'INSERT INTO groups (name,description,ownerid) values ($1, $2, $3)',
+    INSERT_USER_HAS_GROUP: 'INSERT INTO user_has_groups (user_iduser,groups_idgroups) values ($1, $2)',
     GET_GROUPS: 'SELECT * from groups',
     GET_USER_GROUPS: 'SELECT name,description from groups g INNER JOIN user_has_groups uhg ON g.id = uhg.groups_idgroups WHERE user_iduser = ($1);'
 }
 
-async function addGroup(gname, desc){
-    await pgPool.query(sql.INSERT_GROUP, [gname,desc]);
+async function addGroup(gname, desc, owner){
+    await pgPool.query(sql.INSERT_GROUP, [gname,desc,owner]);
+    //const groupID = results.rows[0];
+    //console.log(groupID);
+    //return groupID;
 }
+
 async function getGroups(){
     const result = await pgPool.query(sql.GET_GROUPS);
     const rows =  result.rows;

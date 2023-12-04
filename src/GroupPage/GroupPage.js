@@ -3,6 +3,8 @@ import "./GroupPage.css"
 import GroupListG from "./GroupList";
 import { userID } from "../components/react-signals"
 
+console.log(userID);
+
 function GroupMainMenu() {
     return (
         <div className="GroupMainMenu">
@@ -26,7 +28,7 @@ function GroupsL() {
 
         const fetchData = async () => {
             setLoading(true);
-            console.log('set loading true'+selectedOption);
+            console.log('set loading true' + selectedOption);
             let data = "";
             let url = 'http://localhost:3001/Groups/';
             if (selectedOption === 'OwnGroups') {
@@ -46,7 +48,7 @@ function GroupsL() {
     }
 
     function buttonHandler(event) {
-        selectedOption=event.target.value;
+        selectedOption = event.target.value;
         getGroups();
     }
 
@@ -82,7 +84,8 @@ function CreateGroup() {
 function GroupInput() {
     const [details, setDetails] = useState({
         name: "",
-        description: ""
+        description: "",
+        ownerid: userID
     })
 
     const handleChange = (e) => {
@@ -97,8 +100,11 @@ function GroupInput() {
 
         fetch('http://localhost:3001/Groups/', {
             method: 'POST',
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify(details)
+            
         }).then(() => {
             console.log('new group added');
         })

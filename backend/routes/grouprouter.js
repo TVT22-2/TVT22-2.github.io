@@ -15,10 +15,12 @@ router.get('/Groups', async (req,res) => {
 router.post('/Groups', async (req,res) => {
     const gname = req.body.name;
     const desc = req.body.description;
+    const owner = req.body.ownerid;
+    //const userID = req.headers.userid;
 
     try {
-        await addGroup(gname, desc);
-        res.status(201).json({ message: 'Group added successfully' });
+        await addGroup(gname, desc, owner);
+        res.status(201).json({ message: 'Group added successfully'});
       } catch (error) {
         res.status(500).json({ error: 'Failed to add group' });
       }
