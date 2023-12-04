@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Profilepage.css"
 import image from "../resources/placeholderimage3.jpg"
 import { idParser } from '../components/DataLoader';
-import { BearerToken, userID } from "../components/react-signals";
+import { userID } from "../components/react-signals";
 
 function Profilepage() {
 
@@ -18,13 +18,21 @@ function Profilepage() {
         );
     }
 
-    return (
-        <div className="Profilepage">
-            <OwnReviews />
-            <FavouriteMoviesAndGroups />
-            <PostsAndNews />
-        </div>
-    )
+    if (userID.value === "") {
+        return (
+            <div className="Profilepage">
+                <h1>You must be logged in to view this page</h1>
+            </div>
+        )
+    } else {
+        return (
+            <div className="Profilepage">
+                <OwnReviews />
+                <FavouriteMoviesAndGroups />
+                <PostsAndNews />
+            </div>
+        )
+    }
 }
 
 function OwnReviews() {
