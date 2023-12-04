@@ -101,7 +101,6 @@ function ReviewContent({ reviews, currentIndex }) {
         <div className="ReviewContent">
             <h2>{currentReview.title}</h2>
             <p>{currentReview.content}</p>
-            {/* Add other fields you want to display */}
         </div>
     );
 }
@@ -154,13 +153,78 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
             </div>
             <div className="AddReview">
                 <AddReviewsHeader />
+                <AddReviewRating />
+                <AddReviewContent />
+                <AddReviewSubmit />
             </div>
         </div>
     );
 }
 
+function handleReviewSubmit(){
+
+    fetch('http://localhost:3001/addReview/', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify()
+    }).then(() => {
+        console.log('Review added');
+    })
+
+}
+
+function AddReviewSubmit(){
+
+    return(
+        <button onClick={handleReviewSubmit}>Submit Review</button>
+    );
+}
+
+function AddReviewContent() {
+    const [content, setContent] = useState('');
+
+    const handleContentChange = (e) => {
+        setContent(e.target.value);
+    };
+
+    return (
+        <div className="AddReviewContent">
+            <label htmlFor="content">Review Content: </label>
+            <textarea
+                id="content"
+                value={content}
+                onChange={handleContentChange}
+                placeholder="Write your review here..."
+                rows="4"
+                cols="50"
+            />
+        </div>
+    );
+}
 
 
+function AddReviewRating() {
+    const [rating, setRating] = useState(0);
+
+    const handleRatingChange = (e) => {
+        setRating(e.target.value);
+    };
+
+    return (
+        <div className="AddReviewRating">
+            <label htmlFor="rating">Select Rating: </label>
+            <select id="rating" value={rating} onChange={handleRatingChange}>
+                <option value={0}>Select...</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={5}>5</option>
+            </select>
+        </div>
+    );
+}
+ 
 function Movie({ movieData }) {
     return (
         <div className="Movie">

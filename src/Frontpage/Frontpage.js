@@ -48,7 +48,7 @@ export default function Frontpage() {
         for(let i = 1; i<5; i++){
          reviews.push(
         <div className="FrontpageReviewContainer">
-        <Link to={"http://localhost:3000/movie/?" + ReviewArray[i].id}>
+        <Link to={"http://localhost:3000/movie/" + ReviewArray[i].id}>
         <div className="verticaltextTitle">{ReviewArray[i].movietitle}</div>
         </Link>
         <div className="verticaltextScore">5/{ReviewArray[i].review}</div>
