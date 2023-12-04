@@ -5,7 +5,7 @@ export const token = signal(getSessionToken());
 export const userID = signal(getUserID());
 export const BearerToken = ""
 function getUserID(){
-    const t = sessionStorage.getItem('userID');
+    const t = sessionStorage.getItem('UserID');
     return t===null || t==='null' ? '' : t;
 }
 function getSessionToken(){
