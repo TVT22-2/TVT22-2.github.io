@@ -30,18 +30,22 @@ router.get('/getmoviereview/:idmovie', async (req,res) => {
 
 
 router.post('/addReview', async (req,res) => {
-        const content = req.body.content;
-        const date = req.body.date;
-        const review = req.body.review;
-        const iduser = req.body.iduser;
-        const idmovie = req.body.idmovie;
+    const content = req.body.content;
+    const date = req.body.date;
+    const review = req.body.review;
+    const iduser = req.body.iduser;
+    const idmovie = req.body.idmovie;
 
     try {
         await addReview(content, date, review, iduser, idmovie);
         res.status(201).json({ message: 'Review added successfully' });
-      } catch (error) {
+    } catch (error) {
+        // Log the error for debugging
+        console.error('Error adding review:', error);
+
+        // Send an error response
         res.status(500).json({ error: 'Failed to add review' });
-      }
+    }
 });
 
 module.exports = router;
