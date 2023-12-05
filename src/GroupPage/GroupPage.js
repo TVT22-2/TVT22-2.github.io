@@ -82,11 +82,13 @@ function CreateGroup() {
 }
 
 function GroupInput() {
-    const [details, setDetails] = useState({
+    const initialDetails = {
         name: "",
         description: "",
         ownerid: userID
-    })
+    };
+    
+    const [details, setDetails] = useState(initialDetails);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -107,14 +109,16 @@ function GroupInput() {
             
         }).then(() => {
             console.log('new group added');
+            setDetails(initialDetails);
+            window.location.reload();
         })
     }
 
     return (
         <div className="GroupInput">
             <form onSubmit={handleSubmit}>
-                <h3>Group name:</h3> <input type='name' name="name" onChange={handleChange} />
-                <h3>Group description:</h3> <textarea name="description" onChange={handleChange}></textarea>
+                <h3>Group name:</h3> <input type='name' name="name" value = {details.name} onChange={handleChange} />
+                <h3>Group description:</h3> <textarea name="description" value = {details.description} onChange={handleChange} />
                 <button type="create">Create group</button>
             </form>
         </div>
