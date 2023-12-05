@@ -51,7 +51,7 @@
 .ProfileMovieTitle,
 .Rating,
 .Text,
-.GroupName,
+.ProfileGroupName,
 .placeholderImage {
     width: 90%;
     text-align: center;
@@ -74,7 +74,7 @@
     text-align: left;
 }
 
-.Groups .GroupName {
+.Groups .ProfileGroupName {
     text-align: left;
 }
 
@@ -99,7 +99,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin: 0px 40px 5px 40px;
+    margin: 0px 35px 5px 40px;
 }
 
 #ButtonLeft,
@@ -125,9 +125,16 @@
     margin: 0px 15px 0px 15px;
 }
 
-ul.GroupsList {
+.Groupslist {
     list-style-type: none;
-    margin: 0;
+    margin: 0 0px 0px 35px;
+    padding: 0;
+    height: 100%;
+    /* Make the list take up the full height of the container */
+}
+
+.Loader {
+    text-align: center;
     height: 100%;
 }
 
@@ -165,5 +172,5 @@ ul.GroupsList {
     .placeholderImage {
         margin-left: 15px;
     }
-    
+
 }

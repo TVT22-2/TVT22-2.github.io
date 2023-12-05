@@ -6,18 +6,6 @@ import { userID } from "../components/react-signals";
 
 function Profilepage() {
 
-    const [isLoading, setLoading] = useState(true);
-
-    setTimeout(function () {
-        setLoading(false)
-    }, 2000);
-    if (isLoading) {
-        return (
-            <>
-            </>
-        );
-    }
-
     if (userID.value === "") {
         return (
             <div className="Profilepage">
@@ -57,7 +45,7 @@ function OwnReviews() {
                 setTotalPages(Math.ceil(data.length / reviewsPerPage));
                 setReviews(data);
             } catch (error) {
-                console.error('Error fetching data at OwnReviews:', error);
+                console.error('Error fetching data at Profile / OwnReviews:', error);
             } finally {
                 setLoading(false);
             }
@@ -115,7 +103,7 @@ function OwnReviews() {
             </div>
 
             {loading ? (
-                <p>Loading...</p>
+                <p className="Loader">Loading...</p>
             ) : (
                 displayedReviews.map((review, index) => (
                     /* Map the reviews to the page */
@@ -192,8 +180,8 @@ function FavouriteMovies() {
         fetchData();
     }, []);
 
-     /* Get and Map titles to favorites */
-     useEffect(() => {
+    /* Get and Map titles to favorites */
+    useEffect(() => {
         const fetchTitles = async () => {
             try {
                 console.log('Before fetching titles:', favorites);
@@ -225,38 +213,96 @@ function FavouriteMovies() {
                 <h1>Favourite Movies</h1>
             </div>
             <ol className="FavouriteMoviesList">
-            {favoritesWithTitles.map((favorite, index) => (
-                    <li key={index}>
-                        <ProfileMovieTitle Title={favorite.title} />
-                    </li>
-                ))}
+                {loading ? (
+                    <p className="Loader">Loading...</p>
+                ) : (
+                    favoritesWithTitles.map((favorite, index) => (
+                        <li key={index}>
+                            <ProfileMovieTitle Title={favorite.title} />
+                        </li>
+                    )))}
             </ol>
         </div>
     );
 }
 
 function Groups() {
+
+    const [groups, setGroups] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1); // Track the current page
+    const groupsPerPage = 5; // Number of reviews to display per page
+    const [totalPages, setTotalPages] = useState(1);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                let url = `http://localhost:3001/Groups/${userID}`;
+                console.log(url);
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log(data);
+                setTotalPages(Math.ceil(data.length / groupsPerPage));
+                setGroups(data);
+            } catch (error) {
+                console.error('Error fetching data at Profile / Groups:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prevPage => prevPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prevPage => prevPage - 1);
+        }
+    };
+
+    const startIndex = (currentPage - 1) * groupsPerPage;
+    const endIndex = startIndex + groupsPerPage;
+    const displayedGroups = groups.slice(startIndex, endIndex);
+
     return (
         <div className="Groups">
             <div className="GroupsHeader">
                 <h1 >Groups</h1>
             </div>
-            <ul className="GroupsList">
-                <li><GroupName /></li>
-                <li><GroupName /></li>
-                <li><GroupName /></li>
-                <li><GroupName /></li>
-                <li><GroupName /></li>
-            </ul>
-            <Buttons ButtonLeft="Previous" ButtonRight="Next" />
+
+            <ol className="Groupslist">
+                {loading ? (
+                    <p className="Loader">Loading...</p>
+                ) : (
+                    displayedGroups.map((group, index) => (
+                        /* Map the groups to the page */
+                        <li key={index}>
+                            <ProfileGroupName Name={group.name} />
+                        </li>
+                    ))
+                )}
+            </ol>
+
+            <Buttons
+                ButtonLeft="Previous"
+                ButtonRight="Next"
+                onButtonLeftClick={handlePreviousPage}
+                onButtonRightClick={handleNextPage}
+            />
         </div>
     );
 }
 
-function GroupName() {
+function ProfileGroupName({ Name }) {
     return (
         <div className="GroupName">
-            <h2>Group</h2>
+            <h2>{Name}</h2>
         </div>
     );
 }
