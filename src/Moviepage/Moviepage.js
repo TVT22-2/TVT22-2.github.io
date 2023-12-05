@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BearerToken, userID } from '../components/react-signals.js';
 import { useParams } from 'react-router-dom';
 import placeholdergif from '../resources/Loading.gif';
 import "./moviepage.css"
@@ -10,8 +11,7 @@ function Fetch(movieId) {
         method: 'GET',
         headers: {
             accept: 'application/json',
-            Authorization:
-                'Bearer ',
+            Authorization: 'Bearer '+ BearerToken
         },
     };
 
@@ -19,7 +19,6 @@ function Fetch(movieId) {
         .then((response) => response.json())
         .catch((err) => console.error(err));
 }
-
 async function GetMovieData(movieId) {
     const movieData = await Fetch(movieId);
     return {
@@ -127,6 +126,19 @@ function AvgScore({ averageScore }) {
 }
 
 function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handlePrevReview }) {
+    const { movieId } = useParams();
+    const [content, setContent] = useState('');
+    const [review, setReview] = useState(0);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        if (name === 'content') {
+            setContent(value);
+        } else if (name === 'review') {
+            setReview(value);
+        }
+    };
+
     return (
         <div className="InfoFooter">
             <div className="MovieDetail">
@@ -151,49 +163,58 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
                 </div>
                 <ReviewContent reviews={reviews} currentIndex={currentIndex} />
             </div>
-            <div className="AddReview">
+            <div className='AddReview'>
                 <AddReviewsHeader />
-                <AddReviewRating />
-                <AddReviewContent />
-                <AddReviewSubmit />
+                <AddReviewRating review={review} handleChange={handleChange} />
+                <AddReviewContent content={content} handleChange={handleChange} />
+                <AddReview movieId={movieId} content={content} review={review} />
             </div>
         </div>
     );
 }
 
-function handleReviewSubmit(){
+function AddReview({ movieId, content, review }) {
+    const handleSubmit = async () => {
+        try {
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString();
+            const response = await fetch('http://localhost:3001/addReview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    content: content,
+                    review: review,
+                    date: formattedDate,
+                    iduser: userID,
+                    idmovie: movieId,
+                }),
+            });
 
-    fetch('http://localhost:3001/addReview/', {
-        method: 'POST',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify()
-    }).then(() => {
-        console.log('Review added');
-    })
+            if (response.ok) {
+                console.log('Review submitted successfully');
+            } else {
+                console.error('Failed to submit review');
+            }
+        } catch (error) {
+            console.error('Error submitting review:', error);
+        }
+    };
 
-}
-
-function AddReviewSubmit(){
-
-    return(
-        <button onClick={handleReviewSubmit}>Submit Review</button>
+    return (
+        <button onClick={handleSubmit}>Submit review</button>
     );
 }
 
-function AddReviewContent() {
-    const [content, setContent] = useState('');
-
-    const handleContentChange = (e) => {
-        setContent(e.target.value);
-    };
-
+function AddReviewContent({ content, handleChange }) {
     return (
         <div className="AddReviewContent">
             <label htmlFor="content">Review Content: </label>
             <textarea
-                id="content"
+                name="content"
                 value={content}
-                onChange={handleContentChange}
+                onChange={handleChange}
                 placeholder="Write your review here..."
                 rows="4"
                 cols="50"
@@ -202,18 +223,11 @@ function AddReviewContent() {
     );
 }
 
-
-function AddReviewRating() {
-    const [rating, setRating] = useState(0);
-
-    const handleRatingChange = (e) => {
-        setRating(e.target.value);
-    };
-
+function AddReviewRating({ review, handleChange }) {
     return (
         <div className="AddReviewRating">
-            <label htmlFor="rating">Select Rating: </label>
-            <select id="rating" value={rating} onChange={handleRatingChange}>
+            <label htmlFor="review">Select Rating: </label>
+            <select name="review" value={review} onChange={handleChange}>
                 <option value={0}>Select...</option>
                 <option value={1}>1</option>
                 <option value={2}>2</option>
