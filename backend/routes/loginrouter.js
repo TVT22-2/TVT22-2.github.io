@@ -9,7 +9,7 @@ const { addenduser, getUsers, getNamedUsers, getNamedRecoverykey,passput } = req
 
 router.get('/', async (req, res) => {
     try {
-        res.json(await getUsers());
+        res.status(200).json(await getUsers());
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -63,7 +63,9 @@ router.put('/change', upload.none(), async (req, res) => {
 router.post('/login', upload.none(), async (req, res) => {
     const name = req.body.username;
     const pw = req.body.password;
+    console.log(name + " / " +pw)
     const array = await getNamedUsers(name);
+    if(array != null){
     const pwCheck = array[0].password;
     const userId = array[0].id;
     if (pwCheck) {
@@ -74,9 +76,10 @@ router.post('/login', upload.none(), async (req, res) => {
         } else {
             res.status(401).json({ error: 'Password or Username incorrect' })
         }
-    } else {
-        res.status(404).json({ error: 'User not found' });
-    }
+    } 
+}else {
+    res.status(404).json({ error: 'User not found' });
+}
 });
 
 module.exports = router;

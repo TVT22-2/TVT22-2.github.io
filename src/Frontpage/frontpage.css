@@ -1,14 +1,17 @@
 
 @media only screen and (min-width: 768px) {
     .moviecontainer{
-        height: 300px;
+        flex-grow: 1;
+    }
+    .recentImage{
+        height: 200px;
     }
     .nav{
     width: fit-content;
     }
     .navBar{
         width: fit-content;
-    }
+    }   
 }
 .moviecontainer{
     display: flex;
@@ -18,7 +21,7 @@
     border-color: orange ;
     margin-right: 20px;
     align-items: center;
-    width: 99%;
+    width: 99vw;
     height:auto;
     background-color: rgba(255, 166, 0,0.5);
 }
@@ -28,6 +31,7 @@
     display: block;
     width:150px;
     height:200px;
+    margin-right:60px;   
 }
 .elementimage{
     width: 80%;
@@ -66,6 +70,7 @@
 }
 .container {
     width: 99vw;
+    height: auto;
     display: flex;
     max-width: fit-content;
 }
@@ -74,7 +79,7 @@
     flex-direction: row;
     flex-basis: 100%;
     overflow-x:scroll;
-    height: 500px;
+    height: 600px;
 }
 
 .verticalcontainer{
@@ -113,13 +118,13 @@
 .verticaltext{
     font-weight: bold;
     display: flex;
+    flex-direction: column;
     text-align: center;
     align-items: center;
     flex-grow: 1;
     width: 250px;
     border-color:orange;
-    border-style: double;
-    height: 50px;   
+    border-style: double;  
     background-color: rgba(255, 166, 0,0.5);
 }
 .verticaltextTitle{
@@ -152,6 +157,11 @@
     background-color: rgba(255, 166, 0,0.5);
     margin-bottom: 20px;
 }
+#FrontScore{
+    height: 30px;
+    display: flex;
+    justify-content: center;
+}
 .verticaltextReview{
     display: flex;
     overflow: hidden;
@@ -172,11 +182,18 @@ display: flex;
 align-items: center;
 justify-content: center;
 flex-direction: column;
-  margin-right:60px;
+margin-right:60px;
+width: 99vw;
 }
 .navBar{
     display: flex;
     flex-grow: 1;
     flex-basis: 100%;
     flex-wrap: wrap;
+}
+.frontpagegenrecontaienr{
+    display: flex;
+}
+.frontpagereviews{
+    align-self: center;
 }
