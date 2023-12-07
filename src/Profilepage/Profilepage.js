@@ -135,17 +135,95 @@ function FavouriteMoviesAndGroups() {
 }
 
 function PostsAndNews() {
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [currentHeaderPage, setCurrentHeaderCurrentPage] = useState(1); // Track if its Posts or Newsfeed
+    const [currentPage, setCurrentPage] = useState(1); // Track the current page
+    const [totalPages, setTotalPages] = useState(1);
+    const postsPerPage = 1; // Number of reviews to display per page
+
+    // Get posts from the database
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                let url = `http://localhost:3001/post/user/${userID}`;
+                console.log(url);
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log(data);
+                setTotalPages(Math.ceil(data.length / postsPerPage));
+                setPosts(data);
+            } catch (error) {
+                console.error('Error fetching data at Profile / PostsAndNews:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const handlePostPage = () => {
+        setCurrentHeaderCurrentPage(1);
+    };
+
+    const handleNewsfeedPage = () => {
+        setCurrentHeaderCurrentPage(2);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prevPage => prevPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prevPage => prevPage - 1);
+        }
+    };
+
+    const startIndex = (currentPage - 1) * postsPerPage;
+    const endIndex = startIndex + postsPerPage;
+    const displayedPosts = posts.slice(startIndex, endIndex);
+
     return (
         <div className="PostsAndNews">
-            <Buttons ButtonLeft="Posts" ButtonRight="Newsfeed" />
+            <Buttons
+                ButtonLeft="Posts"
+                ButtonRight="Newsfeed"
+                onButtonLeftClick={handlePostPage}
+                onButtonRightClick={handleNewsfeedPage}
+            />
             <div className="PostsAndNewsHeader">
-                <h1>Posts / Newsfeed</h1>
+                {currentHeaderPage === 1 ? (
+                    <h1>Posts</h1>
+                ) : (
+                    <h1>Newsfeed</h1>
+                )}
             </div>
-            <ProfileMovieTitle Title='Placeholder' />
-            <Timestamp />
-            <Text Content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
-            <Image />
-            <Buttons ButtonLeft="Previous" ButtonRight="Next" />
+            { loading ? (
+                <p className="Loader">Loading...</p>
+            ) : (  currentHeaderPage === 1 ? (
+                displayedPosts.map((post, index) => (
+                    <div key={index} className="ProfilePagePost">
+                        <ProfileMovieTitle Title={post.title} />
+                        <Timestamp Date={post.date} />
+                        <Text Content={post.posttext} />
+                        <Image />
+                    </div>
+                ))) : (
+                <div className="ProfilePageNewsfeed">
+                </div>)
+                
+            )
+            }
+            <Buttons
+                ButtonLeft="Previous"
+                ButtonRight="Next"
+                onButtonLeftClick={handleNextPage}
+                onButtonRightClick={handlePreviousPage}
+            />
         </div>
     );
 }
@@ -342,10 +420,10 @@ function Buttons({ ButtonLeft, ButtonRight, onButtonLeftClick, onButtonRightClic
     );
 }
 
-function Timestamp() {
+function Timestamp({ Date }) {
     return (
         <div className="Timestamp">
-            <h2>Timestamp</h2>
+            <h2>{Date}</h2>
         </div>
     );
 }
