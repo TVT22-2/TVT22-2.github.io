@@ -1,8 +1,17 @@
 
 @media only screen and (min-width: 768px) {
     .moviecontainer{
-        height: 300px;
+        flex-grow: 1;
     }
+    .recentImage{
+        height: 200px;
+    }
+    .nav{
+    width: fit-content;
+    }
+    .navBar{
+        width: fit-content;
+    }   
 }
 .moviecontainer{
     display: flex;
@@ -12,8 +21,9 @@
     border-color: orange ;
     margin-right: 20px;
     align-items: center;
-    width: 99%;
+    width: 99vw;
     height:auto;
+    background-color: rgba(255, 166, 0,0.5);
 }
 .recentImage{
     margin-left: auto;
@@ -21,6 +31,7 @@
     display: block;
     width:150px;
     height:200px;
+    margin-right:60px;   
 }
 .elementimage{
     width: 80%;
@@ -31,13 +42,14 @@
 .movieinfo{
     flex-basis: 66%;
     width: 150px;
+
 }
 .title{ 
     flex-grow:1;
     font-weight: bold;
     margin-top: 20px;
     border-style: double;
-    border-width: 1px;
+    border-width: 2px;
     border-color: orange;
 }
 .Movieheading{
@@ -45,24 +57,29 @@
  text-align: center;
 }
 .headingelement{
-    justify-content: center;
+    display: flex;
     background-color: orange;
     height:60px;
     margin-top: 10px;
     margin-bottom: 10px;
     width: 100%;
-    font-size:15px;
+    font-size:25px;
+    justify-content: center;
     align-items: center;
     text-align: center;
 }
 .container {
-    max-width: 800px;
-}
-.nav {
-    list-style: none;
+    width: 99vw;
+    height: auto;
     display: flex;
+    max-width: fit-content;
+}
+.nav { 
+    display: flex;
+    flex-direction: row;
+    flex-basis: 100%;
     overflow-x:scroll;
-    height: 500px;
+    height: 600px;
 }
 
 .verticalcontainer{
@@ -99,17 +116,15 @@
     left:20px;
 }
 .verticaltext{
-    overflow: hidden;
     font-weight: bold;
     display: flex;
+    flex-direction: column;
     text-align: center;
     align-items: center;
-    display: inline-block;
-    flex-basis: 100%;
+    flex-grow: 1;
     width: 250px;
     border-color:orange;
-    border-style: double;
-    height: 50px;   
+    border-style: double;  
     background-color: rgba(255, 166, 0,0.5);
 }
 .verticaltextTitle{
@@ -142,6 +157,11 @@
     background-color: rgba(255, 166, 0,0.5);
     margin-bottom: 20px;
 }
+#FrontScore{
+    height: 30px;
+    display: flex;
+    justify-content: center;
+}
 .verticaltextReview{
     display: flex;
     overflow: hidden;
@@ -162,5 +182,18 @@ display: flex;
 align-items: center;
 justify-content: center;
 flex-direction: column;
-  margin-right:60px;
+margin-right:60px;
+width: 99vw;
+}
+.navBar{
+    display: flex;
+    flex-grow: 1;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+}
+.frontpagegenrecontaienr{
+    display: flex;
+}
+.frontpagereviews{
+    align-self: center;
 }

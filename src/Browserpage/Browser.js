@@ -43,7 +43,7 @@ const [index3, setIndex3] = useState(1);
             </div>
             <MovieContainer var = {props.array} index={props.index}/>
         </div>
-        <Button index={props.index} setIndex={props.setIndex} header={props.header} page={props.pagevar} var = {props.array}/>
+        <Button index={props.index} setIndex={props.setIndex} header={props.header} page={props.pagevar} var ={props.array}/>
         </>
             
     
@@ -51,16 +51,20 @@ const [index3, setIndex3] = useState(1);
         let row = [];
         for (let i = props.index; i <= props.index+4; i++) {
             if(props.var[i]!==undefined){
+                let rows= []
+            props.var[i].genreid.forEach(element => {
+                rows.push(<div className="BrowserGenreContainer">{element}</div>);
+            });
             let url = "https://image.tmdb.org/t/p/w500/" + props.var[i].posterpath;
             row.push(
                 <div className="Moviecontainer">
-                    <Link to={"http://localhost:3000/movie/?" + props.var[i].id}>
+                    <Link to={"http://localhost:3000/movie/" + props.var[i].id}>
                     <img src={url} className="placeholderimage" alt="Hello"></img>
                     </Link>
                     <div className='infocontainer'>
-                        <p className='BrowserInfo'>{props.var[i].title}</p>
-                        <p className='BrowserInfo'>{props.var[i].genreid}</p>
-                        <p className='BrowserInfo'>{props.var[i].popularity}</p>
+                        <p className='BrowserInfo' id="BrowserHeaderID">{props.var[i].title}</p>
+                        <p className='BrowserInfo' id="genreid">{rows}</p>
+                        <p className='BrowserInfo'>Score: {props.var[i].popularity}</p>
                     </div>
                 </div>
                 )

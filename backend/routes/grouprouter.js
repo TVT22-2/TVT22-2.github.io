@@ -1,8 +1,6 @@
 const router = require('express').Router();
-const multer = require('multer');
-const upload = multer({ dest: 'upload/' });
 
-const {addGroup, getGroups, getUserGroups} = require('../postgre/group');
+const {addGroup, getGroups, getUserGroups, addUserToGroup} = require('../postgre/group');
 
 router.get('/Groups', async (req,res) => {
     try{
@@ -15,10 +13,12 @@ router.get('/Groups', async (req,res) => {
 router.post('/Groups', async (req,res) => {
     const gname = req.body.name;
     const desc = req.body.description;
+    const owner = req.body.ownerid;
 
     try {
-        await addGroup(gname, desc);
-        res.status(201).json({ message: 'Group added successfully' });
+        const groupid = await addGroup(gname, desc, owner);
+        await addUserToGroup(owner,groupid);
+        res.status(201).json({ message: 'Group added successfully'});
       } catch (error) {
         res.status(500).json({ error: 'Failed to add group' });
       }

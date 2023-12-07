@@ -4,9 +4,7 @@ import { useParams } from 'react-router-dom';
 import placeholdergif from '../resources/Loading.gif';
 import "./moviepage.css"
 import "../components/genreids.json"
-
-
-function Fetch(movieId) {
+async function Fetch(movieId) {
     const options = {
         method: 'GET',
         headers: {
@@ -14,13 +12,23 @@ function Fetch(movieId) {
             Authorization: 'Bearer '+ BearerToken
         },
     };
-
-    return fetch(`https://api.themoviedb.org/3/movie/${movieId}`, options)
-        .then((response) => response.json())
+    let fetchresponse;
+    let location = window.location.pathname.slice(0, 3);
+    if(location==="/mo"){
+    await fetch(`https://api.themoviedb.org/3/movie/${movieId}`, options)
+        .then(response => fetchresponse = response.json())
         .catch((err) => console.error(err));
+        return fetchresponse;
+    } else {
+        await fetch(`https://api.themoviedb.org/3/tv/${movieId}`, options)
+        .then(response => fetchresponse = response.json())
+        .catch((err) => console.error(err));
+        return fetchresponse;
+    }
 }
 async function GetMovieData(movieId) {
     const movieData = await Fetch(movieId);
+    if(movieData.title != undefined){
     return {
         title: movieData.title,
         genreid: movieData.genres,
@@ -29,6 +37,16 @@ async function GetMovieData(movieId) {
         overview: movieData.overview,
         posterpath: movieData.poster_path,
     };
+    } else {
+    return {
+        title: movieData.name,
+        genreid: movieData.genres,
+        PG: movieData.adult,
+        ReleaseDate: movieData.first_air_date,
+        overview: movieData.overview,
+        posterpath: movieData.poster_path,
+    };
+}
 }
 
 async function GetReviews(movieId) {
@@ -39,6 +57,7 @@ async function GetReviews(movieId) {
 
 
 function Moviepage() {
+    window.scrollTo(0, 0)
     const { movieId } = useParams();
     const [isLoading, setLoading] = useState(true);
     const [averageScore, setAverageScore] = useState(0);
@@ -66,7 +85,7 @@ function Moviepage() {
 
             setMovieData(movie);
             setReviews(fetchedReviews);
-
+            
             const totalScore = fetchedReviews.reduce((acc, review) => acc + review.review, 0);
             const avgScore = fetchedReviews.length > 0 ? totalScore / fetchedReviews.length : 0;
             setAverageScore(avgScore);
@@ -154,6 +173,8 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
                 </div>
                 <Description movieData={movieData} />
             </div>
+            {window.location.pathname.slice(0, 3) === "/mo" ?
+            <>
             <div className="Review">
                 <ReviewsHeader />
                 <ReviewsTitle movieData={movieData} />
@@ -170,6 +191,9 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
                 <AddReviewContent content={content} handleChange={handleChange} />
                 <AddReview movieId={movieId} content={content} review={review} />
             </div>
+            </> 
+            : <></>
+            }
         </div>
     );
 }
