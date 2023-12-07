@@ -163,6 +163,8 @@ function PostsAndNews() {
         fetchData();
     }, []);
 
+    console.log("Total pages = " + totalPages);
+
     const handlePostPage = () => {
         setCurrentHeaderCurrentPage(1);
     };
@@ -221,8 +223,8 @@ function PostsAndNews() {
             <Buttons
                 ButtonLeft="Previous"
                 ButtonRight="Next"
-                onButtonLeftClick={handleNextPage}
-                onButtonRightClick={handlePreviousPage}
+                onButtonLeftClick={handlePreviousPage}
+                onButtonRightClick={handleNextPage}
             />
         </div>
     );

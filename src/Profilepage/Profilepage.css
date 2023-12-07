@@ -65,7 +65,7 @@
 }
 
 .OwnReviews .ProfileMovieTitle,
-.PostsAndNews .ProfileMovieTitle {
+.ProfilePagePost .ProfileMovieTitle {
     border: 1px solid #030303;
     align-items: center;
 }
@@ -140,6 +140,14 @@
 
 /*Child container (Parent: OwnReviews)*/
 .ProfilePageReview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/*Child container (Parent: PostsAndNews)*/
+.ProfilePagePost {
     display: flex;
     flex-direction: column;
     align-items: center;
