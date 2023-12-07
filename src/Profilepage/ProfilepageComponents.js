@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from "react";
 import image from "../resources/postsplaceholder.png";
+import React, { useEffect, useState } from "react";
+import "./Profilepage.css";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 
 function Image() {
     return (
@@ -27,7 +30,6 @@ function Buttons({ ButtonLeft, ButtonRight, onButtonLeftClick, onButtonRightClic
         </div>
     );
 }
-
 
 function ButtonsPostsAndNewsfeed({ ButtonLeft, ButtonRight, ButtonMiddle,
     onButtonLeftClick, onButtonRightClick, onButtonMiddleClick }) {
@@ -75,5 +77,28 @@ function Text({ Content }) {
     );
 }
 
+function CopyProfileLink({ onCopy }) {
+    const [copied, setCopied] = useState(false);
+    const value = window.location.href;
 
-export { Image, Timestamp, ButtonsPostsAndNewsfeed, Buttons, ProfileGroupName, ProfileMovieTitle, Rating, Text };
+    const handleCopy = () => {
+        setCopied(true);
+        if (onCopy) {
+            onCopy(); // Invoke the callback function if provided
+        }
+    };
+
+    return (
+        <div>
+            <CopyToClipboard text={value} onCopy={handleCopy}>
+                <button id="ButtonCopyProfileLink">
+                    Copy Profile Link
+                </button>
+            </CopyToClipboard>
+
+            {copied ? <span style={{ color: 'red' }}>Copied.</span> : null}
+        </div>
+    );
+}
+
+export { Image, Timestamp, ButtonsPostsAndNewsfeed, Buttons, ProfileGroupName, ProfileMovieTitle, Rating, Text, CopyProfileLink };

@@ -1,12 +1,26 @@
 import React, { useEffect, useState } from "react";
-import "./Profilepage.css"
+import { useParams } from "react-router-dom";
+import "./Profilepage.css";
 import { idParser } from '../components/DataLoader';
 import { userID } from "../components/react-signals";
-import { Image, Timestamp, ButtonsPostsAndNewsfeed, Buttons, ProfileGroupName, ProfileMovieTitle, Rating, Text } from "./ProfilepageComponents.js";
+import {
+    Image,
+    Timestamp,
+    ButtonsPostsAndNewsfeed,
+    Buttons,
+    ProfileGroupName,
+    ProfileMovieTitle,
+    Rating,
+    Text,
+    CopyProfileLink
+} from "./ProfilepageComponents.js";
 
 function Profilepage() {
 
-    if (userID.value === "") {
+    const { userId } = useParams();
+    console.log("USER:" + userId);
+
+    if (userID.value === "" || userID.value === null) {
         return (
             <div className="Profilepage">
                 <h1>You must be logged in to view this page</h1>
@@ -137,10 +151,10 @@ function FavouriteMoviesAndGroups() {
 function PostsAndNews() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [currentHeaderPage, setCurrentHeaderCurrentPage] = useState(1); // Track if its Posts or Newsfeed
+    const [currentHeaderPage, setCurrentHeaderCurrentPage] = useState(1); // Track which page is currently displayed (Posts, Newsfeed, New Post)
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const [totalPages, setTotalPages] = useState(1);
-    const postsPerPage = 1; // Number of reviews to display per page
+    const postsPerPage = 1; // Number of posts to display per page
 
     // Get posts from the database
     useEffect(() => {
@@ -195,6 +209,7 @@ function PostsAndNews() {
         <div className="PostsAndNews">
             <Buttons
                 ButtonLeft="Posts"
+                ButtonMiddle="New Post"
                 ButtonRight="Newsfeed"
                 onButtonLeftClick={handlePostPage}
                 onButtonRightClick={handleNewsfeedPage}
@@ -235,7 +250,7 @@ function PostsAndNews() {
                     case 2:
                         return <div className="ProfilePageNewsfeed"></div>;
                     case 3:
-                        return <NewPost onButtonCancelClick={handlePostPage}/>;
+                        return <NewPost onButtonCancelClick={handlePostPage} />;
                     default:
                         return null;
                 }
@@ -252,7 +267,6 @@ function PostsAndNews() {
     );
 }
 
-/*Profiilisivun komponentti*/
 function FavouriteMovies() {
 
     const [favorites, setFavorites] = useState([]);
@@ -391,8 +405,9 @@ function Groups() {
                 )}
             </ol>
 
-            <Buttons
+            <ButtonsPostsAndNewsfeed
                 ButtonLeft="Previous"
+                ButtonMiddle= {<CopyProfileLink/>}
                 ButtonRight="Next"
                 onButtonLeftClick={handlePreviousPage}
                 onButtonRightClick={handleNextPage}
@@ -401,7 +416,7 @@ function Groups() {
     );
 }
 
-function NewPost( {onButtonCancelClick}) {
+function NewPost({ onButtonCancelClick }) {
 
     const initialDetails = {
         title: "",
@@ -465,4 +480,5 @@ function NewPost( {onButtonCancelClick}) {
         </div>
     )
 }
+
 export default Profilepage;

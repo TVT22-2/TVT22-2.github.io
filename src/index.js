@@ -11,7 +11,8 @@ import GroupPage from './GroupPage/GroupPage';
 import Moviepage from './Moviepage/Moviepage';
 import Register from './components/Register';
 import Browser from './Browserpage/Browser';
-import { BrowserRouter,Route, Routes } from "react-router-dom" 
+import { BrowserRouter, Route, Routes } from "react-router-dom" 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
@@ -19,7 +20,7 @@ root.render(
       <Routes>
         <Route path="/login" element={<Login />}/>
         <Route path="/" element={<Frontpage />} />
-        <Route path="/Profile" element={<Profilepage />} />
+        <Route path="/Profile/:userId" element={<Profilepage />} />
         <Route path="/Groups" element={<GroupPage />} />
         <Route path="/Movie" element={<Moviepage />} />
         <Route path="/Group" element={<GroupPage />} />
