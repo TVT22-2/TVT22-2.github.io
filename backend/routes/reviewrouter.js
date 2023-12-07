@@ -2,7 +2,7 @@ const router = require('express').Router();
 const multer = require('multer');
 const upload = multer({ dest: 'upload/' });
 
-const {getRecentReview, addReview, getMovieReview, getOwnReview} = require('../postgre/review');
+const {getRecentReview, addReview, getMovieReview, getOwnReview, addFavorite} = require('../postgre/review');
 
 router.get('/getrecentreview', async (req,res) => {
     try{
@@ -42,9 +42,25 @@ router.post('/addReview', async (req,res) => {
     } catch (error) {
         // Log the error for debugging
         console.error('Error adding review:', error);
-
         // Send an error response
         res.status(500).json({ error: 'Failed to add review' });
+    }
+});
+
+
+router.post('/addFavorite', async (req,res) => {
+    const user_id = req.body.user_id;
+    const movie_id = req.body.movie_id;
+
+    try {
+        await addFavorite(user_id,movie_id);
+        res.status(201).json({ message: 'Favorite added successfully' });
+    } catch (error) {
+        // Log the error for debugging
+        console.error('Error adding favorite:', error);
+
+        // Send an error response
+        res.status(500).json({ error: 'Failed to add favorite' });
     }
 });
 

@@ -85,6 +85,7 @@ function Moviepage() {
             <div className="Moviepage">
                 <AvgScore averageScore={averageScore} />
                 <InfoFooter movieData={movieData} reviews={reviews} currentIndex={currentIndex} handleNextReview={handleNextReview} handlePrevReview={handlePrevReview} />
+                <AddFavorite movieId={movieId} />
             </div>
         );
     }
@@ -170,6 +171,34 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
                 <AddReview movieId={movieId} content={content} review={review} />
             </div>
         </div>
+    );
+}
+
+function AddFavorite({movieId}){
+    const handleSubmit = async () => {
+        console.log(userID);
+        try{
+            const response = await fetch('http://localhost:3001/addFavorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    movie_id: movieId,
+                    user_id: userID
+            }),
+        });
+        if (response.ok) {
+            console.log('Favorite added successfully');
+        } else {
+            console.error('Failed to add favorite');
+        }
+    } catch (error) {
+        console.error('Error adding favorite:', error);
+    }
+    }
+    return (
+        <button onClick={handleSubmit}>Add Favorite</button>
     );
 }
 
