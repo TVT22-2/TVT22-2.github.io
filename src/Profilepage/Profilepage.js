@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./Profilepage.css"
-import image from "../resources/placeholderimage3.jpg"
 import { idParser } from '../components/DataLoader';
 import { userID } from "../components/react-signals";
+import { Image, Timestamp, ButtonsPostsAndNewsfeed, Buttons, ProfileGroupName, ProfileMovieTitle, Rating, Text } from "./ProfilepageComponents.js";
 
 function Profilepage() {
 
@@ -163,10 +163,12 @@ function PostsAndNews() {
         fetchData();
     }, []);
 
-    console.log("Total pages = " + totalPages);
-
     const handlePostPage = () => {
         setCurrentHeaderCurrentPage(1);
+    };
+
+    const HandleNewPost = () => {
+        setCurrentHeaderCurrentPage(3);
     };
 
     const handleNewsfeedPage = () => {
@@ -197,33 +199,53 @@ function PostsAndNews() {
                 onButtonLeftClick={handlePostPage}
                 onButtonRightClick={handleNewsfeedPage}
             />
+
             <div className="PostsAndNewsHeader">
-                {currentHeaderPage === 1 ? (
-                    <h1>Posts</h1>
-                ) : (
-                    <h1>Newsfeed</h1>
-                )}
+                {(() => {
+                    switch (currentHeaderPage) {
+                        case 1:
+                            return <h1>Posts</h1>;
+                        case 2:
+                            return <h1>Newsfeed</h1>;
+                        case 3:
+                            return <h1>New Post</h1>;
+                        default:
+                            return null;
+                    }
+                })()}
             </div>
-            { loading ? (
+
+            {loading ? (
                 <p className="Loader">Loading...</p>
-            ) : (  currentHeaderPage === 1 ? (
-                displayedPosts.map((post, index) => (
-                    <div key={index} className="ProfilePagePost">
-                        <ProfileMovieTitle Title={post.title} />
-                        <Timestamp Date={post.date} />
-                        <Text Content={post.posttext} />
-                        <Image />
-                    </div>
-                ))) : (
-                <div className="ProfilePageNewsfeed">
-                </div>)
-                
-            )
-            }
-            <Buttons
+            ) : (() => {
+                switch (currentHeaderPage) {
+                    case 1:
+                        return (
+                            <div>
+                                {displayedPosts.map((post, index) => (
+                                    <div key={index} className="ProfilePagePost">
+                                        <ProfileMovieTitle Title={post.title} />
+                                        <Timestamp Date={post.date} />
+                                        <Text Content={post.posttext} />
+                                        <Image />
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    case 2:
+                        return <div className="ProfilePageNewsfeed"></div>;
+                    case 3:
+                        return <NewPost onButtonCancelClick={handlePostPage}/>;
+                    default:
+                        return null;
+                }
+            })()}
+            <ButtonsPostsAndNewsfeed
                 ButtonLeft="Previous"
+                ButtonMiddle="New Post"
                 ButtonRight="Next"
                 onButtonLeftClick={handlePreviousPage}
+                onButtonMiddleClick={HandleNewPost}
                 onButtonRightClick={handleNextPage}
             />
         </div>
@@ -379,63 +401,68 @@ function Groups() {
     );
 }
 
-function ProfileGroupName({ Name }) {
-    return (
-        <div className="GroupName">
-            <h2>{Name}</h2>
-        </div>
-    );
-}
+function NewPost( {onButtonCancelClick}) {
 
-function ProfileMovieTitle({ Title }) {
-    return (
-        <div className="ProfileMovieTitle">
-            <h2>{Title}</h2>
-        </div>
-    );
-}
+    const initialDetails = {
+        title: "",
+        posttext: "",
+        date: new Date().toISOString(),
+        end_user_id: userID
+    };
 
-function Rating({ Rating }) {
-    return (
-        <div className="Rating">
-            <h3>{Rating}/5</h3>
-        </div>
-    );
-}
+    const [details, setDetails] = useState(initialDetails);
 
-function Text({ Content }) {
-    return (
-        <div className="Text">
-            <p>{Content}</p>
-        </div>
-    );
-}
 
-function Buttons({ ButtonLeft, ButtonRight, onButtonLeftClick, onButtonRightClick }) {
-    return (
-        <div className="Buttons">
-            <button id="ButtonLeft" onClick={onButtonLeftClick}>
-                {ButtonLeft}</button>
-            <button id="ButtonRight" onClick={onButtonRightClick}>
-                {ButtonRight}</button>
-        </div>
-    );
-}
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setDetails((prev) => {
+            return { ...prev, [name]: value }
+        })
+    };
 
-function Timestamp({ Date }) {
-    return (
-        <div className="Timestamp">
-            <h2>{Date}</h2>
-        </div>
-    );
-}
+    const submitHandler = async (e) => {
+        e.preventDefault();
 
-function Image() {
+        fetch('http://localhost:3001/post/insertPostUser', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(details)
+
+        }).then(() => {
+            console.log('New post added');
+            setDetails(initialDetails);
+            window.location.reload();
+        })
+    }
+
     return (
-        <div className="Image">
-            <img src={image} alt="placeholder" className="placeholderImage" />
+        <div className="NewPost">
+            <form onSubmit={submitHandler} className="NewPostForm">
+                <h3>Title:</h3>
+                <input
+                    type='title'
+                    name="title"
+                    placeholder="Add title"
+                    value={details.title}
+                    onChange={handleChange}
+                    className="InputField"
+                />
+                <h3>Content:</h3>
+                <textarea
+                    name="posttext"
+                    placeholder="Add text"
+                    value={details.posttext}
+                    onChange={handleChange}
+                    className="InputField"
+                />
+                <button type="submit" id="ButtonSubmit" className="NewPostButtons">
+                    Add post</button>
+                <button type="submit" id="ButtonCancel" className="NewPostButtons" onClick={onButtonCancelClick}>
+                    Cancel</button>
+            </form>
         </div>
     )
 }
-
 export default Profilepage;
