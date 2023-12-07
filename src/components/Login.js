@@ -19,10 +19,10 @@ export default function Login() {
             {token.value.length > 3 && pass === false ? <><div className="LoginQuery"><h2>Are you sure?</h2><button className="LoginButtonYes" onClick={LogOut}>yes</button><button className="LoginButtonNo" onClick={() => navigate("/")}>no</button></div></> :
                 <>
                     <div className="inputcontainer">
-                        {pass === true ? <><input className="newPass" type="text" placeholder="New password" value={password} onChange={e => setPassword(e.target.value)}></input><input className="newPass" type="text" placeholder="New password" value={password2} onChange={e => setPassword2(e.target.value)}></input></> : <>
-                            <input className="Username" type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)}></input>
+                        {pass === true ? <><input className="newPass" type="text" placeholder="New password" value={password} onChange={e => setPassword(e.target.value.replace(/[^\w\s]/gi, '').replace(/\s/g, ''))}></input><input className="newPass" type="text" placeholder="New password" value={password2} onChange={e => setPassword2(e.target.value).replace(/[^\w\s]/gi, '').replace(/\s/g, '')}></input></> : <>
+                            <input className="Username" type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value.replace(/[^\w\s]/gi, '').replace(/\s/g, ''))}></input>
                             {forgot !== false ? <input className="Password" type="password" placeholder="Recoverykey" value={password} onChange={e => setPassword(e.target.value)}></input> :
-                                <input className="Password" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}></input>
+                                <input className="Password" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value.replace(/[^\w\s]/gi, '').replace(/\s/g, ''))}></input>
                             }
                         </>
                         }
@@ -31,7 +31,7 @@ export default function Login() {
                         <div className="Align">
                             {forgot !== false ? <button className="LoginB" id="LoginButton" onClick={recoveryfunc}>Change Password</button>
                                 :
-                                <button className="LoginB" id="LoginButton" onClick={returnvalues} onKeyDown={returnvalues}>Login</button>
+                                <button className="LoginB" id="LoginButton" onClick={returnvalues}>Login</button>
                             }
                             <button className="LoginB" id="LoginReset" onClick={() => setForgot(!forgot) + setUsername("") + setPassword("")}>Forgot Password?</button>
                         </div>
@@ -49,12 +49,14 @@ export default function Login() {
     }
     async function returnvalues() {
         if (password !== "" && username !== "") {
-            let response = await axios.postForm('login/login', { username, password })
-                .catch(error => console.log(error) + setAlert(error.message + ". Please try again later!") + setTimeout(function() {
+            let response = await axios.postForm('/login', { username, password })
+                .catch(error => console.log(error) + setAlert(error.message + ". Please try again!") + setTimeout(function() {
                     setAlert("")
                    }, 6000))
+                   if(response){
                    userID.value = await response.data.UserID;
-                   token.value = await response.data.jwtToken
+                   token.value = await response.data.jwtToken;
+                   }
         } else {
             alert("Check the input fields!")
         }
@@ -66,7 +68,7 @@ export default function Login() {
         let success = false;
         let recovery = password;
         if (stage === 1) {
-            await axios.postForm('login/forgot', { username, recovery })
+            await axios.postForm('/forgot', { username, recovery })
                 .then(resp => success = resp.data.Success)
                 .catch(error => setAlert(error.message + ". Please try again later!") + setTimeout(function() {
                     setAlert("")
@@ -80,7 +82,7 @@ export default function Login() {
             }
         } else {
             if (password === password2) {
-                await axios.putForm('login/change', { username, password })
+                await axios.putForm('/change', { username, password })
                     .then(resp => success = resp.data.Success)
                     .catch(error => setAlert(error.message + ". Please try again later!") +setTimeout(function() {
                         setAlert("")

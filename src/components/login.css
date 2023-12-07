@@ -52,7 +52,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    
+    width: 100%;
+    background-color: orange;
+    width:100px;
+    height:40px;
 }
 .LoginQuery{
     width: 100%;
@@ -78,4 +81,17 @@
     align-self: center;
     flex:100%;
     margin-top: 20px;
+}
+.registerheader{
+    margin-top: 20px;
+    font-size: 20px;
+}
+.notification{
+    font-size: 15px;
+}
+.infopng{ 
+    margin-top: 20px;
+    margin-left: 10px;
+    width: 17px;
+    height: 17px;
 }

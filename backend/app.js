@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static('public'));
 
-app.use('/login', loginRouter);
+app.use('/', loginRouter);
 app.use('/', groupRouter);
 app.use('/', ReviewRouter);
 app.use('/post', PostsRouter);

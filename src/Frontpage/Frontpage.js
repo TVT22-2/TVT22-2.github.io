@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from "react";
 import "./frontpage.css" 
 import { MovieDBRegData,ReviewGetter, UpcomingMovies, TrendingMovies, RecentMovies, ReviewArray  } from'../components/DataLoader';
-import { userID } from'../components/react-signals';
 import { Link } from "react-router-dom";
+import ScrollContainer from 'react-indiana-drag-scroll'
+
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
     useEffect(() => {
@@ -30,14 +31,13 @@ export default function Frontpage() {
         <HeaderElement text="upcoming"/>
         <MovieBrowser text="upcom"/>
         <HeaderElement text="recent reviews"/>
-        <nav className="navBar">
+        <nav className="navBar" id="frontpagereviews">
             <div className="container">
-            <ul className="nav">
+            <ScrollContainer className="nav">
                 <Reviews/>
-        </ul>
+        </ScrollContainer>
         </div>
         </nav>
-        <button onClick={()=>console.log(userID)}>button</button>
         <br></br>
         <br></br>
         <br></br>
@@ -46,15 +46,14 @@ export default function Frontpage() {
     } 
     function Reviews(){
         let reviews = [];
-        
-        for(let i = 1; i<5; i++){
+        for(let i = 1; i<=5; i++){
         if(ReviewArray[i]!==undefined){
          reviews.push(
         <div className="FrontpageReviewContainer">
         <Link to={"http://localhost:3000/movie/" + ReviewArray[i].id}>
         <div className="verticaltextTitle">{ReviewArray[i].movietitle}</div>
         </Link>
-        <div className="verticaltextScore">5/{ReviewArray[i].review}</div>
+        <div className="verticaltextScore">{ReviewArray[i].review}/5</div>
         <div className="verticaltextReview">{ReviewArray[i].content}</div>
         </div>
          );
@@ -97,6 +96,10 @@ export default function Frontpage() {
     }
     function MovieElementVertical(props) {
         let imageurl = "https://image.tmdb.org/t/p/w500/"+ props.imagepath;
+        let rows  = []; 
+        props.genre.forEach(element => {
+            rows.push(<div className="frontpagegenrecontaienr">{element}</div>);
+        });
         return (
         <div className="verticalcontainer">
         <div className="ImageContainer">
@@ -105,8 +108,8 @@ export default function Frontpage() {
         </Link>
         </div>
         <div className="verticaltext">{props.title}</div>
-        <div className="verticaltext">{props.genre}</div>
-        <div className="verticaltext">{props.popularity}</div>
+        <div className="verticaltext">{rows}</div>
+        <div className="verticaltext" id="FrontScore">Score: {props.popularity}</div>
         </div>
         );  
     }
@@ -122,9 +125,9 @@ export default function Frontpage() {
         return (
             <nav className="navBar">
             <div className="container">
-            <ul className="nav">
+            <ScrollContainer className="nav">
             <MovieElementRender var = {props.text}/>
-            </ul>
+            </ScrollContainer>
             </div>
             </nav>
             );
@@ -133,9 +136,9 @@ export default function Frontpage() {
             return (
                 <nav className="navBar">
                 <div className="container">
-                <ul className="nav">
+                <ScrollContainer className="nav">
                 <MovieElementRender var = {props.text}/>
-                </ul>
+                </ScrollContainer>
                 </div>  
                 </nav>
                 );

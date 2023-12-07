@@ -1,3 +1,16 @@
+
+@media only screen and (min-width: 768px) {
+    .placeholderimage{
+        width: 250px;
+        height: 300px;
+    }
+    #BrowserHeaderID{
+        font-size: 22px;
+    }
+    .BrowserInfo {
+        font-size: 20px;
+    }
+}
 .elementcontainer{
     display: flex;
     flex-basis: 100%;
@@ -37,6 +50,7 @@
     border-color: orange;
     border-width: 1px;
     justify-content: center;
+    align-items: center;
     font-weight: bold;
     font-size: 15px;
     background-color: rgba(255, 166, 0,0.3);
@@ -79,4 +93,13 @@
 }
 .BrowserGenre{
     width: 100%;
+}
+.BrowserGenreContainer{
+    display: flex;
+    flex-direction: row;
+}
+#genreid{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

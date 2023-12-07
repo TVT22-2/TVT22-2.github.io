@@ -26,11 +26,10 @@ function Home() {
     }, [location])
     const [state, setState] = useState(false);
     const [message, setMessage] = useState("");
-    const [section, setSection] = useState("Home")
+    const [section, setSection] = useState(window.location.pathname.slice(1,10).length > 0 ? window.location.pathname.slice(1,10) : "Home")
     const [open, setOpen] = useState(false);
     const [searchbaropen, setsearchbar] = useState(false);
     const [searches, setsearches] = useState(false);
-    let genre = "";
     return (
         <><div className="Flex-container">
             <header className="webheader">
@@ -180,11 +179,11 @@ function Home() {
                 let url = "https://image.tmdb.org/t/p/w500" + searcharray[i].posterpath;
                 if (searcharray[i].posterpath) {
                     row.push(
-                        <div className="searches"><img src={url} alt="No poster found" className="thumbnail"></img><Link to={"http://localhost:3000/movie?" + searcharray[i].id} className="SearchTitle">{searcharray[i].title}</Link></div>
+                        <div className="searches"><img src={url} alt="No poster found" className="thumbnail"></img><Link to={"http://localhost:3000/"+movietv+"/" + searcharray[i].id} className="SearchTitle">{searcharray[i].title}</Link></div>
                     )
                 } else {
                     row.push(
-                        <div className="searches"><img src={noposter} alt="No poster found" className="thumbnail"></img><Link to={"http://localhost:3000/movie?" + searcharray[i].id} className="SearchTitle">{searcharray[i].title}</Link></div>
+                        <div className="searches"><img src={noposter} alt="No poster found" className="thumbnail"></img><Link to={"http://localhost:3000/"+movietv+"/" + searcharray[i].id} className="SearchTitle">{searcharray[i].title}</Link></div>
                     )
                 }
             } else {
