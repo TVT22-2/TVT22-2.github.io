@@ -64,4 +64,20 @@ router.post('/addFavorite', async (req,res) => {
     }
 });
 
+router.delete('/deleteFavorite', async (req,res) => {
+    const user_id = req.body.user_id;
+    const movie_id = req.body.movie_id;
+
+    try {
+        await deleteFavorite(user_id,movie_id);
+        res.status(201).json({ message: 'Favorite deleted successfully' });
+    } catch (error) {
+        // Log the error for debugging
+        console.error('Error deleting favorite:', error);
+
+        // Send an error response
+        res.status(500).json({ error: 'Failed to delete favorite' });
+    }
+});
+
 module.exports = router;
