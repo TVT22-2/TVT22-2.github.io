@@ -4,8 +4,9 @@ import "./home.css"
 import noposter from "../resources/no_poster.png"
 import nav from "../resources/navbuttonplaceholder.png"
 import { Link, useLocation } from "react-router-dom"
-import customData from '../components/genreids.json';
 import { useEffect } from "react";
+import { userID } from "../components/react-signals";
+
 let searcharray = [{
 }];
 let index = 5;
@@ -30,6 +31,7 @@ function Home() {
     const [open, setOpen] = useState(false);
     const [searchbaropen, setsearchbar] = useState(false);
     const [searches, setsearches] = useState(false);
+    /*const userId = userID.value;*/
     return (
         <><div className="Flex-container">
             <header className="webheader">
@@ -40,7 +42,7 @@ function Home() {
                     <div className={`dropdownmenu ${open ? 'active' : 'inactive'}`}>
                         <Dropdownelements text="Home" href="/" Header="Login" />
                         <Dropdownelements text="Browse" href="/Browse" Header="Browse" />
-                        <Dropdownelements text="Profile" href="/Profile" Header="Profile" />
+                        <Dropdownelements text="Profile" href={`/Profile/${userID}`} Header="Profile" />
                         <Dropdownelements text="Groups" href="/Groups" Header="Groups" />
                         <Dropdownelements text={`${token.value.length > 0 ? 'Logout' : 'Login'}`} href="/login" Header="Login"/>
                         {token.value.length > 0 ? <></> : 
@@ -58,7 +60,7 @@ function Home() {
             {searchbaropen ? <div className={`searchoption ${searchbaropen ? 'active' : 'inactive'}`}>
                 <div className="DropdownelementContainer">
                 <h>Release Year</h>
-                <input className="SearchInputyear" placeholder="release year" maxLength="4" onChange={(event) => year = event.target.value}></input>
+                <input className="SearchInputyear" placeholder="release year" maxLength="4"  onChange={(event) => year = event.target.value.replace(/\D/g, '')}></input>
                 </div>
                 <div className="DropdownelementContainer">
                 <h>Adult Content</h>
@@ -89,7 +91,7 @@ function Home() {
                     <Result state={state} />
                     <div className="SearchButtonContainer">
                     <button onClick={() => uiPage !== 1 ? refreshminus() : console.log("hello")} className="SearchButtonPrev">prev</button>
-                        <p>{uiPage + "/" + totalpages * multiplication}</p>
+                        {totalpages !== 1 ? <p>{uiPage + "/" + totalpages * multiplication}</p> : <p>{uiPage + "/" + totalpages}</p> }
                         <button onClick={() => curpage < totalpages ? refresh() : console.log("hello")} className="SearchButtonNext">next</button>
                     </div>
                 </>
@@ -160,17 +162,6 @@ function Home() {
         async function getter() {
             setState(!state);
         }
-    }
-    function Genres() {
-        let rows = [];
-        rows.push(
-            <option value=""></option>
-        )
-        for (var genre of customData.genres)
-            rows.push(
-                <option value={genre.id}>{genre.name}</option>
-            )
-        return rows;
     }
     function Result() {
         let row = [];

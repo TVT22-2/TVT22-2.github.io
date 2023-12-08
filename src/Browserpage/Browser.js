@@ -13,6 +13,7 @@ const [index2, setIndex2] = useState(1);
 const [index3, setIndex3] = useState(1);
     useEffect(() => {
         async function loader(){
+            window.scrollTo(0, 0)
             await MovieDBRegData("toprated", 1,1);
             await MovieDBRegData("recent", 1,1);
             await MovieDBRegData("upcom", 1,1);
@@ -126,7 +127,7 @@ const [index3, setIndex3] = useState(1);
     function Button(props){
         return(
         <><div className='buttoncontainer'><button className="buttonleft" onClick={()=>props.var.length-1 >= props.index+5 ? props.setIndex(props.index+5) : PageFetcher(props.setIndex, props.header, "+")}><div className="buttonlefttext">Next</div></button>
-        <button className="buttonright" onClick={()=>props.index != 1 ? props.setIndex(props.index-5) : props.index-5 > 1 ? props.setIndex(props.index-5) : PageFetcher(props.setIndex, props.header, "-") }><div className="buttonrighttext">Previous</div></button></div></>
+        <button className="buttonright" onClick={()=>props.index !== 1 ? props.setIndex(props.index-5) : props.index-5 > 1 ? props.setIndex(props.index-5) : PageFetcher(props.setIndex, props.header, "-") }><div className="buttonrighttext">Previous</div></button></div></>
         ); 
     }
 }

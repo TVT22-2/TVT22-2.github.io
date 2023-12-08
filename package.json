@@ -12,6 +12,7 @@
     "npm": "^10.2.3",
     "react": "^18.2.0",
     "react-axios": "^2.0.6",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-indiana-drag-scroll": "^2.2.0",
     "react-router-dom": "^6.19.0",
@@ -50,6 +51,8 @@
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react-native": "^12.4.1",
     "babel-jest": "^29.7.0",
-    "gh-pages": "^6.0.0"
+    "chai": "^4.3.10",
+    "gh-pages": "^6.0.0",
+    "mocha": "^10.2.0"
   }
 }
