@@ -10,7 +10,7 @@ backend/.env
 
 # testing
 /coverage
-/Testing/node_modules
+Testing/node_modules
 
 # production
 /build
