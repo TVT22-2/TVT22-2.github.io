@@ -9,6 +9,7 @@ export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
     useEffect(() => {
         const fetchdata = async () => {
+            window.scrollTo(0, 0)
             await ReviewGetter();   
             await MovieDBRegData("trend", 1,1)
              .then(()=> MovieDBRegData("upcom", 1,1))
@@ -103,7 +104,7 @@ export default function Frontpage() {
         return (
         <div className="verticalcontainer">
         <div className="ImageContainer">
-        <Link to={"http://localhost:3000/movie/" + props.id}>
+        <Link to={"http://localhost:3000/"+props.movie+"/" + props.id}>
         <img src={imageurl} alt="bigdogstatus" className="elementimage"/>
         </Link>
         </div>
@@ -154,7 +155,7 @@ export default function Frontpage() {
     }
    for (let i = 1; i<=20;i++){
     if(array[i]!==undefined){
-    row.push(<MovieElementVertical title={array[i].title} genre={array[i].genreid} popularity={array[i].popularity} imagepath={array[i].posterpath} id={array[i].id}/>)
+    row.push(<MovieElementVertical title={array[i].title} genre={array[i].genreid} popularity={array[i].popularity} imagepath={array[i].posterpath} id={array[i].id} movie={array[i].movie}/>)
     } else {
         row.push(<>Error with the connection</>)
         break;

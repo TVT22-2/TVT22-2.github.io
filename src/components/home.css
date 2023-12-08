@@ -69,15 +69,18 @@
     color:black; 
 }
 .footercontainer{
+    display: flex;
     position: relative;
     min-height: 100vh;
 }
 .footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     bottom: 0;
     position: absolute;
     width: 100%;
     background-color: orange;
-    height:50px;
     text-align: center;
 }
 .footer p{
@@ -182,4 +185,17 @@
 }
 .DropdownelementContainer h{
     text-align: center;
+}
+.footerlinks{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.FooterHead{
+    width: 100%;
+}
+.footerlinks Link{
+    display: flex;
+    width: 30%;
+    justify-content: center;
 }

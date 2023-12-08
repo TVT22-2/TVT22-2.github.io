@@ -28,7 +28,7 @@ async function Fetch(movieId) {
 }
 async function GetMovieData(movieId) {
     const movieData = await Fetch(movieId);
-    if(movieData.title != undefined){
+    if(movieData.title !== undefined){
     return {
         title: movieData.title,
         genreid: movieData.genres,
