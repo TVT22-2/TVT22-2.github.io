@@ -151,7 +151,8 @@ async function idParser(movie_id){
             title: data.results[i].name,
             genreid: genrearray,
             posterpath: data.results[i].poster_path,
-            popularity: data.results[i].popularity
+            popularity: data.results[i].popularity,
+            movie: "tv"
             }
         } else {
             moviearray = 
@@ -160,7 +161,8 @@ async function idParser(movie_id){
             title: data.results[i].title,
             genreid: genrearray,
             posterpath: data.results[i].poster_path,
-            popularity: data.results[i].popularity
+            popularity: data.results[i].popularity,
+            movie: "movie"
             }
         }
         switch (saveval){

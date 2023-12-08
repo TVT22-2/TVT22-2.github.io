@@ -15,7 +15,7 @@ return(
     <input className="Username" type="text" placeholder="Username"  onChange={e => username = e.target.value}></input>
     <h className="registerheader">Password</h>
     <input className="Password" type="password" placeholder="Password" onChange={e => password = e.target.value}></input>
-    <div><h className="registerheader">Password recoverykey</h><img src={infopng} onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)} className="infopng"></img></div>
+    <div><h className="registerheader">Password recoverykey</h><img src={infopng} onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)} alt="hover for info" className="infopng"></img></div>
     {hover ? <p className="notification">Password recoverykey is a word that's used for recovering your password</p> : <></>}
     <input className="Password" type="password" placeholder="Recoverykey" onChange={e => recovery = e.target.value}></input>
 </div>
