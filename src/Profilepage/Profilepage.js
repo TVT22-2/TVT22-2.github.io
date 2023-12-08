@@ -1,12 +1,26 @@
 import React, { useEffect, useState } from "react";
-import "./Profilepage.css"
-import image from "../resources/placeholderimage3.jpg"
+import { useParams } from "react-router-dom";
+import "./Profilepage.css";
 import { idParser } from '../components/DataLoader';
 import { userID } from "../components/react-signals";
+import {
+    Image,
+    Timestamp,
+    ButtonsPostsAndNewsfeed,
+    Buttons,
+    ProfileGroupName,
+    ProfileMovieTitle,
+    Rating,
+    Text,
+    CopyProfileLink
+} from "./ProfilepageComponents.js";
 
 function Profilepage() {
 
-    if (userID.value === "") {
+    const { userId } = useParams();
+    console.log("USER:" + userId);
+
+    if (userID.value === "" || userID.value === null) {
         return (
             <div className="Profilepage">
                 <h1>You must be logged in to view this page</h1>
@@ -135,22 +149,124 @@ function FavouriteMoviesAndGroups() {
 }
 
 function PostsAndNews() {
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [currentHeaderPage, setCurrentHeaderCurrentPage] = useState(1); // Track which page is currently displayed (Posts, Newsfeed, New Post)
+    const [currentPage, setCurrentPage] = useState(1); // Track the current page
+    const [totalPages, setTotalPages] = useState(1);
+    const postsPerPage = 1; // Number of posts to display per page
+
+    // Get posts from the database
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                let url = `http://localhost:3001/post/user/${userID}`;
+                console.log(url);
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log(data);
+                setTotalPages(Math.ceil(data.length / postsPerPage));
+                setPosts(data);
+            } catch (error) {
+                console.error('Error fetching data at Profile / PostsAndNews:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const handlePostPage = () => {
+        setCurrentHeaderCurrentPage(1);
+    };
+
+    const HandleNewPost = () => {
+        setCurrentHeaderCurrentPage(3);
+    };
+
+    const handleNewsfeedPage = () => {
+        setCurrentHeaderCurrentPage(2);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prevPage => prevPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prevPage => prevPage - 1);
+        }
+    };
+
+    const startIndex = (currentPage - 1) * postsPerPage;
+    const endIndex = startIndex + postsPerPage;
+    const displayedPosts = posts.slice(startIndex, endIndex);
+
     return (
         <div className="PostsAndNews">
-            <Buttons ButtonLeft="Posts" ButtonRight="Newsfeed" />
+            <Buttons
+                ButtonLeft="Posts"
+                ButtonMiddle="New Post"
+                ButtonRight="Newsfeed"
+                onButtonLeftClick={handlePostPage}
+                onButtonRightClick={handleNewsfeedPage}
+            />
+
             <div className="PostsAndNewsHeader">
-                <h1>Posts / Newsfeed</h1>
+                {(() => {
+                    switch (currentHeaderPage) {
+                        case 1:
+                            return <h1>Posts</h1>;
+                        case 2:
+                            return <h1>Newsfeed</h1>;
+                        case 3:
+                            return <h1>New Post</h1>;
+                        default:
+                            return null;
+                    }
+                })()}
             </div>
-            <ProfileMovieTitle Title='Placeholder' />
-            <Timestamp />
-            <Text Content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
-            <Image />
-            <Buttons ButtonLeft="Previous" ButtonRight="Next" />
+
+            {loading ? (
+                <p className="Loader">Loading...</p>
+            ) : (() => {
+                switch (currentHeaderPage) {
+                    case 1:
+                        return (
+                            <div>
+                                {displayedPosts.map((post, index) => (
+                                    <div key={index} className="ProfilePagePost">
+                                        <ProfileMovieTitle Title={post.title} />
+                                        <Timestamp Date={post.date} />
+                                        <Text Content={post.posttext} />
+                                        <Image />
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    case 2:
+                        return <div className="ProfilePageNewsfeed"></div>;
+                    case 3:
+                        return <NewPost onButtonCancelClick={handlePostPage} />;
+                    default:
+                        return null;
+                }
+            })()}
+            <ButtonsPostsAndNewsfeed
+                ButtonLeft="Previous"
+                ButtonMiddle="New Post"
+                ButtonRight="Next"
+                onButtonLeftClick={handlePreviousPage}
+                onButtonMiddleClick={HandleNewPost}
+                onButtonRightClick={handleNextPage}
+            />
         </div>
     );
 }
 
-/*Profiilisivun komponentti*/
 function FavouriteMovies() {
 
     const [favorites, setFavorites] = useState([]);
@@ -289,8 +405,9 @@ function Groups() {
                 )}
             </ol>
 
-            <Buttons
+            <ButtonsPostsAndNewsfeed
                 ButtonLeft="Previous"
+                ButtonMiddle= {<CopyProfileLink/>}
                 ButtonRight="Next"
                 onButtonLeftClick={handlePreviousPage}
                 onButtonRightClick={handleNextPage}
@@ -299,61 +416,67 @@ function Groups() {
     );
 }
 
-function ProfileGroupName({ Name }) {
-    return (
-        <div className="GroupName">
-            <h2>{Name}</h2>
-        </div>
-    );
-}
+function NewPost({ onButtonCancelClick }) {
 
-function ProfileMovieTitle({ Title }) {
-    return (
-        <div className="ProfileMovieTitle">
-            <h2>{Title}</h2>
-        </div>
-    );
-}
+    const initialDetails = {
+        title: "",
+        posttext: "",
+        date: new Date().toISOString(),
+        end_user_id: userID
+    };
 
-function Rating({ Rating }) {
-    return (
-        <div className="Rating">
-            <h3>{Rating}/5</h3>
-        </div>
-    );
-}
+    const [details, setDetails] = useState(initialDetails);
 
-function Text({ Content }) {
-    return (
-        <div className="Text">
-            <p>{Content}</p>
-        </div>
-    );
-}
 
-function Buttons({ ButtonLeft, ButtonRight, onButtonLeftClick, onButtonRightClick }) {
-    return (
-        <div className="Buttons">
-            <button id="ButtonLeft" onClick={onButtonLeftClick}>
-                {ButtonLeft}</button>
-            <button id="ButtonRight" onClick={onButtonRightClick}>
-                {ButtonRight}</button>
-        </div>
-    );
-}
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setDetails((prev) => {
+            return { ...prev, [name]: value }
+        })
+    };
 
-function Timestamp() {
-    return (
-        <div className="Timestamp">
-            <h2>Timestamp</h2>
-        </div>
-    );
-}
+    const submitHandler = async (e) => {
+        e.preventDefault();
 
-function Image() {
+        fetch('http://localhost:3001/post/insertPostUser', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(details)
+
+        }).then(() => {
+            console.log('New post added');
+            setDetails(initialDetails);
+            window.location.reload();
+        })
+    }
+
     return (
-        <div className="Image">
-            <img src={image} alt="placeholder" className="placeholderImage" />
+        <div className="NewPost">
+            <form onSubmit={submitHandler} className="NewPostForm">
+                <h3>Title:</h3>
+                <input
+                    type='title'
+                    name="title"
+                    placeholder="Add title"
+                    value={details.title}
+                    onChange={handleChange}
+                    className="InputField"
+                />
+                <h3>Content:</h3>
+                <textarea
+                    name="posttext"
+                    placeholder="Add text"
+                    value={details.posttext}
+                    onChange={handleChange}
+                    className="InputField"
+                />
+                <button type="submit" id="ButtonSubmit" className="NewPostButtons">
+                    Add post</button>
+                <button type="submit" id="ButtonCancel" className="NewPostButtons" onClick={onButtonCancelClick}>
+                    Cancel</button>
+            </form>
         </div>
     )
 }

@@ -104,6 +104,13 @@ function Moviepage() {
             <div className="Moviepage">
                 <AvgScore averageScore={averageScore} />
                 <InfoFooter movieData={movieData} reviews={reviews} currentIndex={currentIndex} handleNextReview={handleNextReview} handlePrevReview={handlePrevReview} />
+                {window.location.pathname.slice(0, 3) === "/mo" ? <>
+            <div className='AddRemoveFavoritesConteiner'>
+                <AddFavorite movieId={movieId} />
+                </div>
+                </> 
+                : <></>
+        }
             </div>
         );
     }
@@ -111,12 +118,12 @@ function Moviepage() {
 
 function ReviewContent({ reviews, currentIndex }) {
     if (!reviews || reviews.length === 0) {
-        return <div>No reviews available.</div>;
+        return <div className='ReviewsContent'>No reviews available.</div>;
     }
 
     const currentReview = reviews[currentIndex];
     return (
-        <div className="ReviewContent">
+        <div className='ReviewsContent'>
             <h2>{currentReview.title}</h2>
             <p>{currentReview.content}</p>
         </div>
@@ -129,11 +136,13 @@ function MovieRating({ reviews, currentIndex }) {
     }
 
     const currentReview = reviews[currentIndex];
-    return (
-        <div className="ReviewsTitle">
-            <h4>{currentReview.review} / 5</h4>
-        </div>
-    );
+    const stars = [];
+
+    for (let i = 0; i < currentReview.review; i++) {
+        stars.push(<img key={i} src={require('../resources/star.png')} className='stars' />);
+    }
+
+    return <div>{stars}</div>;
 }
 
 function AvgScore({ averageScore }) {
@@ -178,11 +187,11 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
                 <ReviewsHeader />
                 <ReviewsTitle movieData={movieData} />
                 <MovieRating reviews={reviews} currentIndex={currentIndex} />
+                <ReviewContent reviews={reviews} currentIndex={currentIndex} />
                 <div className="buttonContainer">
                     <button onClick={handlePrevReview}>Previous Review</button>
                     <button onClick={handleNextReview}>Next</button>
                 </div>
-                <ReviewContent reviews={reviews} currentIndex={currentIndex} />
             </div>
             <div className='AddReview'>
                 <AddReviewsHeader />
@@ -194,6 +203,36 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
             : <></>
             }
         </div>
+    );
+}
+
+function AddFavorite({movieId}){
+    const handleSubmit = async () => {
+        console.log(userID);
+        try{
+            const response = await fetch('http://localhost:3001/addFavorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    movie_id: movieId,
+                    user_id: userID
+            }),
+        });
+        if (response.ok) {
+            console.log('Favorite added successfully');
+            alert("Favorite added successfully");
+        } else {
+            console.error('Failed to add favorite');
+            alert("Failed to add favorite. Please login");
+        }
+    } catch (error) {
+        console.error('Error adding favorite:', error);
+    }
+    }
+    return (
+        <button className={`AddFavoriteButton`} onClick={handleSubmit}>Add Favorite</button>
     );
 }
 
@@ -218,8 +257,11 @@ function AddReview({ movieId, content, review }) {
 
             if (response.ok) {
                 console.log('Review submitted successfully');
+                alert("Review added successfully");
+                window.location.reload();
             } else {
                 console.error('Failed to submit review');
+                alert("Failed to submit review. Please login");
             }
         } catch (error) {
             console.error('Error submitting review:', error);
@@ -227,38 +269,45 @@ function AddReview({ movieId, content, review }) {
     };
 
     return (
-        <button onClick={handleSubmit}>Submit review</button>
+        <button className={`SubmitReviewButton`} onClick={handleSubmit}>Submit review</button>
     );
 }
 
 function AddReviewContent({ content, handleChange }) {
     return (
         <div className="AddReviewContent">
-            <label htmlFor="content">Review Content: </label>
             <textarea
                 name="content"
                 value={content}
                 onChange={handleChange}
                 placeholder="Write your review here..."
-                rows="4"
-                cols="50"
+                rows="10"
+                cols="115"
             />
         </div>
     );
 }
 
-function AddReviewRating({ review, handleChange }) {
+function AddReviewRating({ handleChange }) {
+    const [activeRating, setActiveRating] = useState(null);
+
+    const handleRatingClick = (value) => {
+        handleChange({ target: { name: 'review', value } });
+        setActiveRating(value);
+    };
+
     return (
         <div className="AddReviewRating">
-            <label htmlFor="review">Select Rating: </label>
-            <select name="review" value={review} onChange={handleChange}>
-                <option value={0}>Select...</option>
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-                <option value={4}>4</option>
-                <option value={5}>5</option>
-            </select>
+            <h4>Rating:</h4>
+            {[1, 2, 3, 4, 5].map((value) => (
+                <button
+                    key={value}
+                    onClick={() => handleRatingClick(value)}
+                    className={`rating-button ${activeRating === value ? 'active' : ''}`}
+                >
+                    {value}
+                </button>
+            ))}
         </div>
     );
 }
@@ -337,7 +386,7 @@ function ReviewsHeader() {
 function ReviewsTitle({ movieData }) {
     return (
         <div className="ReviewsTitle">
-            <h4>{movieData.title}</h4>
+            <h2>{movieData.title}</h2>
         </div>
     );
 }
@@ -345,7 +394,7 @@ function ReviewsTitle({ movieData }) {
 function AddReviewsHeader() {
     return (
         <div className="AddReviewsHeader">
-            <h4>Add Reviews</h4>
+            <h2>Add Reviews</h2>
         </div>
     );
 }

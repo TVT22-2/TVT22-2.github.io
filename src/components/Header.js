@@ -5,6 +5,8 @@ import noposter from "../resources/no_poster.png"
 import nav from "../resources/navbuttonplaceholder.png"
 import { Link, useLocation } from "react-router-dom"
 import { useEffect } from "react";
+import { userID } from "../components/react-signals";
+
 let searcharray = [{
 }];
 let index = 5;
@@ -29,6 +31,7 @@ function Home() {
     const [open, setOpen] = useState(false);
     const [searchbaropen, setsearchbar] = useState(false);
     const [searches, setsearches] = useState(false);
+    /*const userId = userID.value;*/
     return (
         <><div className="Flex-container">
             <header className="webheader">
@@ -39,7 +42,7 @@ function Home() {
                     <div className={`dropdownmenu ${open ? 'active' : 'inactive'}`}>
                         <Dropdownelements text="Home" href="/" Header="Login" />
                         <Dropdownelements text="Browse" href="/Browse" Header="Browse" />
-                        <Dropdownelements text="Profile" href="/Profile" Header="Profile" />
+                        <Dropdownelements text="Profile" href={`/Profile/${userID}`} Header="Profile" />
                         <Dropdownelements text="Groups" href="/Groups" Header="Groups" />
                         <Dropdownelements text={`${token.value.length > 0 ? 'Logout' : 'Login'}`} href="/login" Header="Login"/>
                         {token.value.length > 0 ? <></> : 

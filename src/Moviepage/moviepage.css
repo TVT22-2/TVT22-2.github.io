@@ -1,6 +1,6 @@
 .MoviePage {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     text-decoration: none;
 }
 
@@ -14,15 +14,20 @@
 
 .InfoFooter {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     padding: 10px;
+}
+
+@media only screen and (min-width: 768px) {
+    .InfoFooter{
+        flex-direction: row;
+    } 
 }
 
 .MovieDetail {
     border: 2px solid black;
-    padding: 10px;
-    width: 30%;
-    
+    width: 100%;
+    margin: 5px;
 }
 
 .MovieInformation {
@@ -35,6 +40,7 @@
 .MovieDetailContent {
     width: 100%; 
     text-align: center;
+    margin: 5px;
 }
 
 .Movie {
@@ -49,6 +55,7 @@
     width: 230px;
     height: 290px;
     overflow: hidden;
+    padding: 10px;
 }
 
 .thumbnail-image {
@@ -62,19 +69,20 @@
     text-align: left;
     width: 100%;
     align-items: flex-end; 
+    padding: 10px;
 }
 
 .Review {
     border: 2px solid black;
-    width: 30%; 
+    width: 100%;
+    margin: 5px;
     
 }
 
 .ReviewsHeader {
     text-align: center;
     background-color: orange;
-    height: 50px;
-    margin-bottom: 5px;
+    height: auto;
 }
 
 .ReviewsTitle {
@@ -91,15 +99,14 @@
 
 .AddReview {
     border: 2px solid black;
-    width: 30%;
-    margin-bottom: 5px;
+    width: 100%;
+    margin: 5px;
 }
 
 .AddReviewsHeader {
     text-align: center;
     background-color: orange;
-    height: 50px;
-    margin-bottom: 5px;
+    height: auto;
 }
 
 .buttonStyle {
@@ -113,9 +120,62 @@
 
   .buttonContainer{
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
+    margin: 5px;
   }
 
   .ReviewsContent{
     text-align: left;
+    margin: 5px;
+    border: 2px solid black;
+    padding: 5px;
   }
+
+  .ReviewsRating{
+    display: flex;
+    padding: 5px;
+  }
+
+  .stars{
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+  }
+
+  .rating-button {
+    background-color: #ccc; 
+    padding: 5px 10px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.rating-button.active {
+    background-color: #888;
+}
+
+.AddReviewRating{
+    text-align: center;
+}
+
+.AddReviewContent{
+    margin: 10px;
+}
+
+.AddFavoriteButton{
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+.AddRemoveFavoritesConteiner{
+    display: flex;
+    align-items: center; /* Vertical alignment */
+    justify-content: center; /* Horizontal alignment */
+}
+
+.SubmitReviewButton{
+    margin: 10px;
+
+}
+  
