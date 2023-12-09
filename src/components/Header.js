@@ -35,6 +35,11 @@ function Home() {
     const [searchbaropen, setsearchbar] = useState(false);
     const [searches, setsearches] = useState(false);
     /*const userId = userID.value;*/
+    useEffect(() => {
+    if(searchbaropen){
+        adult=false;
+    }
+    }, [searchbaropen])
     return (
         <><div className="Flex-container">
             <header className="webheader">
