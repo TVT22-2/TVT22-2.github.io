@@ -11,10 +11,20 @@ function Image() {
     )
 }
 
-function Timestamp({ Date }) {
+function Timestamp({ date }) {
+    const dateObject = new Date(date);
+
+    // Checking if parsed date is valid
+    if (isNaN(dateObject.getTime())) {
+        return <div className="Timestamp">Invalid Date</div>;
+    }
+
+    // Formatting date to dd/mm/yyyy
+    const formattedDate = dateObject.toLocaleDateString('en-GB');
+
     return (
         <div className="Timestamp">
-            <h2>{Date}</h2>
+            <h2>{formattedDate}</h2>
         </div>
     );
 }
@@ -66,7 +76,6 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, user }) {
         </div>
     );
 }
-
 
 function Buttons({ ButtonLeft, ButtonRight, onButtonLeftClick, onButtonRightClick }) {
     return (
@@ -133,7 +142,6 @@ function Link({ Link, Description }) {
     );
 }
 
-
 function CopyProfileLink({ onCopy }) {
     const [copied, setCopied] = useState(false);
     const value = window.location.href;
@@ -157,6 +165,5 @@ function CopyProfileLink({ onCopy }) {
         </div>
     );
 }
-
 
 export { Image, Timestamp, AddNewsToProfileButtonAndLink, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, CopyProfileLink, Link };

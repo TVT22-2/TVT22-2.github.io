@@ -21,7 +21,7 @@ import {
 function Profilepage() {
 
     const { userId } = useParams();
-    console.log("USER:" + userId);
+    //console.log("USER:" + userId);
 
     if (userID.value === "" || userID.value === null) {
         return (
@@ -55,10 +55,9 @@ function OwnReviews() {
             setLoading(true);
             try {
                 let url = `http://localhost:3001/getownreview/${userID}`;
-                console.log(url);
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
+                //console.log(data);
                 setTotalPages(Math.ceil(data.length / reviewsPerPage));
                 setReviews(data);
             } catch (error) {
@@ -162,7 +161,7 @@ function PostsAndNews() {
         const fetchPosts = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/post/user/${userID}`;
+                let url = `http://localhost:3001/post/userByDate/${userID}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 setTotalPostPages(Math.ceil(data.length / postsPerPage));
@@ -187,11 +186,11 @@ function PostsAndNews() {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(response.data, "text/xml");
 
-                console.log(xmlDoc);
+                //console.log(xmlDoc);
 
                 const articles = xmlDoc.querySelectorAll("NewsArticle");
-                console.log("XML Content:", xmlDoc.documentElement.outerHTML);
-                console.log("Articles NodeList:", articles);
+                //console.log("XML Content:", xmlDoc.documentElement.outerHTML);
+                //console.log("Articles NodeList:", articles);*/
                 const extractedNews = Array.from(articles).map((article) => ({
                     title: article.querySelector("Title").textContent,
                     date: article.querySelector("PublishDate").textContent,
@@ -284,9 +283,9 @@ function PostsAndNews() {
                                 {displayedItems.map((post, index) => (
                                     <div key={index} className="ProfilePagePost">
                                         <ProfileMovieTitle Title={post.title} />
-                                        <Timestamp Date={post.date} />
+                                        <Timestamp date={post.date} />
                                         <Text Content={post.posttext} />
-                                        <Image />
+                                        {/*<Image />*/}
                                     </div>
                                 ))}
                             </div>
@@ -296,7 +295,7 @@ function PostsAndNews() {
                             {displayedItems.map((article, index) => (
                                 <div key={index} className="ProfilePageNews">
                                     <ProfileMovieTitle Title={article.title} />
-                                    <Timestamp Date={article.date} />
+                                    <Timestamp date={article.date} />
                                     <Text Content={article.content} />
                                     <AddNewsToProfileButtonAndLink ButtonText={"Add to profile"} article={article} user={userID} />
                                 </div>
@@ -332,10 +331,9 @@ function FavouriteMovies() {
             setLoading(true);
             try {
                 let url = `http://localhost:3001/favorites/${userID}`;
-                console.log(url);
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
+                //console.log(data);
 
                 // Limit to 5 favorites
                 const limitedFavorites = data.slice(0, 5);
@@ -403,10 +401,9 @@ function Groups() {
             setLoading(true);
             try {
                 let url = `http://localhost:3001/Groups/${userID}`;
-                console.log(url);
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
+                //console.log(data);
                 setTotalPages(Math.ceil(data.length / groupsPerPage));
                 setGroups(data);
             } catch (error) {
@@ -494,7 +491,7 @@ function NewPost({ onButtonCancelClick }) {
             body: JSON.stringify(details)
 
         }).then(() => {
-            console.log('New post added');
+            //console.log('New post added');
             setDetails(initialDetails);
             window.location.reload();
         })
