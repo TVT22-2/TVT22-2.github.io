@@ -7,20 +7,21 @@ import { userID } from "../components/react-signals";
 import {
     Image,
     Timestamp,
-    ButtonsPostsAndNewsfeed,
+    AddNewsToProfileButtonAndLink,
     Buttons,
+    ButtonsPostsAndNewsfeed,
     ProfileGroupName,
     ProfileMovieTitle,
     Rating,
     Text,
     CopyProfileLink,
-    GetNews
+    Link
 } from "./ProfilepageComponents.js";
 
 function Profilepage() {
 
     const { userId } = useParams();
-    console.log("USER:" + userId);
+    //console.log("USER:" + userId);
 
     if (userID.value === "" || userID.value === null) {
         return (
@@ -54,10 +55,9 @@ function OwnReviews() {
             setLoading(true);
             try {
                 let url = `http://localhost:3001/getownreview/${userID}`;
-                console.log(url);
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
+                //console.log(data);
                 setTotalPages(Math.ceil(data.length / reviewsPerPage));
                 setReviews(data);
             } catch (error) {
@@ -153,15 +153,15 @@ function PostsAndNews() {
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const [totalPostPages, setTotalPostPages] = useState(1);
     const [totalNewsPages, setTotalNewsPages] = useState(1);
-    const postsPerPage = 1; // Number of posts to display per page
-    const newsPerPage = 2; // Number of news to display per page
+    const postsPerPage = 1;
+    const newsPerPage = 2;
 
     // Get posts from the database
     useEffect(() => {
         const fetchPosts = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/post/user/${userID}`;
+                let url = `http://localhost:3001/post/userByDate/${userID}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 setTotalPostPages(Math.ceil(data.length / postsPerPage));
@@ -186,16 +186,19 @@ function PostsAndNews() {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(response.data, "text/xml");
 
-                console.log(xmlDoc);
+                //console.log(xmlDoc);
 
                 const articles = xmlDoc.querySelectorAll("NewsArticle");
-                console.log("XML Content:", xmlDoc.documentElement.outerHTML);
-                console.log("Articles NodeList:", articles);
+                //console.log("XML Content:", xmlDoc.documentElement.outerHTML);
+                //console.log("Articles NodeList:", articles);*/
                 const extractedNews = Array.from(articles).map((article) => ({
                     title: article.querySelector("Title").textContent,
+                    date: article.querySelector("PublishDate").textContent,
                     content: article.querySelector("HTMLLead").textContent,
                     link: article.querySelector("ArticleURL").textContent,
                 }));
+
+                setTotalNewsPages(Math.ceil(extractedNews.length / newsPerPage));
                 setNews(extractedNews);
             } catch (error) {
                 console.error("Error fetching data at Profile / News:", error);
@@ -280,20 +283,21 @@ function PostsAndNews() {
                                 {displayedItems.map((post, index) => (
                                     <div key={index} className="ProfilePagePost">
                                         <ProfileMovieTitle Title={post.title} />
-                                        <Timestamp Date={post.date} />
+                                        <Timestamp date={post.date} />
                                         <Text Content={post.posttext} />
-                                        <Image />
+                                        {/*<Image />*/}
                                     </div>
                                 ))}
                             </div>
                         );
                     case 2:
-                        return <div className="ProfilePageNewsfeed">
+                        return <div>
                             {displayedItems.map((article, index) => (
                                 <div key={index} className="ProfilePageNews">
                                     <ProfileMovieTitle Title={article.title} />
+                                    <Timestamp date={article.date} />
                                     <Text Content={article.content} />
-                                    <a href={article.link}>Read more</a>
+                                    <AddNewsToProfileButtonAndLink ButtonText={"Add to profile"} article={article} user={userID} />
                                 </div>
                             ))}
                         </div>;
@@ -327,10 +331,9 @@ function FavouriteMovies() {
             setLoading(true);
             try {
                 let url = `http://localhost:3001/favorites/${userID}`;
-                console.log(url);
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
+                //console.log(data);
 
                 // Limit to 5 favorites
                 const limitedFavorites = data.slice(0, 5);
@@ -398,10 +401,9 @@ function Groups() {
             setLoading(true);
             try {
                 let url = `http://localhost:3001/Groups/${userID}`;
-                console.log(url);
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
+                //console.log(data);
                 setTotalPages(Math.ceil(data.length / groupsPerPage));
                 setGroups(data);
             } catch (error) {
@@ -489,7 +491,7 @@ function NewPost({ onButtonCancelClick }) {
             body: JSON.stringify(details)
 
         }).then(() => {
-            console.log('New post added');
+            //console.log('New post added');
             setDetails(initialDetails);
             window.location.reload();
         })
@@ -523,22 +525,5 @@ function NewPost({ onButtonCancelClick }) {
         </div>
     )
 }
-
-/*function News() {
-    const { authors } = this.state;
- 
-    return (
-        <div>
-            Parse XML using ReactJs
-            {(authors && authors.length > 0) &&
-                authors.map((item) => {
-                    return (
-                        <span>{item.FirstName}</span>
-                    )
-                })
-            }
-        </div>
-    );
-}*/
 
 export default Profilepage;

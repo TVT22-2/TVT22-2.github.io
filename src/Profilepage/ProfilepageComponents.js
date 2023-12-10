@@ -11,10 +11,68 @@ function Image() {
     )
 }
 
-function Timestamp({ Date }) {
+function Timestamp({ date }) {
+    const dateObject = new Date(date);
+
+    // Checking if parsed date is valid
+    if (isNaN(dateObject.getTime())) {
+        return <div className="Timestamp">Invalid Date</div>;
+    }
+
+    // Formatting date to dd/mm/yyyy
+    const formattedDate = dateObject.toLocaleDateString('en-GB');
+
     return (
         <div className="Timestamp">
-            <h2>{Date}</h2>
+            <h2>{formattedDate}</h2>
+        </div>
+    );
+}
+
+function AddNewsToProfileButtonAndLink({ ButtonText, article, user }) {
+    const initialDetails = {
+        title: "",
+        posttext: "",
+        date: article.date,
+        end_user_id: user
+    };
+
+    const [details, setDetails] = useState(initialDetails);
+
+    const submitHandler = async (e) => {
+        e.preventDefault();
+
+        const updatedDetails = {
+            ...initialDetails,
+            title: article.title,
+            posttext: `${article.content} ${article.link}`, // Using template literals for better readability
+            date: article.date,
+        };
+
+        // Use the updated state in the fetch request
+        fetch('http://localhost:3001/post/insertPostUser', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedDetails) // Use the updated details
+
+        }).then(() => {
+            console.log('New newspost added');
+            setDetails(initialDetails);
+            window.location.reload();
+        })
+            .catch((error) => {
+                console.error("Error adding post:", error);
+            });
+    }
+
+    return (
+        <div className="ButtonAndLinkNewsfeed">
+            <a href={article.link}>Read More</a>
+            <button id="Button" onClick={submitHandler}>
+                {ButtonText}
+            </button>
         </div>
     );
 }
@@ -76,6 +134,14 @@ function Text({ Content }) {
     );
 }
 
+function Link({ Link, Description }) {
+    return (
+        <div className="Link">
+            <a href={Link}>{Description}</a>
+        </div>
+    );
+}
+
 function CopyProfileLink({ onCopy }) {
     const [copied, setCopied] = useState(false);
     const value = window.location.href;
@@ -100,4 +166,4 @@ function CopyProfileLink({ onCopy }) {
     );
 }
 
-export { Image, Timestamp, ButtonsPostsAndNewsfeed, Buttons, ProfileGroupName, ProfileMovieTitle, Rating, Text, CopyProfileLink };
+export { Image, Timestamp, AddNewsToProfileButtonAndLink, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, CopyProfileLink, Link };
