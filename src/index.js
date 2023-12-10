@@ -21,8 +21,7 @@ root.render(
         <Route path="/login" element={<Login />}/>
         <Route path="/" element={<Frontpage />} />
         <Route path="/Profile/:userId" element={<Profilepage />} />
-        <Route path="/Groups" element={<GroupPage />} />
-        <Route path="/Movie" element={<Moviepage />} />
+        <Route path="/Groups" element={<GroupPage />} />  
         <Route path="/Group" element={<GroupPage />} />
         <Route path="/movie/:movieId" element={<Moviepage />} />
         <Route path="/tv/:movieId" element={<Moviepage />} />
@@ -32,8 +31,4 @@ root.render(
       <Footer/>
     </BrowserRouter>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
