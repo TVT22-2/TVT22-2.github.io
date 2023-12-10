@@ -19,7 +19,7 @@ function Timestamp({ Date }) {
     );
 }
 
-function AddNewsToProfileButton({ ButtonText, article, user }) {
+function AddNewsToProfileButtonAndLink({ ButtonText, article, user }) {
     const initialDetails = {
         title: "",
         posttext: "",
@@ -52,13 +52,14 @@ function AddNewsToProfileButton({ ButtonText, article, user }) {
             setDetails(initialDetails);
             window.location.reload();
         })
-        .catch((error) => {
-            console.error("Error adding post:", error);
-        });
+            .catch((error) => {
+                console.error("Error adding post:", error);
+            });
     }
 
     return (
-        <div className="Button">
+        <div className="ButtonAndLinkNewsfeed">
+            <a href={article.link}>Read More</a>
             <button id="Button" onClick={submitHandler}>
                 {ButtonText}
             </button>
@@ -158,4 +159,4 @@ function CopyProfileLink({ onCopy }) {
 }
 
 
-export { Image, Timestamp, AddNewsToProfileButton, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, CopyProfileLink, Link };
+export { Image, Timestamp, AddNewsToProfileButtonAndLink, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, CopyProfileLink, Link };

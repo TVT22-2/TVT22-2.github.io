@@ -7,7 +7,7 @@ import { userID } from "../components/react-signals";
 import {
     Image,
     Timestamp,
-    AddNewsToProfileButton,
+    AddNewsToProfileButtonAndLink,
     Buttons,
     ButtonsPostsAndNewsfeed,
     ProfileGroupName,
@@ -298,10 +298,7 @@ function PostsAndNews() {
                                     <ProfileMovieTitle Title={article.title} />
                                     <Timestamp Date={article.date} />
                                     <Text Content={article.content} />
-                                    <div className="LinkButtonContainer">
-                                        <Link Link={article.link} Description={"Read More"} />
-                                        <AddNewsToProfileButton ButtonText={"Add to profile"} article={article} user={userID} />
-                                    </div>
+                                    <AddNewsToProfileButtonAndLink ButtonText={"Add to profile"} article={article} user={userID} />
                                 </div>
                             ))}
                         </div>;

@@ -188,14 +188,13 @@
 }
 
 /*Child container (Parents: ProfilepageNews, PostsAndNews)*/
-.LinkButtonContainer {
+.ButtonAndLinkNewsfeed {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 90%;
     margin: 5px 0px 5px 0px;
-
 }
 
 .NewPost {
