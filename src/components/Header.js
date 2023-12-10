@@ -36,9 +36,9 @@ function Home() {
     const [searches, setsearches] = useState(false);
     /*const userId = userID.value;*/
     useEffect(() => {
-    if(searchbaropen){
-        adult=false;
-    }
+        if (searchbaropen) {
+            adult = false;
+        }
     }, [searchbaropen])
     return (
         <><div className="Flex-container">
@@ -125,24 +125,24 @@ function Home() {
         console.log(event.target.checked);
     }
     async function sumbit(e) {
-        if(e.key === "Enter"){
-        uiPage = 1;
-        curpage = 1;
-        if (!searchbaropen) {
-            year = "";
-            adult = false;
+        if (e.key === "Enter") {
+            uiPage = 1;
+            curpage = 1;
+            if (!searchbaropen) {
+                year = "";
+                adult = false;
 
+            }
+            curquery = message;
+            setsearches(false);
+            if (message.length > 0) {
+                await datasetter();
+                setsearchbar(false);
+                setsearches(true);
+            } else {
+                alert("The search needs an input!")
+            }
         }
-        curquery = message;
-        setsearches(false);
-        if (message.length > 0) {
-            await datasetter();
-            setsearchbar(false);
-            setsearches(true);
-        } else {
-            alert("The search needs an input!")
-        }
-    }
     }
     async function refreshminus() {
         uiPage--;
