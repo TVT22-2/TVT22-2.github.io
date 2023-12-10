@@ -7,14 +7,15 @@ import { userID } from "../components/react-signals";
 import {
     Image,
     Timestamp,
-    ButtonsPostsAndNewsfeed,
+    AddNewsToProfileButton,
     Buttons,
+    ButtonsPostsAndNewsfeed,
     ProfileGroupName,
     ProfileMovieTitle,
     Rating,
     Text,
     CopyProfileLink,
-    GetNews
+    Link
 } from "./ProfilepageComponents.js";
 
 function Profilepage() {
@@ -153,8 +154,8 @@ function PostsAndNews() {
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const [totalPostPages, setTotalPostPages] = useState(1);
     const [totalNewsPages, setTotalNewsPages] = useState(1);
-    const postsPerPage = 1; // Number of posts to display per page
-    const newsPerPage = 2; // Number of news to display per page
+    const postsPerPage = 1;
+    const newsPerPage = 2;
 
     // Get posts from the database
     useEffect(() => {
@@ -193,9 +194,12 @@ function PostsAndNews() {
                 console.log("Articles NodeList:", articles);
                 const extractedNews = Array.from(articles).map((article) => ({
                     title: article.querySelector("Title").textContent,
+                    date: article.querySelector("PublishDate").textContent,
                     content: article.querySelector("HTMLLead").textContent,
                     link: article.querySelector("ArticleURL").textContent,
                 }));
+
+                setTotalNewsPages(Math.ceil(extractedNews.length / newsPerPage));
                 setNews(extractedNews);
             } catch (error) {
                 console.error("Error fetching data at Profile / News:", error);
@@ -288,12 +292,16 @@ function PostsAndNews() {
                             </div>
                         );
                     case 2:
-                        return <div className="ProfilePageNewsfeed">
+                        return <div>
                             {displayedItems.map((article, index) => (
                                 <div key={index} className="ProfilePageNews">
                                     <ProfileMovieTitle Title={article.title} />
+                                    <Timestamp Date={article.date} />
                                     <Text Content={article.content} />
-                                    <a href={article.link}>Read more</a>
+                                    <div className="LinkButtonContainer">
+                                        <Link Link={article.link} Description={"Read More"} />
+                                        <AddNewsToProfileButton ButtonText={"Add to profile"} article={article} user={userID} />
+                                    </div>
                                 </div>
                             ))}
                         </div>;
@@ -523,22 +531,5 @@ function NewPost({ onButtonCancelClick }) {
         </div>
     )
 }
-
-/*function News() {
-    const { authors } = this.state;
- 
-    return (
-        <div>
-            Parse XML using ReactJs
-            {(authors && authors.length > 0) &&
-                authors.map((item) => {
-                    return (
-                        <span>{item.FirstName}</span>
-                    )
-                })
-            }
-        </div>
-    );
-}*/
 
 export default Profilepage;

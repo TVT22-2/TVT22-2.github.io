@@ -13,7 +13,7 @@
     justify-content: space-between;
     align-items: center;
     border: 1px solid #030303;
-    margin: 15px 15px 15px 50px;
+    margin: 15px 15px 15px auto;
 }
 
 /*Favourite Movies and Groups container*/
@@ -34,10 +34,10 @@
     justify-content: space-between;
     align-items: center;
     border: 1px solid #030303;
-    margin: 15px 50px 15px 15px;
+    margin: 15px auto 15px 15px;
 }
 
-/* Header sytling */
+/* Header styling */
 .OwnReviewsHeader,
 .FavouriteMoviesHeader,
 .GroupsHeader,
@@ -49,7 +49,7 @@
     margin-bottom: 5px;
 }
 
-/* Content sytling */
+/* Content styling */
 .ProfileMovieTitle,
 .Rating,
 .Text,
@@ -66,13 +66,16 @@
     text-align: left;
 }
 
-.PostsAndNews .Text {
+.PostsAndNews .ProfilePagePost .Text {
     height: 200px;
     overflow: auto;
     text-align: left;
 }
 
-/*Fix later*/
+.PostsAndNews .ProfilePageNews .Text {
+    text-align: left;
+}
+
 .placeholderImage {
     margin-left: 30px;
 }
@@ -122,7 +125,8 @@
 #ButtonMiddle,
 #ButtonSubmit,
 #ButtonCancel,
-#ButtonCopyProfileLink {
+#ButtonCopyProfileLink,
+#Button {
     background-color: orange;
     border: 1px solid #030303;
 }
@@ -176,16 +180,36 @@
     align-items: center;
 }
 
+/*Child container (Parent: PostsAndNews)*/
+.ProfilePageNews {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*Child container (Parents: ProfilepageNews, PostsAndNews)*/
+.LinkButtonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 5px 0px 5px 0px;
+
+}
+
 .NewPost {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 70%; /* Adjust as needed */
+    width: 70%;
+    /* Adjust as needed */
     margin: 15px 50px 365px 15px;
 }
 
 .NewPostForm {
-    width: 80%; /* Adjust as needed */
+    width: 80%;
+    /* Adjust as needed */
 }
 
 .InputField {
@@ -203,6 +227,7 @@
     cursor: pointer;
     width: 50%;
 }
+
 /*Mobile*/
 @media only screen and (max-width: 768px) {
 

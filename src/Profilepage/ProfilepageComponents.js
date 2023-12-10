@@ -19,6 +19,54 @@ function Timestamp({ Date }) {
     );
 }
 
+function AddNewsToProfileButton({ ButtonText, article, user }) {
+    const initialDetails = {
+        title: "",
+        posttext: "",
+        date: article.date,
+        end_user_id: user
+    };
+
+    const [details, setDetails] = useState(initialDetails);
+
+    const submitHandler = async (e) => {
+        e.preventDefault();
+
+        const updatedDetails = {
+            ...initialDetails,
+            title: article.title,
+            posttext: `${article.content} ${article.link}`, // Using template literals for better readability
+            date: article.date,
+        };
+
+        // Use the updated state in the fetch request
+        fetch('http://localhost:3001/post/insertPostUser', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedDetails) // Use the updated details
+
+        }).then(() => {
+            console.log('New newspost added');
+            setDetails(initialDetails);
+            window.location.reload();
+        })
+        .catch((error) => {
+            console.error("Error adding post:", error);
+        });
+    }
+
+    return (
+        <div className="Button">
+            <button id="Button" onClick={submitHandler}>
+                {ButtonText}
+            </button>
+        </div>
+    );
+}
+
+
 function Buttons({ ButtonLeft, ButtonRight, onButtonLeftClick, onButtonRightClick }) {
     return (
         <div className="Buttons">
@@ -76,6 +124,15 @@ function Text({ Content }) {
     );
 }
 
+function Link({ Link, Description }) {
+    return (
+        <div className="Link">
+            <a href={Link}>{Description}</a>
+        </div>
+    );
+}
+
+
 function CopyProfileLink({ onCopy }) {
     const [copied, setCopied] = useState(false);
     const value = window.location.href;
@@ -100,4 +157,5 @@ function CopyProfileLink({ onCopy }) {
     );
 }
 
-export { Image, Timestamp, ButtonsPostsAndNewsfeed, Buttons, ProfileGroupName, ProfileMovieTitle, Rating, Text, CopyProfileLink };
+
+export { Image, Timestamp, AddNewsToProfileButton, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, CopyProfileLink, Link };
