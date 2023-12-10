@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useParams } from "react-router-dom";
 import "./Profilepage.css";
 import { idParser } from '../components/DataLoader';
@@ -12,7 +13,8 @@ import {
     ProfileMovieTitle,
     Rating,
     Text,
-    CopyProfileLink
+    CopyProfileLink,
+    GetNews
 } from "./ProfilepageComponents.js";
 
 function Profilepage() {
@@ -71,8 +73,6 @@ function OwnReviews() {
     useEffect(() => {
         const fetchTitles = async () => {
             try {
-                console.log('Before fetching titles:', reviews);
-
                 const reviewsWithTitles = await Promise.all(
                     reviews.map(async (review) => {
                         const movieDetails = await idParser(review.idmovie);
@@ -82,9 +82,6 @@ function OwnReviews() {
                         };
                     })
                 );
-
-                console.log('After fetching titles:', reviewsWithTitles);
-
                 setReviewsWithTitles(reviewsWithTitles);
             } catch (error) {
                 console.error('Error fetching titles:', error);
@@ -150,31 +147,65 @@ function FavouriteMoviesAndGroups() {
 
 function PostsAndNews() {
     const [posts, setPosts] = useState([]);
+    const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentHeaderPage, setCurrentHeaderCurrentPage] = useState(1); // Track which page is currently displayed (Posts, Newsfeed, New Post)
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
-    const [totalPages, setTotalPages] = useState(1);
+    const [totalPostPages, setTotalPostPages] = useState(1);
+    const [totalNewsPages, setTotalNewsPages] = useState(1);
     const postsPerPage = 1; // Number of posts to display per page
+    const newsPerPage = 2; // Number of news to display per page
 
     // Get posts from the database
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchPosts = async () => {
             setLoading(true);
             try {
                 let url = `http://localhost:3001/post/user/${userID}`;
-                console.log(url);
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
-                setTotalPages(Math.ceil(data.length / postsPerPage));
+                setTotalPostPages(Math.ceil(data.length / postsPerPage));
                 setPosts(data);
             } catch (error) {
-                console.error('Error fetching data at Profile / PostsAndNews:', error);
+                console.error('Error fetching data at Profile / Posts:', error);
             } finally {
                 setLoading(false);
             }
         };
-        fetchData();
+
+        const fetchNews = async () => {
+            setLoading(true);
+            try {
+                let url = "https://www.finnkino.fi/xml/News/";
+                const response = await axios.get(url, {
+                    headers: {
+                        "Content-Type": "application/xml; charset=utf-8",
+                    },
+                });
+
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(response.data, "text/xml");
+
+                console.log(xmlDoc);
+
+                const articles = xmlDoc.querySelectorAll("NewsArticle");
+                console.log("XML Content:", xmlDoc.documentElement.outerHTML);
+                console.log("Articles NodeList:", articles);
+                const extractedNews = Array.from(articles).map((article) => ({
+                    title: article.querySelector("Title").textContent,
+                    content: article.querySelector("HTMLLead").textContent,
+                    link: article.querySelector("ArticleURL").textContent,
+                }));
+                setNews(extractedNews);
+            } catch (error) {
+                console.error("Error fetching data at Profile / News:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPosts();
+        fetchNews();
     }, []);
 
     const handlePostPage = () => {
@@ -190,8 +221,14 @@ function PostsAndNews() {
     };
 
     const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(prevPage => prevPage + 1);
+        if (currentHeaderPage === 1) {
+            if (currentPage < totalPostPages) {
+                setCurrentPage((prevPage) => prevPage + 1);
+            }
+        } else if (currentHeaderPage === 2) {
+            if (currentPage < totalNewsPages) {
+                setCurrentPage((prevPage) => prevPage + 1);
+            }
         }
     };
 
@@ -201,12 +238,13 @@ function PostsAndNews() {
         }
     };
 
-    const startIndex = (currentPage - 1) * postsPerPage;
-    const endIndex = startIndex + postsPerPage;
-    const displayedPosts = posts.slice(startIndex, endIndex);
+    const startIndex = (currentPage - 1) * (currentHeaderPage === 1 ? postsPerPage : newsPerPage);
+    const endIndex = startIndex + (currentHeaderPage === 1 ? postsPerPage : newsPerPage);
+    const displayedItems = currentHeaderPage === 1 ? posts.slice(startIndex, endIndex) : news.slice(startIndex, endIndex);
 
     return (
         <div className="PostsAndNews">
+            {/* Buttons component for selecting Posts, New Post, or Newsfeed */}
             <Buttons
                 ButtonLeft="Posts"
                 ButtonMiddle="New Post"
@@ -215,6 +253,7 @@ function PostsAndNews() {
                 onButtonRightClick={handleNewsfeedPage}
             />
 
+            {/* Header for displaying "Posts", "Newsfeed", or "New Post" */}
             <div className="PostsAndNewsHeader">
                 {(() => {
                     switch (currentHeaderPage) {
@@ -230,6 +269,7 @@ function PostsAndNews() {
                 })()}
             </div>
 
+            {/* Content based on the selected page */}
             {loading ? (
                 <p className="Loader">Loading...</p>
             ) : (() => {
@@ -237,7 +277,7 @@ function PostsAndNews() {
                     case 1:
                         return (
                             <div>
-                                {displayedPosts.map((post, index) => (
+                                {displayedItems.map((post, index) => (
                                     <div key={index} className="ProfilePagePost">
                                         <ProfileMovieTitle Title={post.title} />
                                         <Timestamp Date={post.date} />
@@ -248,7 +288,15 @@ function PostsAndNews() {
                             </div>
                         );
                     case 2:
-                        return <div className="ProfilePageNewsfeed"></div>;
+                        return <div className="ProfilePageNewsfeed">
+                            {displayedItems.map((article, index) => (
+                                <div key={index} className="ProfilePageNews">
+                                    <ProfileMovieTitle Title={article.title} />
+                                    <Text Content={article.content} />
+                                    <a href={article.link}>Read more</a>
+                                </div>
+                            ))}
+                        </div>;
                     case 3:
                         return <NewPost onButtonCancelClick={handlePostPage} />;
                     default:
@@ -300,8 +348,6 @@ function FavouriteMovies() {
     useEffect(() => {
         const fetchTitles = async () => {
             try {
-                console.log('Before fetching titles:', favorites);
-
                 const favoritesWithTitles = await Promise.all(
                     favorites.map(async (favorite) => {
                         const movieDetails = await idParser(favorite.movie_id);
@@ -311,9 +357,6 @@ function FavouriteMovies() {
                         };
                     })
                 );
-
-                console.log('After fetching titles:', favoritesWithTitles);
-
                 setfavoritesWithTitles(favoritesWithTitles);
             } catch (error) {
                 console.error('Error fetching titles:', error);
@@ -407,7 +450,7 @@ function Groups() {
 
             <ButtonsPostsAndNewsfeed
                 ButtonLeft="Previous"
-                ButtonMiddle= {<CopyProfileLink/>}
+                ButtonMiddle={<CopyProfileLink />}
                 ButtonRight="Next"
                 onButtonLeftClick={handlePreviousPage}
                 onButtonRightClick={handleNextPage}
@@ -480,5 +523,22 @@ function NewPost({ onButtonCancelClick }) {
         </div>
     )
 }
+
+/*function News() {
+    const { authors } = this.state;
+ 
+    return (
+        <div>
+            Parse XML using ReactJs
+            {(authors && authors.length > 0) &&
+                authors.map((item) => {
+                    return (
+                        <span>{item.FirstName}</span>
+                    )
+                })
+            }
+        </div>
+    );
+}*/
 
 export default Profilepage;

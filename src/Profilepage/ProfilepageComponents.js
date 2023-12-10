@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import "./Profilepage.css";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-
 function Image() {
     return (
         <div className="Image">
