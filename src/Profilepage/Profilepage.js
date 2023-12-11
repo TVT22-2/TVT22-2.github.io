@@ -18,11 +18,11 @@ import {
     ButtonsGroups,
     Link
 } from "./ProfilepageComponents.js";
+
 function Profilepage() {
     const navigate = useNavigate();
-    const { userId } = useParams();
-    //console.log("USER:" + userId);
 
+    // Placeholder for checking if the user is logged in
     /*if (userID.value === "" || userID.value === null) {
         return (
             <div className="Profilepage">
@@ -32,37 +32,52 @@ function Profilepage() {
     } else {
         return (
             <>
+                <div className="Profilepage">
+                    <OwnReviews />
+                    <FavouriteMoviesAndGroups />
+                    <PostsAndNews />
+                </div>
+                <button onClick={Deletion}>hello</button>
+            </>
+        )
+    }*/
+
+    return (
+        <>
             <div className="Profilepage">
                 <OwnReviews />
                 <FavouriteMoviesAndGroups />
                 <PostsAndNews />
             </div>
-             <button onClick={Deletion}>hello</button>
-             </>
-        )
-    }
-    async function Deletion(){
+            <div className="ButtonDeleteContainer">
+                <button className="ButtonDelete" id="ButtonDelete" onClick={Deletion}>Delete Profile</button>
+            </div>
+        </>
+    )
+
+    async function Deletion() {
         let userid = userID.value;
         console.log(userid);
         const confirmation = window.confirm("Delete?");
         if (confirmation) {
             const response = await fetch(`http://localhost:3001/delete`, {
                 method: 'DELETE',
-                headers: { 
+                headers: {
                     'Content-type': 'application/json'
-                } ,
-                body: JSON.stringify({userid}) 
-              });
-        userID.value = "";
-        token.value = ""; 
-        navigate("/");
-        if(response){
-        }
+                },
+                body: JSON.stringify({ userid })
+            });
+            userID.value = "";
+            token.value = "";
+            navigate("/");
+            if (response) {
+            }
         } else {
-        alert("deleden't")
+            alert("deleden't")
         }
+    }
 }
-}
+
 function OwnReviews() {
     const { userId } = useParams();
     const [reviews, setReviews] = useState([]);
@@ -271,75 +286,75 @@ function PostsAndNews() {
 
     return (
         <>
-        <div className="PostsAndNews">
-            {/* Buttons component for selecting Posts, New Post, or Newsfeed */}
-            <Buttons
-                ButtonLeft="Posts"
-                ButtonMiddle="New Post"
-                ButtonRight="Newsfeed"
-                onButtonLeftClick={handlePostPage}
-                onButtonRightClick={handleNewsfeedPage}
-            />
-            {/* Header for displaying "Posts", "Newsfeed", or "New Post" */}
-            <div className="PostsAndNewsHeader">
-                {(() => {
+            <div className="PostsAndNews">
+                {/* Buttons component for selecting Posts, New Post, or Newsfeed */}
+                <Buttons
+                    ButtonLeft="Posts"
+                    ButtonMiddle="New Post"
+                    ButtonRight="Newsfeed"
+                    onButtonLeftClick={handlePostPage}
+                    onButtonRightClick={handleNewsfeedPage}
+                />
+                {/* Header for displaying "Posts", "Newsfeed", or "New Post" */}
+                <div className="PostsAndNewsHeader">
+                    {(() => {
+                        switch (currentHeaderPage) {
+                            case 1:
+                                return <h1>Posts</h1>;
+                            case 2:
+                                return <h1>Newsfeed</h1>;
+                            case 3:
+                                return <h1>New Post</h1>;
+                            default:
+                                return null;
+                        }
+                    })()}
+                </div>
+
+                {/* Content based on the selected page */}
+                {loading ? (
+                    <p className="Loader">Loading...</p>
+                ) : (() => {
                     switch (currentHeaderPage) {
                         case 1:
-                            return <h1>Posts</h1>;
+                            return (
+                                <div>
+                                    {displayedItems.map((post, index) => (
+                                        <div key={index} className="ProfilePagePosts">
+                                            <ProfileMovieTitle Title={post.title} />
+                                            <Timestamp date={post.date} />
+                                            <Text Content={post.posttext} />
+                                            {/*<Image />*/}
+                                        </div>
+                                    ))}
+                                </div>
+                            );
                         case 2:
-                            return <h1>Newsfeed</h1>;
+                            return <div>
+                                {displayedItems.map((article, index) => (
+                                    <div key={index} className="ProfilePageNews">
+                                        <ProfileMovieTitle Title={article.title} />
+                                        <Timestamp date={article.date} />
+                                        <Text Content={article.content} />
+                                        <AddNewsToProfileButtonAndLink ButtonText={"Add to profile"} article={article} userIdUrl={userId} />
+                                    </div>
+                                ))}
+                            </div>;
                         case 3:
-                            return <h1>New Post</h1>;
+                            return <NewPost onButtonCancelClick={handlePostPage} />;
                         default:
                             return null;
                     }
                 })()}
+                <ButtonsPostsAndNewsfeed
+                    ButtonLeft="Previous"
+                    ButtonMiddle="New Post"
+                    ButtonRight="Next"
+                    onButtonLeftClick={handlePreviousPage}
+                    onButtonMiddleClick={HandleNewPost}
+                    onButtonRightClick={handleNextPage}
+                />
             </div>
-
-            {/* Content based on the selected page */}
-            {loading ? (
-                <p className="Loader">Loading...</p>
-            ) : (() => {
-                switch (currentHeaderPage) {
-                    case 1:
-                        return (
-                            <div>
-                                {displayedItems.map((post, index) => (
-                                    <div key={index} className="ProfilePagePosts">
-                                        <ProfileMovieTitle Title={post.title} />
-                                        <Timestamp date={post.date} />
-                                        <Text Content={post.posttext} />
-                                        {/*<Image />*/}
-                                    </div>
-                                ))}
-                            </div>
-                        );
-                    case 2:
-                        return <div>
-                            {displayedItems.map((article, index) => (
-                                <div key={index} className="ProfilePageNews">
-                                    <ProfileMovieTitle Title={article.title} />
-                                    <Timestamp date={article.date} />
-                                    <Text Content={article.content} />
-                                    <AddNewsToProfileButtonAndLink ButtonText={"Add to profile"} article={article} userIdUrl={userId} />
-                                </div>
-                            ))}
-                        </div>;
-                    case 3:
-                        return <NewPost onButtonCancelClick={handlePostPage} />;
-                    default:
-                        return null;
-                }
-            })()}
-            <ButtonsPostsAndNewsfeed
-                ButtonLeft="Previous"
-                ButtonMiddle="New Post"
-                ButtonRight="Next"
-                onButtonLeftClick={handlePreviousPage}
-                onButtonMiddleClick={HandleNewPost}
-                onButtonRightClick={handleNextPage}
-            />
-        </div>
         </>
     );
 }
@@ -515,7 +530,7 @@ function NewPost({ onButtonCancelClick }) {
         } else if (userID === "" || userID === null || userID === undefined) {
             setError("You must be logged in to add a post.");
             return;
-            
+
         } else {
             fetch('http://localhost:3001/post/insertPostUser', {
                 method: 'POST',
