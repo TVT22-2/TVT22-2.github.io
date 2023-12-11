@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Profilepage.css";
 import { idParser } from '../components/DataLoader';
-import { userID } from "../components/react-signals";
+import { userID, token } from "../components/react-signals";
 import {
     Image,
     Timestamp,
@@ -17,9 +18,8 @@ import {
     CopyProfileLink,
     Link
 } from "./ProfilepageComponents.js";
-
 function Profilepage() {
-
+    const navigate = useNavigate();
     const { userId } = useParams();
     //console.log("USER:" + userId);
 
@@ -31,16 +31,38 @@ function Profilepage() {
         )
     } else {
         return (
+            <>
             <div className="Profilepage">
                 <OwnReviews />
                 <FavouriteMoviesAndGroups />
                 <PostsAndNews />
-                
             </div>
+             <button onClick={Deletion}>hello</button>
+             </>
         )
     }
+    async function Deletion(){
+        let userid = userID.value;
+        console.log(userid);
+        const confirmation = window.confirm("Delete?");
+        if (confirmation) {
+            const response = await fetch(`http://localhost:3001/delete`, {
+                method: 'DELETE',
+                headers: { 
+                    'Content-type': 'application/json'
+                } ,
+                body: JSON.stringify({userid}) 
+              });
+        userID.value = "";
+        token.value = ""; 
+        navigate("/");
+        if(response){
+        }
+        } else {
+        alert("deleden't")
+        }
 }
-
+}
 function OwnReviews() {
 
     const [reviews, setReviews] = useState([]);
@@ -247,6 +269,7 @@ function PostsAndNews() {
     const displayedItems = currentHeaderPage === 1 ? posts.slice(startIndex, endIndex) : news.slice(startIndex, endIndex);
 
     return (
+        <>
         <div className="PostsAndNews">
             {/* Buttons component for selecting Posts, New Post, or Newsfeed */}
             <Buttons
@@ -256,7 +279,6 @@ function PostsAndNews() {
                 onButtonLeftClick={handlePostPage}
                 onButtonRightClick={handleNewsfeedPage}
             />
-
             {/* Header for displaying "Posts", "Newsfeed", or "New Post" */}
             <div className="PostsAndNewsHeader">
                 {(() => {
@@ -317,6 +339,7 @@ function PostsAndNews() {
                 onButtonRightClick={handleNextPage}
             />
         </div>
+        </>
     );
 }
 
