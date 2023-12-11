@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Frontpage from './Frontpage/Frontpage'
 import Profilepage from './Profilepage/Profilepage';
 import GroupPage from './GroupPage/GroupPage';
+import GroupDetails from './GroupPage/GroupDetails'
 import Moviepage from './Moviepage/Moviepage';
 import Register from './components/Register';
 import Browser from './Browserpage/Browser';
@@ -22,7 +23,7 @@ root.render(
         <Route path="/" element={<Frontpage />} />
         <Route path="/Profile/:userId" element={<Profilepage />} />
         <Route path="/Groups" element={<GroupPage />} />  
-        <Route path="/Group" element={<GroupPage />} />
+        <Route path="/Groupspage/:id" element={<GroupDetails />} />
         <Route path="/movie/:movieId" element={<Moviepage />} />
         <Route path="/tv/:movieId" element={<Moviepage />} />
         <Route path="/Register" element={<Register/>}/>
