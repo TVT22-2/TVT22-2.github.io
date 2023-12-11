@@ -1,6 +1,7 @@
 require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
+var deleteRouter = require('./routes/deleterouter');
 var loginRouter = require('./routes/loginrouter');
 var groupRouter = require('./routes/grouprouter');
 var ReviewRouter = require('./routes/reviewrouter');
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static('public'));
 
+app.use('/', deleteRouter);
 app.use('/', loginRouter);
 app.use('/', groupRouter);
 app.use('/', ReviewRouter);

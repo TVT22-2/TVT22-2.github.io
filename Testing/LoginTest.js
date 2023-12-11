@@ -19,6 +19,13 @@ describe('Post Login test', () => {
         expect(response.status).to.equal(200);
         expect(response.data.jwtToken).to.be.a("string");
     });
+    it('Should get a token and the code 200', async () => {
+        let username = "Jhon";
+        let password = "Jho";
+        const response = await axios.postForm('http://localhost:3001/login', { username, password });
+        expect(response.status).to.equal(200);
+        expect(response.data.jwtToken).to.be.a("string");
+    });
 });
 describe('Password recovery test', () => {
     it('Should return with the code 200 and a boolean that is true', async () => {
