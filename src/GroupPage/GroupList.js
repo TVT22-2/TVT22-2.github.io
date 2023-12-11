@@ -1,3 +1,5 @@
+import React from "react";
+
 const GroupListG = (props) => {
     const groups = props.groups;
     return (
