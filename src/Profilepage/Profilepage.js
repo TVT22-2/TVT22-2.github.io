@@ -14,16 +14,14 @@ import {
     ProfileMovieTitle,
     Rating,
     Text,
-    CopyProfileLink,
+    ButtonsGroups,
     Link
 } from "./ProfilepageComponents.js";
 
 function Profilepage() {
-
-    const { userId } = useParams();
     //console.log("USER:" + userId);
 
-    if (userID.value === "" || userID.value === null) {
+    /*if (userID.value === "" || userID.value === null) {
         return (
             <div className="Profilepage">
                 <h1>You must be logged in to view this page</h1>
@@ -35,14 +33,21 @@ function Profilepage() {
                 <OwnReviews />
                 <FavouriteMoviesAndGroups />
                 <PostsAndNews />
-                
+
             </div>
         )
-    }
+    }*/
+    return (
+        <div className="Profilepage">
+            <OwnReviews />
+            <FavouriteMoviesAndGroups />
+            <PostsAndNews />
+        </div>
+    )
 }
 
 function OwnReviews() {
-
+    const { userId } = useParams();
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [reviewsWithTitles, setReviewsWithTitles] = useState([]);
@@ -55,7 +60,7 @@ function OwnReviews() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/getownreview/${userID}`;
+                let url = `http://localhost:3001/getownreview/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 //console.log(data);
@@ -147,6 +152,7 @@ function FavouriteMoviesAndGroups() {
 }
 
 function PostsAndNews() {
+    const { userId } = useParams();
     const [posts, setPosts] = useState([]);
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -162,7 +168,7 @@ function PostsAndNews() {
         const fetchPosts = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/post/userByDate/${userID}`;
+                let url = `http://localhost:3001/post/userByDate/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 setTotalPostPages(Math.ceil(data.length / postsPerPage));
@@ -282,7 +288,7 @@ function PostsAndNews() {
                         return (
                             <div>
                                 {displayedItems.map((post, index) => (
-                                    <div key={index} className="ProfilepageNews">
+                                    <div key={index} className="ProfilePagePosts">
                                         <ProfileMovieTitle Title={post.title} />
                                         <Timestamp date={post.date} />
                                         <Text Content={post.posttext} />
@@ -298,7 +304,7 @@ function PostsAndNews() {
                                     <ProfileMovieTitle Title={article.title} />
                                     <Timestamp date={article.date} />
                                     <Text Content={article.content} />
-                                    <AddNewsToProfileButtonAndLink ButtonText={"Add to profile"} article={article} user={userID} />
+                                    <AddNewsToProfileButtonAndLink ButtonText={"Add to profile"} article={article} userIdUrl={userId} />
                                 </div>
                             ))}
                         </div>;
@@ -322,6 +328,7 @@ function PostsAndNews() {
 
 function FavouriteMovies() {
 
+    const { userId } = useParams();
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
     const [favoritesWithTitles, setfavoritesWithTitles] = useState([]);
@@ -331,7 +338,7 @@ function FavouriteMovies() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/favorites/${userID}`;
+                let url = `http://localhost:3001/favorites/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 //console.log(data);
@@ -389,6 +396,7 @@ function FavouriteMovies() {
 
 function Groups() {
 
+    const { userId } = useParams();
     const [groups, setGroups] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
@@ -399,7 +407,7 @@ function Groups() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/Groups/${userID}`;
+                let url = `http://localhost:3001/Groups/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 //console.log(data);
@@ -449,9 +457,9 @@ function Groups() {
                 )}
             </ol>
 
-            <ButtonsPostsAndNewsfeed
+            <ButtonsGroups
                 ButtonLeft="Previous"
-                ButtonMiddle={<CopyProfileLink />}
+                ButtonMiddle="Copy Profile Link"
                 ButtonRight="Next"
                 onButtonLeftClick={handlePreviousPage}
                 onButtonRightClick={handleNextPage}
@@ -470,34 +478,46 @@ function NewPost({ onButtonCancelClick }) {
     };
 
     const [details, setDetails] = useState(initialDetails);
-
+    const [error, setError] = useState(null);
+    const { userId } = useParams();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setDetails((prev) => {
-            return { ...prev, [name]: value }
-        })
+            return { ...prev, [name]: value };
+        });
     };
 
     const submitHandler = async (e) => {
         e.preventDefault();
 
-        fetch('http://localhost:3001/post/insertPostUser', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(details)
-
-        }).then(() => {
-            //console.log('New post added');
-            setDetails(initialDetails);
-            window.location.reload();
-        })
-    }
+        if (userID != userId) {
+            setError("You cannot add posts to another user's profile.");
+            return;
+        } else if (userID === "" || userID === null || userID === undefined) {
+            setError("You must be logged in to add a post.");
+            return;
+            
+        } else {
+            fetch('http://localhost:3001/post/insertPostUser', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(details)
+            }).then(() => {
+                setDetails(initialDetails);
+                window.location.reload();
+            }).catch((error) => {
+                console.error('Error adding new post:', error);
+                // Handle error appropriately, e.g., setError("Failed to add new post.")
+            });
+        }
+    };
 
     return (
         <div className="NewPost">
+            {error && <div className="ErrorMessage">{error}</div>}
             <form onSubmit={submitHandler} className="NewPostForm">
                 <h3>Title:</h3>
                 <input
@@ -517,12 +537,14 @@ function NewPost({ onButtonCancelClick }) {
                     className="InputField"
                 />
                 <button type="submit" id="ButtonSubmit" className="NewPostButtons">
-                    Add post</button>
-                <button type="submit" id="ButtonCancel" className="NewPostButtons" onClick={onButtonCancelClick}>
-                    Cancel</button>
+                    Add post
+                </button>
+                <button type="button" id="ButtonCancel" className="NewPostButtons" onClick={onButtonCancelClick}>
+                    Cancel
+                </button>
             </form>
         </div>
-    )
+    );
 }
 
 export default Profilepage;
