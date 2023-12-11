@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 import placeholdergif from '../resources/Loading.gif';
 import "./moviepage.css"
 import "../components/genreids.json"
+
+let isFavoriteVar = "";
+
 async function Fetch(movieId) {
     const options = {
         method: 'GET',
@@ -118,7 +121,7 @@ function Moviepage() {
 
 function ReviewContent({ reviews, currentIndex }) {
     if (!reviews || reviews.length === 0) {
-        return <div className='ReviewsContent'>No reviews available.</div>;
+        return <div></div>;
     }
 
     const currentReview = reviews[currentIndex];
@@ -189,9 +192,13 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
                 <MovieRating reviews={reviews} currentIndex={currentIndex} />
                 <ReviewContent reviews={reviews} currentIndex={currentIndex} />
                 <div className="buttonContainer">
-                    <button onClick={handlePrevReview}>Previous Review</button>
-                    <button onClick={handleNextReview}>Next</button>
-                </div>
+                            {reviews.length > 0 && (
+                                <>
+                                    <button onClick={handlePrevReview}>Previous Review</button>
+                                    <button onClick={handleNextReview}>Next</button>
+                                </>
+                            )}
+                        </div>
             </div>
             <div className='AddReview'>
                 <AddReviewsHeader />
@@ -206,35 +213,128 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
     );
 }
 
-function AddFavorite({movieId}){
-    const handleSubmit = async () => {
-        console.log(userID);
-        try{
-            const response = await fetch('http://localhost:3001/addFavorite', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    movie_id: movieId,
-                    user_id: userID
-            }),
-        });
-        if (response.ok) {
-            console.log('Favorite added successfully');
-            alert("Favorite added successfully");
-        } else {
-            console.error('Failed to add favorite');
-            alert("Failed to add favorite. Please login");
+
+function AddFavorite({ movieId }) {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const checkIfFavorite = async () => {
+            try {
+                const response = await fetch(
+                    `http://localhost:3001/checkFavorites?user_id=${userID}&movie_id=${movieId}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                );
+
+                if (response.ok) {
+                    const isMovieFavorite = await response.json();
+                    isFavoriteVar = isMovieFavorite.isFavorite;
+                    console.log(isFavoriteVar);
+                } else {
+                    console.error('Failed to check if the movie is a favorite:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error checking if the movie is a favorite:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        checkIfFavorite();
+    }, [movieId]);
+
+    const handleToggleFavorite = async () => {
+        try {
+            const response = await fetch(
+                `http://localhost:3001/checkFavorites?user_id=${userID}&movie_id=${movieId}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            if (response.ok) {
+                const { isFavorite } = await response.json();
+                if (isFavorite === true) {
+                    const deleteResponse = await fetch(
+                        `http://localhost:3001/deleteFavorite?user_id=${userID}&movie_id=${movieId}`,
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        }
+                    );
+
+                    if (deleteResponse.ok) {
+                        console.log('Removed from favorites successfully');
+                        alert('Removed from favorites successfully');
+                        isFavoriteVar = false;
+                    } else {
+                        console.error('Failed to remove from favorites:', deleteResponse.status, deleteResponse.statusText);
+                        alert('Failed to remove from favorites. Please try again.');
+                    }
+                } else {
+                    const addResponse = await fetch('http://localhost:3001/addFavorite', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            movie_id: movieId,
+                            user_id: userID,
+                        }),
+                    });
+
+                    if (addResponse.ok) {
+                        console.log('Added to favorites successfully');
+                        alert('Added to favorites successfully');
+                        isFavoriteVar = true;
+                    } else {
+                        console.error('Failed to add to favorites:', addResponse.status, addResponse.statusText);
+                        alert('Failed to add to favorites. Please try again.');
+                    }
+                }
+            } else {
+                console.error('Failed to check if the movie is a favorite:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error checking if the movie is a favorite:', error);
+        } finally {
+            window.location.reload();
         }
-    } catch (error) {
-        console.error('Error adding favorite:', error);
+    };
+
+    console.log('isFavorite:', isFavoriteVar);
+
+    if (loading) {
+        return <p>Loading...</p>;
     }
+
+    if (isFavoriteVar === true) {
+        return (
+            <button className={`AddFavoriteButton`} onClick={handleToggleFavorite}>
+                Remove from Favorites
+            </button>
+        );
+    } else if (isFavoriteVar === false) {
+        return (
+            <button className={`AddFavoriteButton`} onClick={handleToggleFavorite}>
+                Add to Favorites
+            </button>
+        );
+    } else {
+        return <p>Not found</p>;
     }
-    return (
-        <button className={`AddFavoriteButton`} onClick={handleSubmit}>Add Favorite</button>
-    );
 }
+
+
 
 function AddReview({ movieId, content, review }) {
     const handleSubmit = async () => {

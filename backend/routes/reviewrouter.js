@@ -2,7 +2,7 @@ const router = require('express').Router();
 const multer = require('multer');
 const upload = multer({ dest: 'upload/' });
 
-const {getRecentReview, addReview, getMovieReview, getOwnReview, addFavorite} = require('../postgre/review');
+const {getRecentReview, addReview, getMovieReview, getOwnReview, addFavorite, deleteFavorite, checkFavorites} = require('../postgre/review');
 
 router.get('/getrecentreview', async (req,res) => {
     try{
@@ -64,12 +64,12 @@ router.post('/addFavorite', async (req,res) => {
     }
 });
 
-router.delete('/deleteFavorite', async (req,res) => {
-    const user_id = req.body.user_id;
-    const movie_id = req.body.movie_id;
+router.delete('/deleteFavorite', async (req, res) => {
+    const user_id = req.query.user_id;
+    const movie_id = req.query.movie_id;
 
     try {
-        await deleteFavorite(user_id,movie_id);
+        await deleteFavorite(user_id, movie_id);
         res.status(201).json({ message: 'Favorite deleted successfully' });
     } catch (error) {
         // Log the error for debugging
@@ -77,6 +77,19 @@ router.delete('/deleteFavorite', async (req,res) => {
 
         // Send an error response
         res.status(500).json({ error: 'Failed to delete favorite' });
+    }
+});
+
+router.get('/checkFavorites', async (req, res) => {
+    const user_id = req.query.user_id;
+    const movie_id = req.query.movie_id;
+
+    try {
+        const isFavorite = await checkFavorites(user_id, movie_id);
+        res.json({ isFavorite });
+    } catch (error) {
+        console.error('Error checking favorites:', error);
+        res.status(500).json({ error: 'Failed to check favorites' });
     }
 });
 
