@@ -35,6 +35,7 @@ function Profilepage() {
                 <OwnReviews />
                 <FavouriteMoviesAndGroups />
                 <PostsAndNews />
+                
             </div>
         )
     }
@@ -281,7 +282,7 @@ function PostsAndNews() {
                         return (
                             <div>
                                 {displayedItems.map((post, index) => (
-                                    <div key={index} className="ProfilePagePost">
+                                    <div key={index} className="ProfilepageNews">
                                         <ProfileMovieTitle Title={post.title} />
                                         <Timestamp date={post.date} />
                                         <Text Content={post.posttext} />
@@ -335,9 +336,7 @@ function FavouriteMovies() {
                 const data = await response.json();
                 //console.log(data);
 
-                // Limit to 5 favorites
-                const limitedFavorites = data.slice(0, 5);
-                setFavorites(limitedFavorites);
+                setFavorites(data);
             } catch (error) {
                 console.error('Error fetching data at FavouriteMovies:', error);
             } finally {

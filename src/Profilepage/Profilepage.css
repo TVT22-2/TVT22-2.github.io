@@ -81,10 +81,13 @@
     text-align: left;
 }
 
-.PostsAndNews .ProfilePagePost .Text {
-    height: 500px;
+.PostAndNews .ProfilePagePostComponents .Text {
+    height: 600px;
+    width: 100%;
     overflow: auto;
     text-align: left;
+    /*white-space: wrap;*/
+    margin: 0 auto;
 }
 
 .PostsAndNews .ProfilePageNews .Text {
@@ -98,12 +101,10 @@
 
 /* Title styling */
 .OwnReviews .ProfileMovieTitle,
-.ProfilePagePost .ProfileMovieTitle,
+.ProfilePagePostComponents .ProfileMovieTitle,
 .ProfilePageNews .ProfileMovieTitle {
-    border-top: 1px solid #030303;
-    border-right: 1px solid #030303;
-    border-left: 1px solid #030303;
     border-bottom: 1px solid #030303;
+    width: 100%;
     align-items: center;
 }
 
@@ -117,15 +118,14 @@
 
 .ProfilePagePost .ProfileMovieTitle,
 .ProfilePageNews .ProfileMovieTitle {
+    width: 100%;
     margin-bottom: 0px;
 }
 
 .Timestamp {
     margin-top: 0px;
-    width: 90%;
+    width: 100%;
     text-align: center;
-    border-right: 1px solid #030303;
-    border-left: 1px solid #030303;
     border-bottom: 1px solid #030303;
 }
 
@@ -192,6 +192,10 @@
     margin: 0px 15px 15px 15px;
 }
 
+.FavouriteMoviesList {
+    overflow: auto;
+}
+
 .FavouriteMoviesAndGroups .Groups {
     margin: 0px 15px 0px 15px;
 }
@@ -213,6 +217,7 @@
 /*Child container (Parent: OwnReviews)*/
 .ProfilePageReview {
     display: flex;
+    width: 100%;
     flex-direction: column;
     align-items: center;
 }
@@ -220,13 +225,19 @@
 /*Child container (Parent: PostsAndNews)*/
 .ProfilePagePost {
     display: flex;
+    width: 100%;
     flex-direction: column;
     align-items: center;
+}
+
+.ProfilePagePostComponents {
+    width: 100%;
 }
 
 /*Child container (Parent: PostsAndNews)*/
 .ProfilePageNews {
     display: flex;
+    width: 100%;
     flex-direction: column;
     align-items: center;
 }
