@@ -2,6 +2,7 @@ import image from "../resources/postsplaceholder.png";
 import React, { useEffect, useState } from "react";
 import "./Profilepage.css";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { userID } from "../components/react-signals";
 
 function Image() {
     return (
@@ -29,15 +30,16 @@ function Timestamp({ date }) {
     );
 }
 
-function AddNewsToProfileButtonAndLink({ ButtonText, article, user }) {
+function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl }) {
     const initialDetails = {
         title: "",
         posttext: "",
         date: article.date,
-        end_user_id: user
+        end_user_id: userID
     };
 
     const [details, setDetails] = useState(initialDetails);
+    const [error, setError] = useState(null);
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -49,27 +51,36 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, user }) {
             date: article.date,
         };
 
-        // Use the updated state in the fetch request
-        fetch('http://localhost:3001/post/insertPostUser', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedDetails) // Use the updated details
+        if (userID != userIdUrl) {
+            setError("You cannot add news to another user's profile.");
+            return;
+        } else if (userID === "" || userID === null || userID === undefined) {
+            setError("You must be logged in to add news.");
+            return;
+        } else {
+            // Use the updated state in the fetch request
+            fetch('http://localhost:3001/post/insertPostUser', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedDetails) // Use the updated details
 
-        }).then(() => {
-            console.log('New newspost added');
-            setDetails(initialDetails);
-            window.location.reload();
-        })
-            .catch((error) => {
-                console.error("Error adding post:", error);
-            });
+            }).then(() => {
+                console.log('New newspost added');
+                setDetails(initialDetails);
+                window.location.reload();
+            })
+                .catch((error) => {
+                    console.error("Error adding news:", error);
+                });
+        }
     }
 
     return (
         <div className="ButtonAndLinkNewsfeed">
             <a href={article.link}>Read More</a>
+            {error && <div className="ErrorMessage">{error}</div>}
             <button id="Button" onClick={submitHandler}>
                 {ButtonText}
             </button>
@@ -96,6 +107,32 @@ function ButtonsPostsAndNewsfeed({ ButtonLeft, ButtonRight, ButtonMiddle,
                 {ButtonLeft}</button>
             <button id="ButtonMiddle" onClick={onButtonMiddleClick}>
                 {ButtonMiddle}</button>
+            <button id="ButtonRight" onClick={onButtonRightClick}>
+                {ButtonRight}</button>
+        </div>
+    );
+}
+
+function ButtonsGroups({ ButtonLeft, ButtonRight, ButtonMiddle,
+    onButtonLeftClick, onButtonRightClick, onButtonMiddleClick, onCopy }) {
+    const [copied, setCopied] = useState(false);
+    const value = window.location.href;
+    const handleCopy = () => {
+        setCopied(true);
+        if (onCopy) {
+            onCopy(); // Invoke the callback function if provided
+        }
+    };
+
+    return (
+        <div className="Buttons">
+            <button id="ButtonLeft" onClick={onButtonLeftClick}>
+                {ButtonLeft}</button>
+            <CopyToClipboard text={value} onCopy={handleCopy}>
+                <button id="ButtonMiddle" onClick={onButtonMiddleClick}>
+                    {ButtonMiddle}</button>
+            </CopyToClipboard>
+            {copied ? <span style={{ color: 'red' }}>Copied.</span> : null}
             <button id="ButtonRight" onClick={onButtonRightClick}>
                 {ButtonRight}</button>
         </div>
@@ -142,28 +179,4 @@ function Link({ Link, Description }) {
     );
 }
 
-function CopyProfileLink({ onCopy }) {
-    const [copied, setCopied] = useState(false);
-    const value = window.location.href;
-
-    const handleCopy = () => {
-        setCopied(true);
-        if (onCopy) {
-            onCopy(); // Invoke the callback function if provided
-        }
-    };
-
-    return (
-        <div>
-            <CopyToClipboard text={value} onCopy={handleCopy}>
-                <button id="ButtonCopyProfileLink">
-                    Copy Profile Link
-                </button>
-            </CopyToClipboard>
-
-            {copied ? <span style={{ color: 'red' }}>Copied.</span> : null}
-        </div>
-    );
-}
-
-export { Image, Timestamp, AddNewsToProfileButtonAndLink, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, CopyProfileLink, Link };
+export { Image, Timestamp, AddNewsToProfileButtonAndLink, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, ButtonsGroups, Link };

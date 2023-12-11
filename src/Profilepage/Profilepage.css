@@ -81,16 +81,13 @@
     text-align: left;
 }
 
-.PostAndNews .ProfilePagePostComponents .Text {
-    height: 600px;
-    width: 100%;
+.ProfilePagePosts .Text {
+    height: 500px;
     overflow: auto;
     text-align: left;
-    /*white-space: wrap;*/
-    margin: 0 auto;
 }
 
-.PostsAndNews .ProfilePageNews .Text {
+.ProfilePageNews .Text {
     overflow: auto;
     text-align: left;
 }
@@ -101,11 +98,10 @@
 
 /* Title styling */
 .OwnReviews .ProfileMovieTitle,
-.ProfilePagePostComponents .ProfileMovieTitle,
 .ProfilePageNews .ProfileMovieTitle {
+    border-top: 1px solid #030303;
     border-bottom: 1px solid #030303;
-    width: 100%;
-    align-items: center;
+    width: 90%;
 }
 
 .FavouriteMovies .ProfileMovieTitle {
@@ -116,15 +112,14 @@
     text-align: left;
 }
 
-.ProfilePagePost .ProfileMovieTitle,
-.ProfilePageNews .ProfileMovieTitle {
-    width: 100%;
-    margin-bottom: 0px;
+.ProfilePagePosts .ProfileMovieTitle {
+    border-bottom: 1px solid #030303;
+    width: 90%;
 }
 
 .Timestamp {
     margin-top: 0px;
-    width: 100%;
+    width: 90%;
     text-align: center;
     border-bottom: 1px solid #030303;
 }
@@ -154,13 +149,18 @@
     margin: 0px 35px 5px 40px;
 }
 
+.ButtonDelete {
+    margin-left: 65px;
+}
+
 #ButtonLeft,
 #ButtonRight,
 #ButtonMiddle,
 #ButtonSubmit,
 #ButtonCancel,
 #ButtonCopyProfileLink,
-#Button {
+#Button,
+#ButtonDelete {
     background-color: orange;
     border: 1px solid #030303;
 }
@@ -171,7 +171,8 @@
 #ButtonSubmit:hover,
 #ButtonCancel:hover,
 #ButtonCopyProfileLink:hover,
-#Button:hover {
+#Button:hover,
+#ButtonDelete:hover {
     background-color: #FFFF00;
 }
 
@@ -223,15 +224,11 @@
 }
 
 /*Child container (Parent: PostsAndNews)*/
-.ProfilePagePost {
+.ProfilePagePosts {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: center;
-}
-
-.ProfilePagePostComponents {
-    width: 100%;
 }
 
 /*Child container (Parent: PostsAndNews)*/
@@ -283,6 +280,10 @@
     width: 50%;
 }
 
+.ErrorMessage {
+    color: red;
+}
+
 /*Mobile*/
 @media only screen and (max-width: 768px) {
 
@@ -308,5 +309,12 @@
 
     .placeholderImage {
         margin-left: 15px;
+    }
+    .ButtonDeleteContainer {
+        display: flex;
+        justify-content: center;  
+    }
+    .ButtonDelete {
+        margin-left: 0px;
     }
 }
