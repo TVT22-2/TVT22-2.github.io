@@ -89,7 +89,7 @@ export default function Frontpage() {
     const updatedDetails = {
         title: NewsArray[i].title,
         posttext: `${NewsArray[i].content} ${NewsArray[i].link}`, 
-        date: dateString.toISOString,
+        date: dateString.toISOString(),
         end_user_id: userID.value
     }
     fetch('http://localhost:3001/post/insertPostUser', {
