@@ -1,10 +1,12 @@
 
 import React, { useEffect, useState } from "react";
+import { userID } from "../components/react-signals";
+import axios from "axios";
 import "./frontpage.css" 
 import { MovieDBRegData,ReviewGetter, UpcomingMovies, TrendingMovies, RecentMovies, ReviewArray  } from'../components/DataLoader';
 import { Link } from "react-router-dom";
 import ScrollContainer from 'react-indiana-drag-scroll'
-
+let NewsArray = [];
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
     useEffect(() => {
@@ -12,6 +14,7 @@ export default function Frontpage() {
             window.scrollTo(0, 0)
             await ReviewGetter();   
             await MovieDBRegData("trend", 1,1)
+            .then(()=> newsbutton())
              .then(()=> MovieDBRegData("upcom", 1,1))
              .then(()=> MovieDBRegData("recent", 1,1))
              .then(()=> setLoading(false))
@@ -39,12 +42,84 @@ export default function Frontpage() {
         </ScrollContainer>
         </div>
         </nav>
+        <HeaderElement text="Recent Movie News"/>
+        <News/>
         <br></br>
         <br></br>
         <br></br>
     </>
     );
     } 
+    function News(){
+        let NewsRow = [];
+        console.log(NewsArray.length)
+        for(let i = 1; i<11; i++){
+        if(NewsArray[i]!==undefined){
+            let url = NewsArray[i].imgurl;
+            var date = new Date(NewsArray[i].date);
+        NewsRow.push(
+            <li className="movienewscontainer">
+            <div className="NewsImageContainer">
+            <Link to={NewsArray[i].link}>
+            <img src={url} alt="bigdogstatus" className="recentNewsImage"></img>
+            </Link>
+            </div>
+            <article className="movienewsinfo">
+                <div className="MovieNewsDate" id="MovieNewsTitle">{NewsArray[i].title}</div>
+                <div className="MovieNewsDate" id="MovieNewsDate">{date.toUTCString()}</div>
+                {userID.value ?  
+                <div className="MovieNewsDate" id="MovieNewsDate"><button className="MovieNewsButton" onClick={()=>profilesender(i)}>Add to profile</button></div>
+         : <></>}
+                <div className="MovieNewsPr"><p>{NewsArray[i].content}</p></div>
+            </article>
+        </li> 
+         );
+        } else {
+            NewsRow.push(<>Error with database connection</>)
+            break;
+        }
+        }
+        console.log(NewsRow)
+    return NewsRow;
+        
+    }
+    function profilesender(i){
+    console.log(NewsArray[i].title);
+    var dateString = new Date(NewsArray[i].date);
+    const updatedDetails = {
+        title: NewsArray[i].title,
+        posttext: `${NewsArray[i].content} ${NewsArray[i].link}`, 
+        date: dateString.toISOString,
+        end_user_id: userID.value
+    }
+    fetch('http://localhost:3001/post/insertPostUser', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedDetails)
+
+    }).then(alert("post has been added to the your profile!"))
+    }
+    async function newsbutton(){
+        let url = "https://www.finnkino.fi/xml/News/";
+        const response = await axios.get(url, {
+            headers: {
+                "Content-Type": "application/xml; charset=utf-8",
+            },
+        });
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(response.data, "text/xml");
+        const articles = xmlDoc.querySelectorAll("NewsArticle");
+        const extractedNews = Array.from(articles).map((article) => ({
+            title: article.querySelector("Title").textContent,
+            date: article.querySelector("PublishDate").textContent,
+            content: article.querySelector("HTMLLead").textContent,
+            link: article.querySelector("ArticleURL").textContent,
+            imgurl: article.querySelector("ImageURL").textContent
+        }));
+        NewsArray = extractedNews;
+    }
     function Reviews(){
         let reviews = [];
         for(let i = 1; i<=5; i++){
