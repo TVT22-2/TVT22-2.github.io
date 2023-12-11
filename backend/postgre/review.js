@@ -4,6 +4,7 @@ const sql = {
     INSERT_REVIEW: 'INSERT INTO review (content,date,review,iduser,idmovie) VALUES ($1,$2,$3,$4,$5)',
     INSERT_FAVORITE: 'INSERT INTO favorites (user_id,movie_id) VALUES ($1,$2)',
     DELETE_FAVORITE: 'DELETE FROM favorites WHERE user_id = ($1) and movie_id = ($2)',
+    CHECK_FAVORITE: 'SELECT * FROM favorites WHERE user_id = ($1) and movie_id = ($2)',
     GET_RECENT_REVIEW: 'SELECT * FROM review ORDER BY date DESC LIMIT 5',
     GET_OWN_REVIEWS: 'SELECT * FROM review WHERE iduser = ($1)',
     GET_MOVIE_REVIEW: 'SELECT * FROM review where idmovie = ($1) ORDER BY date DESC'
@@ -19,6 +20,11 @@ async function addFavorite(user_id,movie_id){
 
 async function deleteFavorite(user_id,movie_id){
     await pgPool.query(sql.DELETE_FAVORITE, [user_id,movie_id])
+}
+
+async function checkFavorites(user_id, movie_id) {
+    const result = await pgPool.query(sql.CHECK_FAVORITE, [user_id, movie_id]);
+    return result.rows.length > 0;
 }
 
 async function getRecentReview(){
@@ -40,4 +46,5 @@ async function getMovieReview(idmovie){
     return rows;
 }
 
-module.exports = {addReview, addFavorite, getRecentReview, getOwnReview, getMovieReview, deleteFavorite};
+
+module.exports = {addReview, addFavorite, getRecentReview, getOwnReview, getMovieReview, deleteFavorite, checkFavorites};
