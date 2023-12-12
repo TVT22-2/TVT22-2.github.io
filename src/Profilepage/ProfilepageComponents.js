@@ -1,5 +1,6 @@
 import image from "../resources/postsplaceholder.png";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Profilepage.css";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { userID } from "../components/react-signals";
@@ -88,6 +89,40 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl, fetchPo
     );
 }
 
+function DeleteButton ({ reviewID }){
+
+    const navigate = useNavigate();
+
+    async function deleteReview() {
+        let userid = userID.value;
+        let reviewid = reviewID
+        console.log("USER:" +userid);
+        console.log("Review:" +reviewID);
+        const confirmation = window.confirm("Delete review?");
+        if (confirmation) {
+            const response = await fetch(`http://localhost:3001/deleteReview`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ userid, reviewid })
+            });
+            navigate("/");
+            if (response) {
+            }
+        } else {
+            alert("Cancelled")
+        }
+    }
+
+    return (
+        <div className="DeleteButton">
+            <button id="DeleteButton" onClick={deleteReview}>
+                Delete</button>
+        </div>
+    );
+}
+
 function Buttons({ ButtonLeft, ButtonRight, onButtonLeftClick, onButtonRightClick }) {
     return (
         <div className="Buttons">
@@ -171,12 +206,4 @@ function Text({ Content }) {
     );
 }
 
-function Link({ Link, Description }) {
-    return (
-        <div className="Link">
-            <a href={Link}>{Description}</a>
-        </div>
-    );
-}
-
-export { Image, Timestamp, AddNewsToProfileButtonAndLink, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, ButtonsGroups, Link };
+export { Image, Timestamp, AddNewsToProfileButtonAndLink, DeleteButton, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, ButtonsGroups };

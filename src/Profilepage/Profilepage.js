@@ -7,6 +7,7 @@ import { userID, token } from "../components/react-signals";
 import {
     Timestamp,
     AddNewsToProfileButtonAndLink,
+    DeleteButton,
     Buttons,
     ButtonsPostsAndNewsfeed,
     ProfileGroupName,
@@ -55,7 +56,7 @@ function Profilepage() {
     async function Deletion() {
         let userid = userID.value;
         //console.log(userid);
-        const confirmation = window.confirm("Delete?");
+        const confirmation = window.confirm("Are you sure you want to delete your profile?");
         if (confirmation) {
             const response = await fetch(`http://localhost:3001/delete`, {
                 method: 'DELETE',
@@ -70,7 +71,7 @@ function Profilepage() {
             if (response) {
             }
         } else {
-            alert("deleden't")
+            alert("Cancelled")
         }
     }
 }
@@ -157,6 +158,7 @@ function OwnReviews() {
                         <ProfileMovieTitle Title={review.title} />
                         <Rating Rating={review.review} />
                         <Text Content={review.content} />
+                        <DeleteButton reviewID={review.id}/>
                     </div>
                 ))
             )}
@@ -228,7 +230,7 @@ function PostsAndNews() {
                 //console.log(xmlDoc);
 
                 const articles = xmlDoc.querySelectorAll("NewsArticle");
-                console.log("XML Content:", xmlDoc.documentElement.outerHTML);
+                //console.log("XML Content:", xmlDoc.documentElement.outerHTML);
                 //console.log("Articles NodeList:", articles);*/
                 const extractedNews = Array.from(articles).map((article) => ({
                     title: article.querySelector("Title").textContent,
