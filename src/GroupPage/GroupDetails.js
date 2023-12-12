@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { userID } from "../components/react-signals";
+import { useNavigate } from "react-router-dom";
+
+let requestArray = [];
 
 function GroupDetailsMenu() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [isUserInGroup, setIsUserInGroup] = useState(undefined);
   const [groupDetails, setGroupDetails] = useState({});
@@ -24,9 +28,12 @@ function GroupDetailsMenu() {
         const groupDetailsData = await fetchGroupDetails(id);
         setGroupDetails(groupDetailsData);
 
+
         const userIDsFromGroup = await fetchUserIDs(id);
         const userIsInGroup = await checkIfUserInGroup(userIDsFromGroup, userID);
         setIsUserInGroup(userIsInGroup);
+
+        await getRequests();
 
         setLoading(false);
       } catch (error) {
@@ -97,6 +104,31 @@ function GroupDetailsMenu() {
     fetchOwnerUsername();
   }, [id]);
 
+  async function requestGroupJoin() {
+      let userid = userID.value;
+      let groupid = id;
+
+      await fetch('http://localhost:3001/joinRequest', {
+      method: 'POST',
+      headers: {'Content-type': 'application/json'},
+      body: JSON.stringify({userid,groupid})
+    })
+    .then(alert("The request has been sent"))
+    .then(navigate("/Groups"))
+  }
+
+  async function getRequests() {
+    let groupid = id;
+
+    let response = await fetch('http://localhost:3001/getRequests/'+groupid,{
+      headers: {'Content-type': 'application/json'}
+    })
+    const data = await response.json();
+    console.log(data);
+    requestArray.push(await data.rows);
+    console.log(requestArray[0][0]);
+  }
+
   async function removeUserFromGroupFrontend(userToRemove) {
     const confirmation = window.confirm(`Are you sure you want to remove ${userToRemove} from the group?`);
     if (confirmation) {
@@ -106,11 +138,61 @@ function GroupDetailsMenu() {
         });
         const result = await response.json();
         console.log(result);
-        window.location.reload();
       } catch (error) {
         console.error('Error:', error);
       }
     }
+    try {
+      const groupUsernameData = await fetch(`http://localhost:3001/GetUsers/${id}`);
+      const data = await groupUsernameData.json();
+      setGroupUsernames(data.filter(username => username !== currentUserID));
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  function Requestdata(){
+      let rows = [];
+      for(let i = 0;requestArray[0].length > i;i++) {
+        rows.push(
+            <div>
+                <h1>{requestArray[0][i].username}</h1>
+                <button onClick={() =>requestMenu(requestArray[0][i].id,requestArray[0][i].username)}>Accept request</button>
+            </div>
+        )
+      }
+      return rows;
+  }
+
+  async function requestMenu(userid,username){
+    console.log(userid);
+    const groupid = id;
+    const confirmation = window.confirm(`Are you sure you want to accept ${username} to the group?`);
+
+    if(confirmation){
+      const value = true;
+      await fetch("http://localhost:3001/joinRequest",{
+        method: 'PUT',
+        headers: {'Content-type': 'application/json'},
+        body: JSON.stringify({userid,groupid,value})
+      })
+    } else{
+      const value = false;
+      await fetch("http://localhost:3001/joinRequest",{
+        method: 'PUT',
+        headers: {'Content-type': 'application/json'},
+        body: JSON.stringify({userid,groupid,value})
+      })
+    }
+    try {
+      const groupUsernameData = await fetch(`http://localhost:3001/GetUsers/${id}`);
+      const data = await groupUsernameData.json();
+      setGroupUsernames(data.filter(username => username !== currentUserID));
+    } catch (error) {
+      console.error('Error:', error);
+    }
+    getRequests();
+    Requestdata();
   }
 
   const toggleManageMembersMenu = () => {
@@ -162,11 +244,15 @@ function GroupDetailsMenu() {
                       )
                     ))}
                   </ul>
+                  <Requestdata/>
                 </div>
               )}
             </div>
           ) : (
+            <>
             <p>You are not part of this group</p>
+            <button onClick = {() => requestGroupJoin()}>Request to join</button>
+            </>
           )}
         </div>
       )}
