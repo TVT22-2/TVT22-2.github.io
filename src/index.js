@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Frontpage from './Frontpage/Frontpage'
 import Profilepage from './Profilepage/Profilepage';
 import GroupPage from './GroupPage/GroupPage';
+import GroupDetails from './GroupPage/GroupDetails'
 import Moviepage from './Moviepage/Moviepage';
 import Register from './components/Register';
 import Browser from './Browserpage/Browser';
@@ -21,9 +22,8 @@ root.render(
         <Route path="/login" element={<Login />}/>
         <Route path="/" element={<Frontpage />} />
         <Route path="/Profile/:userId" element={<Profilepage />} />
-        <Route path="/Groups" element={<GroupPage />} />
-        <Route path="/Movie" element={<Moviepage />} />
-        <Route path="/Group" element={<GroupPage />} />
+        <Route path="/Groups" element={<GroupPage />} />  
+        <Route path="/Groupspage/:id" element={<GroupDetails />} />
         <Route path="/movie/:movieId" element={<Moviepage />} />
         <Route path="/tv/:movieId" element={<Moviepage />} />
         <Route path="/Register" element={<Register/>}/>
@@ -32,8 +32,4 @@ root.render(
       <Footer/>
     </BrowserRouter>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

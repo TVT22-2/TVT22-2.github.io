@@ -100,6 +100,12 @@ function GroupInput() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (details.name.trim() === "" || details.description.trim() === "") {
+            alert("Name and description cannot be empty");
+            return;
+        }
+
+
         fetch('http://localhost:3001/Groups/', {
             method: 'POST',
             headers: {

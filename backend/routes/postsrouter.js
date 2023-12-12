@@ -46,7 +46,6 @@ router.get('/groupBydate/:id', async (req, res) => {
 
 router.post('/insertPostUser', async (req, res) => {
     const { title, posttext, date, end_user_id } = req.body;
-
     try {
         await insertPostUser(title, posttext, date, end_user_id);
         res.status(200).send('PostUser added successfully');

@@ -1,18 +1,4 @@
 
-@media only screen and (min-width: 768px) {
-    .moviecontainer{
-        flex-grow: 1;
-    }
-    .recentImage{
-        height: 200px;
-    }
-    .nav{
-    width: fit-content;
-    }
-    .navBar{
-        width: fit-content;
-    }   
-}
 .moviecontainer{
     display: flex;
     margin-top:2px;
@@ -196,4 +182,92 @@ width: 99vw;
 }
 .frontpagereviews{
     align-self: center;
+}
+.recentNewsImage{
+    max-height: 200px;
+    max-width: 400px;
+    margin-top: 20px;
+}
+.movienewscontainer{
+    display: flex;
+    margin-top:2px;
+    border-width: 1.5px;
+    border-style: solid;
+    border-color: orange ;
+    margin-right: 20px;
+    align-items: center;
+    flex-direction: column;
+    width: 99vw;
+    height:auto;
+    background-color: rgba(255, 166, 0,0.5);
+    margin-top: 20px;
+}
+.movienewsinfo{
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+}
+.NewsImageContainer{
+    display: flex;
+    flex-basis: 25%;
+    align-items: center;
+    justify-content: center;
+}
+#MovieNewsTitle{
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+#MovieNewsDate{
+    text-align: center;
+    margin-bottom: 40px;
+}
+.MovieNewsDate{
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+}
+.MovieNewsPr{
+    min-height: 200px;
+    flex-grow:1;
+    font-weight: bold;
+    margin-top: 20px;
+    border-style: double;
+    border-width: 2px;
+    border-color: orange;
+    margin-bottom: 10px;
+}
+.MovieNewsPr p{
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.MovieNewsButton{
+    width: 100px;
+    background-color: orange;
+}
+@media screen and (min-width: 768px) {
+    .moviecontainer{
+        flex-grow: 1;
+    }
+    .recentImage{
+        height: 300px;
+        width: 200px;
+    }
+    .nav{
+    width: fit-content;
+    }
+    .navBar{
+        width: fit-content;
+    } 
+    .recentNewsImage{
+        max-height: 250px;
+        max-width: 500px;
+    }
+    .NewsImageContainer{
+        flex-basis: 35%;
+    }
+    .movienewscontainer{
+        flex-direction: row;
+    }
 }

@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Profilepage.css";
 import { idParser } from '../components/DataLoader';
-import { userID } from "../components/react-signals";
+import { userID, token } from "../components/react-signals";
 import {
     Image,
     Timestamp,
-    ButtonsPostsAndNewsfeed,
+    AddNewsToProfileButtonAndLink,
     Buttons,
+    ButtonsPostsAndNewsfeed,
     ProfileGroupName,
     ProfileMovieTitle,
     Rating,
     Text,
-    CopyProfileLink
+    ButtonsGroups,
+    Link
 } from "./ProfilepageComponents.js";
 
 function Profilepage() {
+    const navigate = useNavigate();
 
-    const { userId } = useParams();
-    console.log("USER:" + userId);
-
-    if (userID.value === "" || userID.value === null) {
+    // Placeholder for checking if the user is logged in
+    /*if (userID.value === "" || userID.value === null) {
         return (
             <div className="Profilepage">
                 <h1>You must be logged in to view this page</h1>
@@ -28,17 +31,55 @@ function Profilepage() {
         )
     } else {
         return (
+            <>
+                <div className="Profilepage">
+                    <OwnReviews />
+                    <FavouriteMoviesAndGroups />
+                    <PostsAndNews />
+                </div>
+                <button onClick={Deletion}>hello</button>
+            </>
+        )
+    }*/
+
+    return (
+        <>
             <div className="Profilepage">
                 <OwnReviews />
                 <FavouriteMoviesAndGroups />
                 <PostsAndNews />
             </div>
-        )
+            <div className="ButtonDeleteContainer">
+                <button className="ButtonDelete" id="ButtonDelete" onClick={Deletion}>Delete Profile</button>
+            </div>
+        </>
+    )
+
+    async function Deletion() {
+        let userid = userID.value;
+        console.log(userid);
+        const confirmation = window.confirm("Delete?");
+        if (confirmation) {
+            const response = await fetch(`http://localhost:3001/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ userid })
+            });
+            userID.value = "";
+            token.value = "";
+            navigate("/");
+            if (response) {
+            }
+        } else {
+            alert("deleden't")
+        }
     }
 }
 
 function OwnReviews() {
-
+    const { userId } = useParams();
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [reviewsWithTitles, setReviewsWithTitles] = useState([]);
@@ -51,11 +92,10 @@ function OwnReviews() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/getownreview/${userID}`;
-                console.log(url);
+                let url = `http://localhost:3001/getownreview/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
+                //console.log(data);
                 setTotalPages(Math.ceil(data.length / reviewsPerPage));
                 setReviews(data);
             } catch (error) {
@@ -71,8 +111,6 @@ function OwnReviews() {
     useEffect(() => {
         const fetchTitles = async () => {
             try {
-                console.log('Before fetching titles:', reviews);
-
                 const reviewsWithTitles = await Promise.all(
                     reviews.map(async (review) => {
                         const movieDetails = await idParser(review.idmovie);
@@ -82,9 +120,6 @@ function OwnReviews() {
                         };
                     })
                 );
-
-                console.log('After fetching titles:', reviewsWithTitles);
-
                 setReviewsWithTitles(reviewsWithTitles);
             } catch (error) {
                 console.error('Error fetching titles:', error);
@@ -149,32 +184,70 @@ function FavouriteMoviesAndGroups() {
 }
 
 function PostsAndNews() {
+    const { userId } = useParams();
     const [posts, setPosts] = useState([]);
+    const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentHeaderPage, setCurrentHeaderCurrentPage] = useState(1); // Track which page is currently displayed (Posts, Newsfeed, New Post)
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
-    const [totalPages, setTotalPages] = useState(1);
-    const postsPerPage = 1; // Number of posts to display per page
+    const [totalPostPages, setTotalPostPages] = useState(1);
+    const [totalNewsPages, setTotalNewsPages] = useState(1);
+    const postsPerPage = 1;
+    const newsPerPage = 2;
 
     // Get posts from the database
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchPosts = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/post/user/${userID}`;
-                console.log(url);
+                let url = `http://localhost:3001/post/userByDate/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
-                setTotalPages(Math.ceil(data.length / postsPerPage));
+                setTotalPostPages(Math.ceil(data.length / postsPerPage));
                 setPosts(data);
             } catch (error) {
-                console.error('Error fetching data at Profile / PostsAndNews:', error);
+                console.error('Error fetching data at Profile / Posts:', error);
             } finally {
                 setLoading(false);
             }
         };
-        fetchData();
+
+        const fetchNews = async () => {
+            setLoading(true);
+            try {
+                let url = "https://www.finnkino.fi/xml/News/";
+                const response = await axios.get(url, {
+                    headers: {
+                        "Content-Type": "application/xml; charset=utf-8",
+                    },
+                });
+
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(response.data, "text/xml");
+
+                //console.log(xmlDoc);
+
+                const articles = xmlDoc.querySelectorAll("NewsArticle");
+                //console.log("XML Content:", xmlDoc.documentElement.outerHTML);
+                //console.log("Articles NodeList:", articles);*/
+                const extractedNews = Array.from(articles).map((article) => ({
+                    title: article.querySelector("Title").textContent,
+                    date: article.querySelector("PublishDate").textContent,
+                    content: article.querySelector("HTMLLead").textContent,
+                    link: article.querySelector("ArticleURL").textContent,
+                }));
+
+                setTotalNewsPages(Math.ceil(extractedNews.length / newsPerPage));
+                setNews(extractedNews);
+            } catch (error) {
+                console.error("Error fetching data at Profile / News:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPosts();
+        fetchNews();
     }, []);
 
     const handlePostPage = () => {
@@ -190,8 +263,14 @@ function PostsAndNews() {
     };
 
     const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(prevPage => prevPage + 1);
+        if (currentHeaderPage === 1) {
+            if (currentPage < totalPostPages) {
+                setCurrentPage((prevPage) => prevPage + 1);
+            }
+        } else if (currentHeaderPage === 2) {
+            if (currentPage < totalNewsPages) {
+                setCurrentPage((prevPage) => prevPage + 1);
+            }
         }
     };
 
@@ -201,74 +280,88 @@ function PostsAndNews() {
         }
     };
 
-    const startIndex = (currentPage - 1) * postsPerPage;
-    const endIndex = startIndex + postsPerPage;
-    const displayedPosts = posts.slice(startIndex, endIndex);
+    const startIndex = (currentPage - 1) * (currentHeaderPage === 1 ? postsPerPage : newsPerPage);
+    const endIndex = startIndex + (currentHeaderPage === 1 ? postsPerPage : newsPerPage);
+    const displayedItems = currentHeaderPage === 1 ? posts.slice(startIndex, endIndex) : news.slice(startIndex, endIndex);
 
     return (
-        <div className="PostsAndNews">
-            <Buttons
-                ButtonLeft="Posts"
-                ButtonMiddle="New Post"
-                ButtonRight="Newsfeed"
-                onButtonLeftClick={handlePostPage}
-                onButtonRightClick={handleNewsfeedPage}
-            />
+        <>
+            <div className="PostsAndNews">
+                {/* Buttons component for selecting Posts, New Post, or Newsfeed */}
+                <Buttons
+                    ButtonLeft="Posts"
+                    ButtonMiddle="New Post"
+                    ButtonRight="Newsfeed"
+                    onButtonLeftClick={handlePostPage}
+                    onButtonRightClick={handleNewsfeedPage}
+                />
+                {/* Header for displaying "Posts", "Newsfeed", or "New Post" */}
+                <div className="PostsAndNewsHeader">
+                    {(() => {
+                        switch (currentHeaderPage) {
+                            case 1:
+                                return <h1>Posts</h1>;
+                            case 2:
+                                return <h1>Newsfeed</h1>;
+                            case 3:
+                                return <h1>New Post</h1>;
+                            default:
+                                return null;
+                        }
+                    })()}
+                </div>
 
-            <div className="PostsAndNewsHeader">
-                {(() => {
+                {/* Content based on the selected page */}
+                {loading ? (
+                    <p className="Loader">Loading...</p>
+                ) : (() => {
                     switch (currentHeaderPage) {
                         case 1:
-                            return <h1>Posts</h1>;
+                            return (
+                                <div>
+                                    {displayedItems.map((post, index) => (
+                                        <div key={index} className="ProfilePagePosts">
+                                            <ProfileMovieTitle Title={post.title} />
+                                            <Timestamp date={post.date} />
+                                            <Text Content={post.posttext} />
+                                            {/*<Image />*/}
+                                        </div>
+                                    ))}
+                                </div>
+                            );
                         case 2:
-                            return <h1>Newsfeed</h1>;
+                            return <div>
+                                {displayedItems.map((article, index) => (
+                                    <div key={index} className="ProfilePageNews">
+                                        <ProfileMovieTitle Title={article.title} />
+                                        <Timestamp date={article.date} />
+                                        <Text Content={article.content} />
+                                        <AddNewsToProfileButtonAndLink ButtonText={"Add to profile"} article={article} userIdUrl={userId} />
+                                    </div>
+                                ))}
+                            </div>;
                         case 3:
-                            return <h1>New Post</h1>;
+                            return <NewPost onButtonCancelClick={handlePostPage} />;
                         default:
                             return null;
                     }
                 })()}
+                <ButtonsPostsAndNewsfeed
+                    ButtonLeft="Previous"
+                    ButtonMiddle="New Post"
+                    ButtonRight="Next"
+                    onButtonLeftClick={handlePreviousPage}
+                    onButtonMiddleClick={HandleNewPost}
+                    onButtonRightClick={handleNextPage}
+                />
             </div>
-
-            {loading ? (
-                <p className="Loader">Loading...</p>
-            ) : (() => {
-                switch (currentHeaderPage) {
-                    case 1:
-                        return (
-                            <div>
-                                {displayedPosts.map((post, index) => (
-                                    <div key={index} className="ProfilePagePost">
-                                        <ProfileMovieTitle Title={post.title} />
-                                        <Timestamp Date={post.date} />
-                                        <Text Content={post.posttext} />
-                                        <Image />
-                                    </div>
-                                ))}
-                            </div>
-                        );
-                    case 2:
-                        return <div className="ProfilePageNewsfeed"></div>;
-                    case 3:
-                        return <NewPost onButtonCancelClick={handlePostPage} />;
-                    default:
-                        return null;
-                }
-            })()}
-            <ButtonsPostsAndNewsfeed
-                ButtonLeft="Previous"
-                ButtonMiddle="New Post"
-                ButtonRight="Next"
-                onButtonLeftClick={handlePreviousPage}
-                onButtonMiddleClick={HandleNewPost}
-                onButtonRightClick={handleNextPage}
-            />
-        </div>
+        </>
     );
 }
 
 function FavouriteMovies() {
 
+    const { userId } = useParams();
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
     const [favoritesWithTitles, setfavoritesWithTitles] = useState([]);
@@ -278,15 +371,12 @@ function FavouriteMovies() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/favorites/${userID}`;
-                console.log(url);
+                let url = `http://localhost:3001/favorites/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
+                //console.log(data);
 
-                // Limit to 5 favorites
-                const limitedFavorites = data.slice(0, 5);
-                setFavorites(limitedFavorites);
+                setFavorites(data);
             } catch (error) {
                 console.error('Error fetching data at FavouriteMovies:', error);
             } finally {
@@ -300,8 +390,6 @@ function FavouriteMovies() {
     useEffect(() => {
         const fetchTitles = async () => {
             try {
-                console.log('Before fetching titles:', favorites);
-
                 const favoritesWithTitles = await Promise.all(
                     favorites.map(async (favorite) => {
                         const movieDetails = await idParser(favorite.movie_id);
@@ -311,9 +399,6 @@ function FavouriteMovies() {
                         };
                     })
                 );
-
-                console.log('After fetching titles:', favoritesWithTitles);
-
                 setfavoritesWithTitles(favoritesWithTitles);
             } catch (error) {
                 console.error('Error fetching titles:', error);
@@ -344,6 +429,7 @@ function FavouriteMovies() {
 
 function Groups() {
 
+    const { userId } = useParams();
     const [groups, setGroups] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
@@ -354,11 +440,10 @@ function Groups() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/Groups/${userID}`;
-                console.log(url);
+                let url = `http://localhost:3001/Groups/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
+                //console.log(data);
                 setTotalPages(Math.ceil(data.length / groupsPerPage));
                 setGroups(data);
             } catch (error) {
@@ -405,9 +490,9 @@ function Groups() {
                 )}
             </ol>
 
-            <ButtonsPostsAndNewsfeed
+            <ButtonsGroups
                 ButtonLeft="Previous"
-                ButtonMiddle= {<CopyProfileLink/>}
+                ButtonMiddle="Copy Profile Link"
                 ButtonRight="Next"
                 onButtonLeftClick={handlePreviousPage}
                 onButtonRightClick={handleNextPage}
@@ -426,34 +511,46 @@ function NewPost({ onButtonCancelClick }) {
     };
 
     const [details, setDetails] = useState(initialDetails);
-
+    const [error, setError] = useState(null);
+    const { userId } = useParams();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setDetails((prev) => {
-            return { ...prev, [name]: value }
-        })
+            return { ...prev, [name]: value };
+        });
     };
 
     const submitHandler = async (e) => {
         e.preventDefault();
 
-        fetch('http://localhost:3001/post/insertPostUser', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(details)
+        if (userID != userId) {
+            setError("You cannot add posts to another user's profile.");
+            return;
+        } else if (userID === "" || userID === null || userID === undefined) {
+            setError("You must be logged in to add a post.");
+            return;
 
-        }).then(() => {
-            console.log('New post added');
-            setDetails(initialDetails);
-            window.location.reload();
-        })
-    }
+        } else {
+            fetch('http://localhost:3001/post/insertPostUser', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(details)
+            }).then(() => {
+                setDetails(initialDetails);
+                window.location.reload();
+            }).catch((error) => {
+                console.error('Error adding new post:', error);
+                // Handle error appropriately, e.g., setError("Failed to add new post.")
+            });
+        }
+    };
 
     return (
         <div className="NewPost">
+            {error && <div className="ErrorMessage">{error}</div>}
             <form onSubmit={submitHandler} className="NewPostForm">
                 <h3>Title:</h3>
                 <input
@@ -473,12 +570,14 @@ function NewPost({ onButtonCancelClick }) {
                     className="InputField"
                 />
                 <button type="submit" id="ButtonSubmit" className="NewPostButtons">
-                    Add post</button>
-                <button type="submit" id="ButtonCancel" className="NewPostButtons" onClick={onButtonCancelClick}>
-                    Cancel</button>
+                    Add post
+                </button>
+                <button type="button" id="ButtonCancel" className="NewPostButtons" onClick={onButtonCancelClick}>
+                    Cancel
+                </button>
             </form>
         </div>
-    )
+    );
 }
 
 export default Profilepage;

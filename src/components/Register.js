@@ -24,16 +24,12 @@ return(
 );
 async function register(){
     if (password !== "" && username !== "" && recovery !== "") {
-        await axios.postForm('login/register', { username, password, recovery })
-             .then(resp => token.value = resp.data.jwtToken)
+        await axios.postForm('/register', { username, password, recovery })
+             .then(alert("Thank you! You will be redirected to the mainpage! Please log in!"))
+             .then(navigate("/"))
              .catch(error => alert(error.message + ". Please try again later!"))
      } else {
          alert("Check the input fields!")
-     }
-     if(token.value.length>5){
-        console.log(token.value);
-          alert("Thank you! You will be redirected to the mainpage!")
-          navigate("/");
      }
 }
 }

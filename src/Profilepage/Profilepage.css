@@ -13,7 +13,7 @@
     justify-content: space-between;
     align-items: center;
     border: 1px solid #030303;
-    margin: 15px 15px 15px 50px;
+    margin: 15px 15px 15px auto;
 }
 
 /*Favourite Movies and Groups container*/
@@ -34,10 +34,10 @@
     justify-content: space-between;
     align-items: center;
     border: 1px solid #030303;
-    margin: 15px 50px 15px 15px;
+    margin: 15px auto 15px 15px;
 }
 
-/* Header sytling */
+/* Header styling */
 .OwnReviewsHeader,
 .FavouriteMoviesHeader,
 .GroupsHeader,
@@ -45,11 +45,26 @@
     background-color: orange;
     width: 100%;
     text-align: center;
-    border: 1px solid #030303;
     margin-bottom: 5px;
 }
 
-/* Content sytling */
+.OwnReviewsHeader {
+    border-right: 1px solid #030303;
+    border-left: 1px solid #030303;
+    border-bottom: 1px solid #030303;
+}
+
+.FavouriteMoviesHeader,
+.GroupsHeader {
+    border-bottom: 1px solid #030303;
+}
+
+.PostsAndNewsHeader {
+    border-top: 1px solid #030303;
+    border-bottom: 1px solid #030303;
+}
+
+/* Content styling */
 .ProfileMovieTitle,
 .Rating,
 .Text,
@@ -66,22 +81,27 @@
     text-align: left;
 }
 
-.PostsAndNews .Text {
-    height: 200px;
+.ProfilePagePosts .Text {
+    height: 500px;
     overflow: auto;
     text-align: left;
 }
 
-/*Fix later*/
+.ProfilePageNews .Text {
+    overflow: auto;
+    text-align: left;
+}
+
 .placeholderImage {
     margin-left: 30px;
 }
 
 /* Title styling */
 .OwnReviews .ProfileMovieTitle,
-.ProfilePagePost .ProfileMovieTitle {
-    border: 1px solid #030303;
-    align-items: center;
+.ProfilePageNews .ProfileMovieTitle {
+    border-top: 1px solid #030303;
+    border-bottom: 1px solid #030303;
+    width: 90%;
 }
 
 .FavouriteMovies .ProfileMovieTitle {
@@ -90,6 +110,18 @@
 
 .Groups .ProfileGroupName {
     text-align: left;
+}
+
+.ProfilePagePosts .ProfileMovieTitle {
+    border-bottom: 1px solid #030303;
+    width: 90%;
+}
+
+.Timestamp {
+    margin-top: 0px;
+    width: 90%;
+    text-align: center;
+    border-bottom: 1px solid #030303;
 }
 
 /* Button sytling */
@@ -117,14 +149,31 @@
     margin: 0px 35px 5px 40px;
 }
 
+.ButtonDelete {
+    margin-left: 65px;
+}
+
 #ButtonLeft,
 #ButtonRight,
 #ButtonMiddle,
 #ButtonSubmit,
 #ButtonCancel,
-#ButtonCopyProfileLink {
+#ButtonCopyProfileLink,
+#Button,
+#ButtonDelete {
     background-color: orange;
     border: 1px solid #030303;
+}
+
+#ButtonLeft:hover,
+#ButtonRight:hover,
+#ButtonMiddle:hover,
+#ButtonSubmit:hover,
+#ButtonCancel:hover,
+#ButtonCopyProfileLink:hover,
+#Button:hover,
+#ButtonDelete:hover {
+    background-color: #FFFF00;
 }
 
 #ButtonCopyProfileLink {
@@ -144,6 +193,10 @@
     margin: 0px 15px 15px 15px;
 }
 
+.FavouriteMoviesList {
+    overflow: auto;
+}
+
 .FavouriteMoviesAndGroups .Groups {
     margin: 0px 15px 0px 15px;
 }
@@ -156,6 +209,7 @@
     /* Make the list take up the full height of the container */
 }
 
+/* Loading text styling */
 .Loader {
     text-align: center;
     height: 100%;
@@ -164,28 +218,50 @@
 /*Child container (Parent: OwnReviews)*/
 .ProfilePageReview {
     display: flex;
+    width: 100%;
     flex-direction: column;
     align-items: center;
 }
-
 
 /*Child container (Parent: PostsAndNews)*/
-.ProfilePagePost {
+.ProfilePagePosts {
     display: flex;
+    width: 100%;
     flex-direction: column;
     align-items: center;
 }
 
+/*Child container (Parent: PostsAndNews)*/
+.ProfilePageNews {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*Child container (Parents: ProfilepageNews, PostsAndNews)*/
+.ButtonAndLinkNewsfeed {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 5px 0px 5px 0px;
+}
+
+/* Parent container: PostandNews */
 .NewPost {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 70%; /* Adjust as needed */
+    width: 70%;
+    /* Adjust as needed */
     margin: 15px 50px 365px 15px;
 }
 
 .NewPostForm {
-    width: 80%; /* Adjust as needed */
+    width: 80%;
+    /* Adjust as needed */
 }
 
 .InputField {
@@ -203,6 +279,11 @@
     cursor: pointer;
     width: 50%;
 }
+
+.ErrorMessage {
+    color: red;
+}
+
 /*Mobile*/
 @media only screen and (max-width: 768px) {
 
@@ -226,8 +307,14 @@
         width: 100%;
     }
 
-    /*Fix later*/
     .placeholderImage {
         margin-left: 15px;
+    }
+    .ButtonDeleteContainer {
+        display: flex;
+        justify-content: center;  
+    }
+    .ButtonDelete {
+        margin-left: 0px;
     }
 }

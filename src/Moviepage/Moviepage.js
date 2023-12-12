@@ -478,7 +478,7 @@ function Description({ movieData }) {
 function ReviewsHeader() {
     return (
         <div className="ReviewsHeader">
-            <h2>Reviews</h2>
+            <h2 className="ReviewHeaderText">Reviews</h2>
         </div>
     );
 }
