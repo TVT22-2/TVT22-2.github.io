@@ -7,7 +7,8 @@ import { userID, token } from "../components/react-signals";
 import {
     Timestamp,
     AddNewsToProfileButtonAndLink,
-    DeleteButton,
+    DeleteReviewButton,
+    DeletePostButton,
     Buttons,
     ButtonsPostsAndNewsfeed,
     ProfileGroupName,
@@ -159,7 +160,7 @@ function OwnReviews() {
                         <ProfileMovieTitle Title={review.title} />
                         <Rating Rating={review.review} />
                         <Text Content={review.content} />
-                        <DeleteButton reviewID={review.id} fetchReviews={fetchData}/>
+                        <DeleteReviewButton reviewID={review.id} fetchReviews={fetchData}/>
                     </div>
                 ))
             )}
@@ -326,6 +327,7 @@ function PostsAndNews() {
                                             <ProfileMovieTitle Title={post.title} />
                                             <Timestamp date={post.date} />
                                             <Text Content={post.posttext} />
+                                            <DeletePostButton postID={post.id} fetchPosts={fetchPosts}  />
                                             {/*<Image />*/}
                                         </div>
                                     ))}

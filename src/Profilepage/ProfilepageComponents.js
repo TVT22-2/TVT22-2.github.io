@@ -89,15 +89,13 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl, fetchPo
     );
 }
 
-function DeleteButton ({ reviewID, fetchReviews }){
+function DeleteReviewButton ({ reviewID, fetchReviews }){
 
     const navigate = useNavigate();
 
     async function deleteReview() {
         let userid = userID.value;
         let reviewid = reviewID
-        console.log("USER:" +userid);
-        console.log("Review:" +reviewID);
         const confirmation = window.confirm("Delete review?");
         if (confirmation) {
             const response = await fetch(`http://localhost:3001/deleteReview`, {
@@ -117,8 +115,42 @@ function DeleteButton ({ reviewID, fetchReviews }){
     }
 
     return (
-        <div className="DeleteButton">
-            <button id="DeleteButton" onClick={deleteReview}>
+        <div className="DeleteReviewButton">
+            <button id="DeleteReviewButton" onClick={deleteReview}>
+                Delete</button>
+        </div>
+    );
+}
+
+function DeletePostButton ({ postID, fetchPosts }){
+
+    const navigate = useNavigate();
+
+    async function deletePost() {
+        let userid = userID.value;
+        let postid = postID
+        console.log("USER and POST ID:" +userid, postid)
+        const confirmation = window.confirm("Delete post?");
+        if (confirmation) {
+            const response = await fetch(`http://localhost:3001/deletePost`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ userid, postid })
+            });
+            fetchPosts();
+            navigate(`/Profile/${userid}`);
+            if (response) {
+            }
+        } else {
+            alert("Cancelled")
+        }
+    }
+
+    return (
+        <div className="DeletePostButton">
+            <button id="DeletePostButton" onClick={deletePost}>
                 Delete</button>
         </div>
     );
@@ -207,4 +239,4 @@ function Text({ Content }) {
     );
 }
 
-export { Image, Timestamp, AddNewsToProfileButtonAndLink, DeleteButton, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, ButtonsGroups };
+export { Image, Timestamp, AddNewsToProfileButtonAndLink, DeleteReviewButton, DeletePostButton, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, ButtonsGroups };
