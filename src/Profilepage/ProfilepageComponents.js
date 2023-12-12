@@ -1,5 +1,6 @@
 import image from "../resources/postsplaceholder.png";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Profilepage.css";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { userID } from "../components/react-signals";
@@ -30,7 +31,7 @@ function Timestamp({ date }) {
     );
 }
 
-function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl }) {
+function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl, fetchPosts }) {
     const initialDetails = {
         title: "",
         posttext: "",
@@ -47,7 +48,7 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl }) {
         const updatedDetails = {
             ...initialDetails,
             title: article.title,
-            posttext: `${article.content} ${article.link}`, // Using template literals for better readability
+            posttext: `${article.content} ${article.link}`,
             date: article.date,
         };
 
@@ -69,7 +70,7 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl }) {
             }).then(() => {
                 console.log('New newspost added');
                 setDetails(initialDetails);
-                window.location.reload();
+                fetchPosts();
             })
                 .catch((error) => {
                     console.error("Error adding news:", error);
@@ -84,6 +85,40 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl }) {
             <button id="Button" onClick={submitHandler}>
                 {ButtonText}
             </button>
+        </div>
+    );
+}
+
+function DeleteButton ({ reviewID }){
+
+    const navigate = useNavigate();
+
+    async function deleteReview() {
+        let userid = userID.value;
+        let reviewid = reviewID
+        console.log("USER:" +userid);
+        console.log("Review:" +reviewID);
+        const confirmation = window.confirm("Delete review?");
+        if (confirmation) {
+            const response = await fetch(`http://localhost:3001/deleteReview`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ userid, reviewid })
+            });
+            navigate("/");
+            if (response) {
+            }
+        } else {
+            alert("Cancelled")
+        }
+    }
+
+    return (
+        <div className="DeleteButton">
+            <button id="DeleteButton" onClick={deleteReview}>
+                Delete</button>
         </div>
     );
 }
@@ -171,12 +206,4 @@ function Text({ Content }) {
     );
 }
 
-function Link({ Link, Description }) {
-    return (
-        <div className="Link">
-            <a href={Link}>{Description}</a>
-        </div>
-    );
-}
-
-export { Image, Timestamp, AddNewsToProfileButtonAndLink, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, ButtonsGroups, Link };
+export { Image, Timestamp, AddNewsToProfileButtonAndLink, DeleteButton, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, ButtonsGroups };

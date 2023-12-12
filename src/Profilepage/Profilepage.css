@@ -160,7 +160,8 @@
 #ButtonCancel,
 #ButtonCopyProfileLink,
 #Button,
-#ButtonDelete {
+#ButtonDelete,
+#DeleteButton {
     background-color: orange;
     border: 1px solid #030303;
 }
@@ -172,7 +173,8 @@
 #ButtonCancel:hover,
 #ButtonCopyProfileLink:hover,
 #Button:hover,
-#ButtonDelete:hover {
+#ButtonDelete:hover,
+#DeleteButton:hover {
     background-color: #FFFF00;
 }
 
