@@ -89,7 +89,7 @@ function OwnReviews() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/getownreview/${userId}`;
+                let url = `http://localhost:3001/getownreviewbydate/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 //console.log(data);

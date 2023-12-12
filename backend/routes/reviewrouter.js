@@ -2,7 +2,7 @@ const router = require('express').Router();
 const multer = require('multer');
 const upload = multer({ dest: 'upload/' });
 
-const {getRecentReview, addReview, getMovieReview, getOwnReview, addFavorite, deleteFavorite, checkFavorites} = require('../postgre/review');
+const {getRecentReview, addReview, getMovieReview, getOwnReview, getOwnReviewByDate, addFavorite, deleteFavorite, checkFavorites} = require('../postgre/review');
 
 router.get('/getrecentreview', async (req,res) => {
     try{
@@ -19,6 +19,15 @@ router.get('/getownreview/:id', async (req,res) => {
         res.status(500).json({error: error.message})
     }
 });
+
+router.get('/getownreviewbydate/:id', async (req,res) => {
+    try{
+        res.json(await getOwnReviewByDate(req.params.id));
+    } catch (error){
+        res.status(500).json({error: error.message})
+    }
+});
+
 
 router.get('/getmoviereview/:idmovie', async (req,res) => {
     try{
