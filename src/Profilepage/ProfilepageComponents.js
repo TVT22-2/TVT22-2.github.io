@@ -30,7 +30,7 @@ function Timestamp({ date }) {
     );
 }
 
-function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl }) {
+function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl, fetchPosts }) {
     const initialDetails = {
         title: "",
         posttext: "",
@@ -47,7 +47,7 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl }) {
         const updatedDetails = {
             ...initialDetails,
             title: article.title,
-            posttext: `${article.content} ${article.link}`, // Using template literals for better readability
+            posttext: `${article.content} ${article.link}`,
             date: article.date,
         };
 
@@ -69,7 +69,7 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl }) {
             }).then(() => {
                 console.log('New newspost added');
                 setDetails(initialDetails);
-                window.location.reload();
+                fetchPosts();
             })
                 .catch((error) => {
                     console.error("Error adding news:", error);

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import "./Profilepage.css";
 import { idParser } from '../components/DataLoader';
 import { userID, token } from "../components/react-signals";
 import {
-    Image,
     Timestamp,
     AddNewsToProfileButtonAndLink,
     Buttons,
@@ -16,7 +14,6 @@ import {
     Rating,
     Text,
     ButtonsGroups,
-    Link
 } from "./ProfilepageComponents.js";
 
 function Profilepage() {
@@ -57,7 +54,7 @@ function Profilepage() {
 
     async function Deletion() {
         let userid = userID.value;
-        console.log(userid);
+        //console.log(userid);
         const confirmation = window.confirm("Delete?");
         if (confirmation) {
             const response = await fetch(`http://localhost:3001/delete`, {
@@ -105,7 +102,7 @@ function OwnReviews() {
             }
         };
         fetchData();
-    }, []);
+    }, [userId]);
 
     /* Get and Map titles to reviews */
     useEffect(() => {
@@ -196,22 +193,25 @@ function PostsAndNews() {
     const newsPerPage = 2;
 
     // Get posts from the database
-    useEffect(() => {
-        const fetchPosts = async () => {
-            setLoading(true);
-            try {
-                let url = `http://localhost:3001/post/userByDate/${userId}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                setTotalPostPages(Math.ceil(data.length / postsPerPage));
-                setPosts(data);
-            } catch (error) {
-                console.error('Error fetching data at Profile / Posts:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const fetchPosts = async () => {
+        setLoading(true);
+        try {
+            let url = `http://localhost:3001/post/userByDate/${userId}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            setTotalPostPages(Math.ceil(data.length / postsPerPage));
+            setPosts(data);
+        } catch (error) {
+            console.error('Error fetching data at Profile / Posts:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
+        fetchPosts();
+
+        // Get news from API
         const fetchNews = async () => {
             setLoading(true);
             try {
@@ -228,7 +228,7 @@ function PostsAndNews() {
                 //console.log(xmlDoc);
 
                 const articles = xmlDoc.querySelectorAll("NewsArticle");
-                //console.log("XML Content:", xmlDoc.documentElement.outerHTML);
+                console.log("XML Content:", xmlDoc.documentElement.outerHTML);
                 //console.log("Articles NodeList:", articles);*/
                 const extractedNews = Array.from(articles).map((article) => ({
                     title: article.querySelector("Title").textContent,
@@ -245,9 +245,8 @@ function PostsAndNews() {
                 setLoading(false);
             }
         };
-
-        fetchPosts();
         fetchNews();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handlePostPage = () => {
@@ -336,12 +335,12 @@ function PostsAndNews() {
                                         <ProfileMovieTitle Title={article.title} />
                                         <Timestamp date={article.date} />
                                         <Text Content={article.content} />
-                                        <AddNewsToProfileButtonAndLink ButtonText={"Add to profile"} article={article} userIdUrl={userId} />
+                                        <AddNewsToProfileButtonAndLink ButtonText={"Add to profile"} article={article} userIdUrl={userId} fetchPosts={fetchPosts} />
                                     </div>
                                 ))}
                             </div>;
                         case 3:
-                            return <NewPost onButtonCancelClick={handlePostPage} />;
+                            return <NewPost onButtonCancelClick={handlePostPage} fetchPosts={fetchPosts} />;
                         default:
                             return null;
                     }
@@ -384,7 +383,7 @@ function FavouriteMovies() {
             }
         };
         fetchData();
-    }, []);
+    }, [userId]);
 
     /* Get and Map titles to favorites */
     useEffect(() => {
@@ -443,7 +442,7 @@ function Groups() {
                 let url = `http://localhost:3001/Groups/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                //console.log(data);
+                console.log(data);
                 setTotalPages(Math.ceil(data.length / groupsPerPage));
                 setGroups(data);
             } catch (error) {
@@ -453,7 +452,7 @@ function Groups() {
             }
         };
         fetchData();
-    }, []);
+    }, [userId]);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -484,7 +483,7 @@ function Groups() {
                     displayedGroups.map((group, index) => (
                         /* Map the groups to the page */
                         <li key={index}>
-                            <ProfileGroupName Name={group.name} />
+                            <Link to = {`http://localhost:3000/Groupspage/${group.id}`} ><ProfileGroupName Name={group.name} /></Link>
                         </li>
                     ))
                 )}
@@ -501,7 +500,7 @@ function Groups() {
     );
 }
 
-function NewPost({ onButtonCancelClick }) {
+function NewPost({ fetchPosts, onButtonCancelClick }) {
 
     const initialDetails = {
         title: "",
@@ -540,7 +539,7 @@ function NewPost({ onButtonCancelClick }) {
                 body: JSON.stringify(details)
             }).then(() => {
                 setDetails(initialDetails);
-                window.location.reload();
+                fetchPosts();
             }).catch((error) => {
                 console.error('Error adding new post:', error);
                 // Handle error appropriately, e.g., setError("Failed to add new post.")
