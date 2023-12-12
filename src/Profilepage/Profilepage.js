@@ -86,22 +86,23 @@ function OwnReviews() {
     const [totalPages, setTotalPages] = useState(1);
 
     /* Get reviews from the database */
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            let url = `http://localhost:3001/getownreviewbydate/${userId}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            //console.log(data);
+            setTotalPages(Math.ceil(data.length / reviewsPerPage));
+            setReviews(data);
+        } catch (error) {
+            console.error('Error fetching data at Profile / OwnReviews:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                let url = `http://localhost:3001/getownreviewbydate/${userId}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                //console.log(data);
-                setTotalPages(Math.ceil(data.length / reviewsPerPage));
-                setReviews(data);
-            } catch (error) {
-                console.error('Error fetching data at Profile / OwnReviews:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchData();
     }, [userId]);
 
@@ -158,7 +159,7 @@ function OwnReviews() {
                         <ProfileMovieTitle Title={review.title} />
                         <Rating Rating={review.review} />
                         <Text Content={review.content} />
-                        <DeleteButton reviewID={review.id}/>
+                        <DeleteButton reviewID={review.id} fetchReviews={fetchData}/>
                     </div>
                 ))
             )}

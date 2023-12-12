@@ -89,7 +89,7 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl, fetchPo
     );
 }
 
-function DeleteButton ({ reviewID }){
+function DeleteButton ({ reviewID, fetchReviews }){
 
     const navigate = useNavigate();
 
@@ -107,7 +107,8 @@ function DeleteButton ({ reviewID }){
                 },
                 body: JSON.stringify({ userid, reviewid })
             });
-            navigate("/");
+            fetchReviews();
+            navigate(`/Profile/${userid}`);
             if (response) {
             }
         } else {
