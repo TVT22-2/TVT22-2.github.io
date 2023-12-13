@@ -4,7 +4,7 @@ const sql = {
   INSERT_GROUP: 'INSERT INTO groups (name,description,ownerid) values ($1, $2, $3) RETURNING id',
   INSERT_USER_HAS_GROUP: 'INSERT INTO user_has_groups (user_iduser,groups_idgroups,request) values ($1, $2, $3)',
   GET_GROUPS: 'SELECT * from groups ORDER BY name ASC',
-  GET_USER_GROUPS: 'SELECT g.id,name,description,ownerid from groups g INNER JOIN user_has_groups uhg ON g.id = uhg.groups_idgroups WHERE user_iduser = ($1) ORDER BY name ASC',
+  GET_USER_GROUPS: 'SELECT g.id,name,description,ownerid from groups g INNER JOIN user_has_groups uhg ON g.id = uhg.groups_idgroups WHERE user_iduser = ($1) and request = true ORDER BY name ASC',
   GET_GROUP_BY_ID: 'SELECT * from groups where id=($1)',
   GET_USERS_FROM_GROUP: 'SELECT * FROM user_has_groups WHERE groups_idgroups =($1) AND request = true',
   GET_USERNAMES_FROM_GROUP: 'SELECT username FROM end_user e JOIN user_has_groups u ON e.id = u.user_iduser WHERE u.groups_idgroups = ($1) AND request = true',
