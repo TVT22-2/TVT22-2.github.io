@@ -57,7 +57,6 @@ router.post('/insertPostUser', async (req, res) => {
 
 router.post('/insertPostGroup', async (req, res) => {
     const { title, posttext, date, group_id } = req.body;
-
     try {
         await insertPostGroup(title, posttext, date, group_id);
         res.status(200).send('PostGroup added successfully');

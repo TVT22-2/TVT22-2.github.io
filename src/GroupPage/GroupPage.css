@@ -1,11 +1,15 @@
+
 .GroupMainMenu {
     display: flex;
     justify-content: space-between;
 }
-
+.MainContainer2{
+    display: flex;
+    height: 100%;
+}
 .GroupsL {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     width: 48%;
     justify-content: space-between;
     align-items: left;
@@ -27,4 +31,72 @@
 
 .GroupDropdown {
     display: flex;
+}
+.NewsElement{
+    display: flex;
+    background-color: rgba(255, 165, 0,0.4);
+}
+.NewsContent{
+    display: flex;
+    border-style: double;
+    border-width: 1px;
+    flex-basis: 100%;
+    flex-direction: column;
+}
+.NewsHeader, .NewsContent, .NewsDate{
+    display: flex;
+}
+.NewsHeader{
+    font-size: 20px;
+    font-weight: bold;
+}
+.GroupDetailsMenu{
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex-grow: 1;
+}
+.DetailElement{
+    flex-basis: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 165, 0,0.4);
+}
+.GroupMembers{
+    flex-basis:100%;
+    display: flex;
+    flex-direction: column;
+}
+.NewsFeedContainer{
+    display: flex;
+    flex-basis: 33%;
+    flex-direction: column;
+}
+.GroupFlexContainer{
+    display: flex;
+    width: 100%;
+}
+.MainContainer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.manage-member-menu{
+    display: flex;
+}
+.NewsMainHeader{
+    font-size: 25px;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+}
+@media only screen and (min-width: 968px) {
+    .GroupDetailsMenu{
+        display: flex;
+        flex-direction: row;
+        flex-basis: 100%;
+        flex-grow: 1;
+    }
 }
