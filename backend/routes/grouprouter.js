@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const {addGroup, getGroups, getUserGroups, addUserToGroup, getGroupById, getUsersFromGroup, getUsernamesFromGroup, removeUserFromGroup, getOwnerName} = require('../postgre/group');
+const {addGroup, getGroups, getUserGroups, addUserToGroup, getGroupById, getUsersFromGroup, getUsernamesFromGroup, removeUserFromGroup, getOwnerName, joinRequest, getUsernameFromID, requestAssessed, getRequests} = require('../postgre/group');
 
 router.get('/Groups', async (req,res) => {
     try{
@@ -16,7 +16,7 @@ router.post('/Groups', async (req,res) => {
     const owner = req.body.ownerid;
     try {
         const groupid = await addGroup(gname, desc, owner);
-        await addUserToGroup(owner,groupid);
+        await addUserToGroup(owner,groupid,true);
         res.status(201).json({ message: 'Group added successfully'});
       } catch (error) {
         res.status(500).json({ error: 'Failed to add group' });
@@ -93,4 +93,41 @@ router.get('/ownerUsername/:groupid', async (req, res) => {
     }
   });
 
+router.post('/joinRequest', async (req,res) => {
+    const userid = req.body.userid;
+    const groupid = req.body.groupid;
+
+    await joinRequest(userid,groupid,false);
+    res.status(200).json();
+});
+
+router.put('/joinRequest', async (req,res) =>{
+    const userid = req.body.userid;
+    const groupid = req.body.groupid;
+    const value = req.body.value;
+    const username = await getUsernameFromID(userid);
+    console.log(value);
+
+    if(value === true){
+            requestAssessed(value, userid, groupid, username);
+            res.status(200).json();
+      }
+      else{
+            removeUserFromGroup(username,groupid);
+            res.status(200).json();
+      }
+});
+
+router.get('/getUsername', async (req,res) => {
+    const userid = req.body.userid;
+    console.log(req.body.userid);
+    const rows = await getUsernameFromID(userid);
+    res.status(200).json({userid:rows});
+});
+
+router.get('/getRequests/:groupid', async (req,res) => {
+    const groupid = req.params.groupid;
+    const rows = await getRequests(groupid);
+    res.status(200).json({rows});
+})
 module.exports = router;

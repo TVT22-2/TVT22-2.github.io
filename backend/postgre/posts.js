@@ -29,28 +29,24 @@ async function getPost(){
 async function getPostByUser(end_user_id){
     const result = await pgPool.query(sql.GET_POST_BY_USER, [end_user_id]);
     const rows = result.rows;
-    console.log(rows);
     return rows;
 }
 
 async function getPostByGroup(group_id){
     const result = await pgPool.query(sql.GET_POST_BY_GROUP, [group_id]);
     const rows = result.rows;
-    console.log(rows);
     return rows;
 }
 
 async function getPostsByDateUser(end_user_id){
     const result = await pgPool.query(sql.GET_POSTS_BY_DATE_USER, [end_user_id]);
     const rows = result.rows;
-    console.log(rows);
     return rows;
 }
 
 async function getPostsByDateGroup(group_id){
     const result = await pgPool.query(sql.GET_POSTS_BY_DATE_GROUP, [group_id]);
     const rows = result.rows;
-    console.log(rows);
     return rows;
 }
 
