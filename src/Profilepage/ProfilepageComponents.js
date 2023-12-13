@@ -1,5 +1,5 @@
 import image from "../resources/postsplaceholder.png";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profilepage.css";
 import { CopyToClipboard } from 'react-copy-to-clipboard';

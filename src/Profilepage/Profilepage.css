@@ -149,19 +149,16 @@
     margin: 0px 35px 5px 40px;
 }
 
-.ButtonDeleteContainer {
-    display: flex;
-    justify-content: center;  
-}
-
-.DeletePostButton {
+.ButtonDeleteAndEditPost {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;  
     width: 90%;
 }
 
-.DeletePostButton #DeletePostButton {
-    justify-content: left;
+.ButtonDeleteContainer {
+    display: flex;
+    justify-content: center;  
 }
 
 #ButtonLeft,
@@ -173,7 +170,8 @@
 #Button,
 #ButtonDelete,
 #DeleteReviewButton,
-#DeletePostButton {
+#DeletePostButton,
+#ButtonEditPost {
     background-color: orange;
     border: 1px solid #030303;
 }
@@ -185,7 +183,8 @@
 #ButtonCancel:hover,
 #ButtonCopyProfileLink:hover,
 #Button:hover,
-#ButtonDelete:hover {
+#ButtonDelete:hover,
+#ButtonEditPost:hover {
     background-color: #FFFF00;
 }
 
@@ -303,7 +302,7 @@
 }
 
 /*Mobile*/
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 900px) {
 
     /*Main container*/
     .Profilepage {
