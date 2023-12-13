@@ -7,10 +7,13 @@ import { MovieDBRegData,ReviewGetter, UpcomingMovies, TrendingMovies, RecentMovi
 import { Link } from "react-router-dom";
 import ScrollContainer from 'react-indiana-drag-scroll'
 let NewsArray = [];
+let GroupArray = [];
+let Groupselection = "";
 export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
     useEffect(() => {
         const fetchdata = async () => {
+            parsegroups();
             window.scrollTo(0, 0)
             await ReviewGetter();   
             await MovieDBRegData("trend", 1,1)
@@ -30,11 +33,11 @@ export default function Frontpage() {
     return (
         <>
         <MovieElementHead/>
-        <HeaderElement text="treding"/>
+        <HeaderElement text="Trending"/>
         <MovieBrowser text="trend"/>
-        <HeaderElement text="upcoming"/>
+        <HeaderElement text="Upcoming"/>
         <MovieBrowser text="upcom"/>
-        <HeaderElement text="recent reviews"/>
+        <HeaderElement text="Recent Reviews"/>
         <nav className="navBar" id="frontpagereviews">
             <div className="container">
             <ScrollContainer className="nav">
@@ -50,9 +53,23 @@ export default function Frontpage() {
     </>
     );
     } 
+    function fetchgroups(){
+        let fetchresponse = fetch(`http://localhost:3001/Groups/${userID.value}`)
+        .then(response => fetchresponse = response.json())
+        return fetchresponse;
+    }
+    async function parsegroups(){
+      let data = await fetchgroups();
+      data.forEach( element => {
+      let array = {
+        id: element.id,
+        name: element.name
+      }
+      GroupArray.push(array)
+      })
+    }
     function News(){
         let NewsRow = [];
-        console.log(NewsArray.length)
         for(let i = 1; i<11; i++){
         if(NewsArray[i]!==undefined){
             let url = NewsArray[i].imgurl;
@@ -68,9 +85,11 @@ export default function Frontpage() {
                 <div className="MovieNewsDate" id="MovieNewsTitle">{NewsArray[i].title}</div>
                 <div className="MovieNewsDate" id="MovieNewsDate">{date.toUTCString()}</div>
                 {userID.value ?  
+                <>
                 <div className="MovieNewsDate" id="MovieNewsDate"><button className="MovieNewsButton" onClick={()=>profilesender(i)}>Add to profile</button></div>
+                <div className="GrouselectionContainer"><GroupSelectRender/><button className="GroupSubmitButton" onClick={()=>GroupPagePost(NewsArray[i].title,NewsArray[i].date,NewsArray[i].content+NewsArray[i].link)}>Send to selected group</button></div>
+                </>
          : <></>}
-                <GroupSelectRender/>
                 <div className="MovieNewsPr"><p>{NewsArray[i].content}</p></div>
             </article>
         </li> 
@@ -80,12 +99,38 @@ export default function Frontpage() {
             break;
         }
         }
-        console.log(NewsRow)
     return NewsRow;
         
     }
+    function GroupPagePost(title,date,content){
+        let datestring = new Date(date).toISOString();
+        date = datestring;
+        const updatedDetails = {
+            title: title,
+            posttext: content,
+            date: date,
+            group_id: Groupselection
+        }
+     fetch("http://localhost:3001/post/insertPostGroup",{
+        method: 'POST',
+        headers: {'Content-type': 'application/json'}, 
+        body: JSON.stringify(updatedDetails)
+     });
+    alert("Post Has been sent!");
+    }
     function GroupSelectRender(){
-
+        let rows = []; 
+        GroupArray.forEach(data => {
+            rows.push(
+                <option className="optionValue" value={data.id}>{data.name}</option>
+            )
+        })
+    return (
+     <select classname="GroupSelection" onChange={(e)=>Groupselection = e.target.value}>
+        <option className="optionValue" value=""></option>
+        {rows}
+     </select>
+    );
     }
     function profilesender(i){
     console.log(NewsArray[i].title);
@@ -165,7 +210,7 @@ export default function Frontpage() {
                 <article className="movieinfo">
                     <div className="title">{RecentMovies[index].title}</div>
                     <div className="title">{RecentMovies[index].genreid}</div>
-                    <div className="title">{RecentMovies[index].popularity}</div>
+                    <div className="title">{"Score: "+ RecentMovies[index].popularity}</div>
                 </article>
             </li> 
             </>
