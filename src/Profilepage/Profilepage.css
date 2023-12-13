@@ -115,6 +115,7 @@
 .ProfilePagePosts .ProfileMovieTitle {
     border-bottom: 1px solid #030303;
     width: 90%;
+    justify-content: center;
 }
 
 .Timestamp {
@@ -122,6 +123,10 @@
     width: 90%;
     text-align: center;
     border-bottom: 1px solid #030303;
+}
+
+a.NewsfeedLink {
+    margin-left: 35px;
 }
 
 /* Button styling */
@@ -171,7 +176,8 @@
 #ButtonDelete,
 #DeleteReviewButton,
 #DeletePostButton,
-#ButtonEditPost {
+#ButtonEditPost,
+#ButtonOpenEditPost {
     background-color: orange;
     border: 1px solid #030303;
 }
@@ -184,7 +190,8 @@
 #ButtonCopyProfileLink:hover,
 #Button:hover,
 #ButtonDelete:hover,
-#ButtonEditPost:hover {
+#ButtonEditPost:hover,
+#ButtonOpenEditPost:hover {
     background-color: #FFFF00;
 }
 
@@ -278,7 +285,14 @@
     width: 80%;
 }
 
-.InputField {
+.NewPost .InputTitleField {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.NewPost .InputContentField {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
@@ -292,6 +306,34 @@
     border-radius: 5px;
     cursor: pointer;
     width: 50%;
+}
+
+.EditPost {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    margin: 15px 50px 15px 15px;
+}
+
+.EditPostForm {
+    width: 100%;
+}
+
+.EditPost .InputTitleField {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;;
+}
+
+
+.EditPost .InputContentField {
+    width: 100%;
+    padding: 8px;
+    height: 200px;
+    margin-bottom: 10px;
+    box-sizing: border-box;;
 }
 
 .ErrorMessage {
@@ -324,7 +366,7 @@
     .placeholderImage {
         margin-left: 15px;
     }
-    
+
     .ButtonDeleteContainer {
         display: flex;
         justify-content: center;  

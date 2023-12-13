@@ -16,6 +16,7 @@ import {
     Rating,
     Text,
     ButtonsGroups,
+    ButtonOpenEditPost
 } from "./ProfilepageComponents.js";
 
 function Profilepage() {
@@ -206,15 +207,15 @@ function PostsAndNews() {
             const data = await response.json();
             console.log(data[0]);
             let urlParsed = [];
-            for(let i = 0;i<data.length;i++){
+            for (let i = 0; i < data.length; i++) {
                 let temparray = [];
                 const link = (data[i].posttext.split("https"));
                 temparray = {
-                    id:data[i].id,
-                    title:data[i].title,
-                    date:data[i].date,
-                    posttext:link[0],
-                    link:"https"+link[1]
+                    id: data[i].id,
+                    title: data[i].title,
+                    date: data[i].date,
+                    posttext: link[0],
+                    link: "https" + link[1]
                 }
                 urlParsed.push(temparray);
             }
@@ -271,14 +272,13 @@ function PostsAndNews() {
 
     const handlePostPage = () => {
         setCurrentHeaderCurrentPage(1);
-        setIsEditing(false);
     };
 
     const HandleNewPost = () => {
         setCurrentHeaderCurrentPage(3);
     };
 
-    const HandleEditPost = async () => {
+    const HandleEditPost = () => {
         setIsEditing(true);
     };
 
@@ -347,26 +347,35 @@ function PostsAndNews() {
                         case 1:
                             return (
                                 <div>
-                                    {displayedItems.map((post, index) => (!isEditing ? (
+                                    {displayedItems.map((post, index) => (
                                         <div key={index} className="ProfilePagePosts">
-                                            {post.link !== "httpsundefined" ? 
-                                            <Link to = {post.link}><ProfileMovieTitle Title={post.title} /></Link>
-                                            : <ProfileMovieTitle Title={post.title} />}
+                                            {post.link !== "httpsundefined" ?
+                                                <Link to={post.link} className="NewsfeedLink"><ProfileMovieTitle Title={post.title} /></Link>
+                                                : <ProfileMovieTitle Title={post.title} />}
                                             <Timestamp date={post.date} />
                                             <Text Content={post.posttext} />
                                             <div className="ButtonDeleteAndEditPost">
                                                 <DeletePostButton postID={post.id} fetchPosts={fetchPosts} />
-                                                <button id="ButtonEditPost" onClick={() => setIsEditing(true) }>Edit Post</button>
+                                                {/* Toggle rendering based on isEditing */}
+                                                {isEditing ? (
+                                                    <EditPostButton
+                                                        postID={post.id}
+                                                        fetchPosts={fetchPosts}
+                                                        postText={post.posttext}
+                                                        postTitle={post.title}
+                                                        onButtonCancelEditClick={handleCancelEditClick}
+                                                    />
+                                                ) : (
+                                                    <ButtonOpenEditPost
+                                                        ButtonOpenEditPost="Edit Post"
+                                                        onButtonOpenEditPostClick={HandleEditPost}
+                                                    />
+                                                )}
                                             </div>
-                                        </div>) : (
-                                        <EditPostButton postID={post.id}
-                                            fetchPosts={fetchPosts}
-                                            postText={post.posttext}
-                                            postTitle={post.title}
-                                            onButtonCancelEditClick={handleCancelEditClick} />)
+                                        </div>
                                     ))}
                                 </div>
-                            );
+                            )
                         case 2:
                             return <div>
                                 {displayedItems.map((article, index) => (
@@ -384,6 +393,7 @@ function PostsAndNews() {
                             return null;
                     }
                 })()}
+
                 <ButtonsPostsAndNewsfeed
                     ButtonLeft="Previous"
                     ButtonMiddle="New Post"
@@ -597,7 +607,7 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
                     placeholder="Add title"
                     value={details.title}
                     onChange={handleChange}
-                    className="InputField"
+                    className="InputTitleField"
                 />
                 <h3>Content:</h3>
                 <textarea
@@ -605,7 +615,8 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
                     placeholder="Add text"
                     value={details.posttext}
                     onChange={handleChange}
-                    className="InputField"
+                    rows={10}
+                    className="InputContentField"
                 />
                 <button type="submit" id="ButtonSubmit" className="NewPostButtons">
                     Add post
@@ -674,7 +685,7 @@ function EditPostButton({ postID, fetchPosts, postText, postTitle, onButtonCance
     return (
         <div className="EditPost">
             {error && <div className="ErrorMessage">{error}</div>}
-            <form onSubmit={submitHandler} className="NewPostForm">
+            <form onSubmit={submitHandler} className="EditPostForm">
                 <h3>Title:</h3>
                 <input
                     type="title"
@@ -682,7 +693,7 @@ function EditPostButton({ postID, fetchPosts, postText, postTitle, onButtonCance
                     placeholder="Edit title"
                     value={details.title}
                     onChange={handleChange}
-                    className="InputField"
+                    className="InputTitleField"
                 />
                 <h3>Content:</h3>
                 <textarea
@@ -690,7 +701,7 @@ function EditPostButton({ postID, fetchPosts, postText, postTitle, onButtonCance
                     placeholder="Edit text"
                     value={details.posttext}
                     onChange={handleChange}
-                    className="InputField"
+                    className="InputContentField"
                 />
                 <button type="submit" id="ButtonSubmit" className="NewPostButtons">
                     Edit post
