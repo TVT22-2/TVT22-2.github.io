@@ -8,6 +8,7 @@ const sql = {
     GET_POSTS_BY_DATE_GROUP: 'SELECT * from posts WHERE group_id=($1) order by date DESC',
     INSERT_POST_USER: 'INSERT INTO posts (title, posttext, date, end_user_id) values ($1, $2, $3, $4)',
     INSERT_POST_GROUP: 'INSERT INTO posts (title, posttext, date, group_id) values ($1, $2, $3, $4)',
+    UPDATE_POST_USER: 'UPDATE posts SET title=($1), posttext=($2) WHERE end_user_id=($3) AND id=$4'
 }
 
 //TESTING
@@ -59,4 +60,8 @@ async function insertPostGroup(title, posttext, date, group_id){
     await pgPool.query(sql.INSERT_POST_GROUP, [title, posttext, date, group_id])
 }
 
-module.exports = {getPost, getPostByUser, getPostByGroup, getPostsByDateUser, getPostsByDateGroup, insertPostUser, insertPostGroup};
+async function updatePostUser(title, posttext, end_user_id, id){
+    await pgPool.query(sql.UPDATE_POST_USER, [title, posttext, end_user_id, id])
+}
+
+module.exports = {getPost, getPostByUser, getPostByGroup, getPostsByDateUser, getPostsByDateGroup, insertPostUser, insertPostGroup, updatePostUser};

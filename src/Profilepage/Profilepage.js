@@ -160,7 +160,7 @@ function OwnReviews() {
                         <ProfileMovieTitle Title={review.title} />
                         <Rating Rating={review.review} />
                         <Text Content={review.content} />
-                        <DeleteReviewButton reviewID={review.id} fetchReviews={fetchData}/>
+                        <DeleteReviewButton reviewID={review.id} fetchReviews={fetchData} />
                     </div>
                 ))
             )}
@@ -193,6 +193,7 @@ function PostsAndNews() {
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const [totalPostPages, setTotalPostPages] = useState(1);
     const [totalNewsPages, setTotalNewsPages] = useState(1);
+    const [isEditing, setIsEditing] = useState(false);
     const postsPerPage = 1;
     const newsPerPage = 2;
 
@@ -255,10 +256,19 @@ function PostsAndNews() {
 
     const handlePostPage = () => {
         setCurrentHeaderCurrentPage(1);
+        setIsEditing(false);
     };
 
     const HandleNewPost = () => {
         setCurrentHeaderCurrentPage(3);
+    };
+
+    const HandleEditPost = () => {
+        setIsEditing(true);
+    };
+
+    const handleCancelEditClick = () => {
+        setIsEditing(false);
     };
 
     const handleNewsfeedPage = () => {
@@ -303,7 +313,7 @@ function PostsAndNews() {
                     {(() => {
                         switch (currentHeaderPage) {
                             case 1:
-                                return <h1>Posts</h1>;
+                                return  <h1>Posts</h1>;
                             case 2:
                                 return <h1>Newsfeed</h1>;
                             case 3:
@@ -322,14 +332,21 @@ function PostsAndNews() {
                         case 1:
                             return (
                                 <div>
-                                    {displayedItems.map((post, index) => (
+                                    {displayedItems.map((post, index) => (!isEditing ? (
                                         <div key={index} className="ProfilePagePosts">
                                             <ProfileMovieTitle Title={post.title} />
                                             <Timestamp date={post.date} />
                                             <Text Content={post.posttext} />
-                                            <DeletePostButton postID={post.id} fetchPosts={fetchPosts}  />
-                                            {/*<Image />*/}
-                                        </div>
+                                            <div className="ButtonDeleteAndEditPost">
+                                            <DeletePostButton postID={post.id} fetchPosts={fetchPosts} />
+                                            <button id="ButtonEditPost" onClick={HandleEditPost}>Edit Post</button>
+                                            </div>      
+                                        </div>) : (
+                                        <EditPostButton postID={post.id}
+                                            fetchPosts={fetchPosts}
+                                            postText={post.posttext}
+                                            postTitle={post.title}
+                                            onButtonCancelEditClick={handleCancelEditClick} />)
                                     ))}
                                 </div>
                             );
@@ -488,7 +505,7 @@ function Groups() {
                     displayedGroups.map((group, index) => (
                         /* Map the groups to the page */
                         <li key={index}>
-                            <Link to = {`http://localhost:3000/Groupspage/${group.id}`} ><ProfileGroupName Name={group.name} /></Link>
+                            <Link to={`http://localhost:3000/Groupspage/${group.id}`} ><ProfileGroupName Name={group.name} /></Link>
                         </li>
                     ))
                 )}
@@ -577,6 +594,91 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
                     Add post
                 </button>
                 <button type="button" id="ButtonCancel" className="NewPostButtons" onClick={onButtonCancelClick}>
+                    Cancel
+                </button>
+            </form>
+        </div>
+    );
+}
+
+function EditPostButton({ postID, fetchPosts, postText, postTitle, onButtonCancelEditClick }) {
+    const { userId } = useParams();
+    const [details, setDetails] = useState({
+        title: postTitle,
+        posttext: postText,
+        end_user_id: userID,
+        id: postID
+    });
+
+    const [error, setError] = useState(null);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setDetails((prev) => {
+            return { ...prev, [name]: value };
+        });
+    };
+
+    console.log("USER:" + userID);
+
+    const submitHandler = async (e) => {
+        e.preventDefault();
+
+        if (userID != userId) {
+            setError("You cannot edit another user's posts.");
+            return;
+        } else if (userID === "" || userID === null || userID === undefined) {
+            setError("You must be logged in to edit a post.");
+            return;
+        } else {
+            fetch('http://localhost:3001/post/updatePostUser', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(details),
+            })
+                .then(() => {
+                    setDetails({
+                        title: postTitle,
+                        posttext: postText,
+                        end_user_id: userID,
+                        id: postID
+                    });
+                    fetchPosts();
+                })
+                .catch((error) => {
+                    console.error('Error updating post:', error);
+                    setError('Failed to update post.');
+                });
+        }
+    };
+
+    return (
+        <div className="EditPost">
+            {error && <div className="ErrorMessage">{error}</div>}
+            <form onSubmit={submitHandler} className="NewPostForm">
+                <h3>Title:</h3>
+                <input
+                    type="title"
+                    name="title"
+                    placeholder="Edit title"
+                    value={details.title}
+                    onChange={handleChange}
+                    className="InputField"
+                />
+                <h3>Content:</h3>
+                <textarea
+                    name="posttext"
+                    placeholder="Edit text"
+                    value={details.posttext}
+                    onChange={handleChange}
+                    className="InputField"
+                />
+                <button type="submit" id="ButtonSubmit" className="NewPostButtons">
+                    Edit post
+                </button>
+                <button type="button" id="ButtonCancel" className="NewPostButtons" onClick={onButtonCancelEditClick}>
                     Cancel
                 </button>
             </form>

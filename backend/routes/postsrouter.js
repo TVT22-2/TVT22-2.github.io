@@ -2,7 +2,7 @@ const router = require('express').Router();
 const multer = require('multer');
 const upload = multer({ dest: 'upload/' });
 
-const { getPost, getPostByUser, getPostByGroup, getPostsByDateUser, getPostsByDateGroup, insertPostUser, insertPostGroup } = require('../postgre/posts');
+const { getPost, getPostByUser, getPostByGroup, getPostsByDateUser, getPostsByDateGroup, insertPostUser, insertPostGroup, updatePostUser } = require('../postgre/posts');
 
 router.get('/', async (req, res) => {
     try {
@@ -63,6 +63,17 @@ router.post('/insertPostGroup', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('PostGroup failed to add');
+    }
+});
+
+router.put('/updatePostUser', async (req, res) => {
+    const { title, posttext, end_user_id, id } = req.body;
+    try {
+        await updatePostUser(title, posttext, end_user_id, id);
+        res.status(200).send('UpdatePost succesful');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('UpdatePost failed to update');
     }
 });
 
