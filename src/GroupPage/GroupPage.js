@@ -21,6 +21,7 @@ function GroupsL() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+         selectedOption = 'AllGroups';
         getGroups();
     }, []);
 

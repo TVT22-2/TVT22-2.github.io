@@ -58,6 +58,12 @@ async function GetReviews(movieId) {
     return reviews;
 }
 
+async function GetReviewsByRating(movieId){
+    const response = await fetch(`http://localhost:3001/getmoviereviewbyrating/${movieId}`)
+    const reviews = await response.json();
+    return reviews;
+}
+
 
 function Moviepage() {
     window.scrollTo(0, 0)
@@ -79,25 +85,36 @@ function Moviepage() {
         });
     };
 
+    const [sortingOption, setSortingOption] = useState('rating');
+
+    const handleSortingChange = (event) => {
+        setSortingOption(event.target.value);
+    };
+
     useEffect(() => {
         async function fetchData() {
-            const [movie, fetchedReviews] = await Promise.all([
-                GetMovieData(movieId),
-                GetReviews(movieId),
-            ]);
+            let movie;
 
-            setMovieData(movie);
-            setReviews(fetchedReviews);
-            
-            const totalScore = fetchedReviews.reduce((acc, review) => acc + review.review, 0);
-            const avgScore = fetchedReviews.length > 0 ? totalScore / fetchedReviews.length : 0;
-            setAverageScore(avgScore);
+            try {
+                movie = await GetMovieData(movieId);
+                const fetchedReviews = sortingOption === 'rating' ? await GetReviewsByRating(movieId) : await GetReviews(movieId);
 
-            setLoading(false);
+                setMovieData(movie);
+                setReviews(fetchedReviews);
+
+                const totalScore = fetchedReviews.reduce((acc, review) => acc + review.review, 0);
+                const avgScore = fetchedReviews.length > 0 ? totalScore / fetchedReviews.length : 0;
+                setAverageScore(avgScore);
+
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setLoading(false);
+            }
         }
 
         fetchData();
-    }, [movieId]);
+    }, [movieId, sortingOption]);
 
 
     if (isLoading) {
@@ -106,14 +123,22 @@ function Moviepage() {
         return (
             <div className="Moviepage">
                 <AvgScore averageScore={averageScore} />
-                <InfoFooter movieData={movieData} reviews={reviews} currentIndex={currentIndex} handleNextReview={handleNextReview} handlePrevReview={handlePrevReview} />
+                {/* Pass handleSortingChange to InfoFooter */}
+                <InfoFooter
+                    movieData={movieData}
+                    reviews={reviews}
+                    currentIndex={currentIndex}
+                    handleNextReview={handleNextReview}
+                    handlePrevReview={handlePrevReview}
+                    handleSortingChange={handleSortingChange}
+                    sortingOption={sortingOption}
+                />
                 {window.location.pathname.slice(0, 3) === "/mo" ? <>
-            <div className='AddRemoveFavoritesConteiner'>
-                <AddFavorite movieId={movieId} />
-                </div>
+                    <div className='AddRemoveFavoritesConteiner'>
+                        <AddFavorite movieId={movieId} />
+                    </div>
                 </> 
-                : <></>
-        }
+                : <></>}
             </div>
         );
     }
@@ -156,7 +181,7 @@ function AvgScore({ averageScore }) {
     );
 }
 
-function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handlePrevReview }) {
+function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handlePrevReview, handleSortingChange, sortingOption }) {
     const { movieId } = useParams();
     const [content, setContent] = useState('');
     const [review, setReview] = useState(0);
@@ -185,13 +210,17 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
                 <Description movieData={movieData} />
             </div>
             {window.location.pathname.slice(0, 3) === "/mo" ?
-            <>
-            <div className="Review">
-                <ReviewsHeader />
-                <ReviewsTitle movieData={movieData} />
-                <MovieRating reviews={reviews} currentIndex={currentIndex} />
-                <ReviewContent reviews={reviews} currentIndex={currentIndex} />
-                <div className="buttonContainer">
+                <>
+                    <div className="Review">
+                        <ReviewsHeader />
+                        <ReviewsTitle movieData={movieData} />
+                        <MovieRating reviews={reviews} currentIndex={currentIndex} />
+                            <select className='sortingContainer' id="sortingOption" value={sortingOption} onChange={handleSortingChange}>
+                                <option value="rating">Rating</option>
+                                <option value="date">Date</option>
+                            </select>
+                        <ReviewContent reviews={reviews} currentIndex={currentIndex} />
+                        <div className="buttonContainer">
                             {reviews.length > 0 && (
                                 <>
                                     <button onClick={handlePrevReview}>Previous Review</button>
@@ -199,15 +228,15 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
                                 </>
                             )}
                         </div>
-            </div>
-            <div className='AddReview'>
-                <AddReviewsHeader />
-                <AddReviewRating review={review} handleChange={handleChange} />
-                <AddReviewContent content={content} handleChange={handleChange} />
-                <AddReview movieId={movieId} content={content} review={review} />
-            </div>
-            </> 
-            : <></>
+                    </div>
+                    <div className='AddReview'>
+                        <AddReviewsHeader />
+                        <AddReviewRating review={review} handleChange={handleChange} />
+                        <AddReviewContent content={content} handleChange={handleChange} />
+                        <AddReview movieId={movieId} content={content} review={review} />
+                    </div>
+                </>
+                : <></>
             }
         </div>
     );
