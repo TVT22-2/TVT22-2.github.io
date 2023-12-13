@@ -89,7 +89,7 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl, fetchPo
     );
 }
 
-function DeleteReviewButton ({ reviewID, fetchReviews }){
+function DeleteReviewButton({ reviewID, fetchReviews }) {
 
     const navigate = useNavigate();
 
@@ -122,14 +122,14 @@ function DeleteReviewButton ({ reviewID, fetchReviews }){
     );
 }
 
-function DeletePostButton ({ postID, fetchPosts }){
+function DeletePostButton({ postID, fetchPosts }) {
 
     const navigate = useNavigate();
 
     async function deletePost() {
         let userid = userID.value;
         let postid = postID
-        console.log("USER and POST ID:" +userid, postid)
+        console.log("USER and POST ID:" + userid, postid)
         const confirmation = window.confirm("Delete post?");
         if (confirmation) {
             const response = await fetch(`http://localhost:3001/deletePost`, {
@@ -153,6 +153,16 @@ function DeletePostButton ({ postID, fetchPosts }){
             <button id="DeletePostButton" onClick={deletePost}>
                 Delete</button>
         </div>
+    );
+}
+
+function ButtonOpenEditPost({ ButtonOpenEditPost, onButtonOpenEditPostClick }) {
+
+    return (
+        <>
+            <button id="ButtonOpenEditPost" onClick={onButtonOpenEditPostClick}>
+                {ButtonOpenEditPost}</button>
+        </>
     );
 }
 
@@ -239,4 +249,4 @@ function Text({ Content }) {
     );
 }
 
-export { Image, Timestamp, AddNewsToProfileButtonAndLink, DeleteReviewButton, DeletePostButton, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, ButtonsGroups };
+export { Image, Timestamp, AddNewsToProfileButtonAndLink, DeleteReviewButton, DeletePostButton, ButtonOpenEditPost, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, ButtonsGroups };
