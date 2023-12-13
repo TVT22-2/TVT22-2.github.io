@@ -41,6 +41,7 @@ function GroupsL() {
                 )
                 .catch(err => console.error(err));
             setGroups(data);
+            console.log(data);
 
         };
         await fetchData();

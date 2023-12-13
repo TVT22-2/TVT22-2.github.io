@@ -82,7 +82,7 @@
 }
 
 .ProfilePagePosts .Text {
-    height: 500px;
+    height: 400px;
     overflow: auto;
     text-align: left;
 }
@@ -149,8 +149,19 @@
     margin: 0px 35px 5px 40px;
 }
 
-.ButtonDelete {
-    margin-left: 65px;
+.ButtonDeleteContainer {
+    display: flex;
+    justify-content: center;  
+}
+
+.DeletePostButton {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+}
+
+.DeletePostButton #DeletePostButton {
+    justify-content: left;
 }
 
 #ButtonLeft,
@@ -160,7 +171,9 @@
 #ButtonCancel,
 #ButtonCopyProfileLink,
 #Button,
-#ButtonDelete {
+#ButtonDelete,
+#DeleteReviewButton,
+#DeletePostButton {
     background-color: orange;
     border: 1px solid #030303;
 }
@@ -174,6 +187,11 @@
 #Button:hover,
 #ButtonDelete:hover {
     background-color: #FFFF00;
+}
+
+#DeleteReviewButton:hover,
+#DeletePostButton:hover {
+    background-color: #FF0000;
 }
 
 #ButtonCopyProfileLink {

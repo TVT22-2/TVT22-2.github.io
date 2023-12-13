@@ -20,6 +20,15 @@ router.get('/getownreview/:id', async (req,res) => {
     }
 });
 
+router.get('/getownreviewbydate/:id', async (req,res) => {
+    try{
+        res.json(await getOwnReviewByDate(req.params.id));
+    } catch (error){
+        res.status(500).json({error: error.message})
+    }
+});
+
+
 router.get('/getmoviereview/:idmovie', async (req,res) => {
     try{
         res.json(await getMovieReview(req.params.idmovie));
