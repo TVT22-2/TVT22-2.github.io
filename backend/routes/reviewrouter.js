@@ -2,7 +2,7 @@ const router = require('express').Router();
 const multer = require('multer');
 const upload = multer({ dest: 'upload/' });
 
-const {getRecentReview, addReview, getMovieReview, getOwnReview, addFavorite, deleteFavorite, checkFavorites, getMovieReviewByRating} = require('../postgre/review');
+const {getRecentReview, addReview, getMovieReview, getOwnReview, getOwnReviewByDate, addFavorite, deleteFavorite, checkFavorites, getMovieReviewByRating} = require('../postgre/review');
 
 router.get('/getrecentreview', async (req,res) => {
     try{

@@ -8,7 +8,7 @@ const sql = {
     GET_RECENT_REVIEW: 'SELECT * FROM review ORDER BY date DESC LIMIT 5',
     GET_OWN_REVIEWS: 'SELECT * FROM review WHERE iduser = ($1)',
     GET_MOVIE_REVIEW: 'SELECT * FROM review where idmovie = ($1) ORDER BY date DESC',
-    GET_MOVIE_REVIEW_BY_RATING: 'SELECT * FROM review where idmovie = ($1) ORDER BY review DESC'
+    GET_MOVIE_REVIEW_BY_RATING: 'SELECT * FROM review where idmovie = ($1) ORDER BY review DESC',
     GET_OWN_REVIEWS_BY_DATE: 'SELECT * FROM review WHERE iduser = ($1) ORDER BY date DESC',
     GET_MOVIE_REVIEW: 'SELECT * FROM review where idmovie = ($1) ORDER BY date DESC'
 }
@@ -63,4 +63,4 @@ async function getMovieReviewByRating(idmovie){
 }
 
 
-module.exports = {addReview, addFavorite, getRecentReview, getOwnReview, getMovieReview, deleteFavorite, checkFavorites, getMovieReviewByRating};
+module.exports = {addReview, addFavorite, getRecentReview, getOwnReview, getOwnReviewByDate, getMovieReview, deleteFavorite, checkFavorites, getMovieReviewByRating};
