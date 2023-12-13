@@ -19,9 +19,10 @@ export default function Login() {
             {token.value.length > 3 && pass === false ? <><div className="LoginQuery"><h2>Are you sure?</h2><button className="LoginButtonYes" onClick={LogOut}>yes</button><button className="LoginButtonNo" onClick={() => navigate("/")}>no</button></div></> :
                 <>
                     <div className="inputcontainer">
-                        {pass === true ? <><input className="newPass" type="text" placeholder="New password" value={password} onChange={e => setPassword(e.target.value.replace(/[^\w\s]/gi, '').replace(/\s/g, ''))}></input><input className="newPass" type="text" placeholder="New password" value={password2} onChange={e => setPassword2(e.target.value).replace(/[^\w\s]/gi, '').replace(/\s/g, '')}></input></> : <>
+                        {pass === true ? <><input className="newPass" type="text" placeholder="New password" value={password} onChange={e => setPassword(e.target.value.replace(/[^\w\s]/gi, '').replace(/\s/g, ''))}></input>
+                        <input className="newPass" type="text" placeholder="New password" value={password2} onChange={e => setPassword2(e.target.value.replace(/[^\w\s]/gi, '').replace(/\s/g, ''))}></input></> : <>
                             <input className="Username" type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value.replace(/[^\w\s]/gi, '').replace(/\s/g, ''))}></input>
-                            {forgot !== false ? <input className="Password" type="password" placeholder="Recoverykey" value={password} onChange={e => setPassword(e.target.value)}></input> :
+                            {forgot !== false ? <input className="Password" type="password" placeholder="Recoverykey" value={password} onChange={e => setPassword(e.target.value.replace(/[^\w\s]/gi, '').replace(/\s/g, ''))}></input> :
                                 <input className="Password" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value.replace(/[^\w\s]/gi, '').replace(/\s/g, ''))}></input>
                             }
                         </>

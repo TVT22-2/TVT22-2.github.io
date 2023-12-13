@@ -1,30 +1,208 @@
+
 .GroupMainMenu {
     display: flex;
     justify-content: space-between;
+    flex-direction: column;
 }
-
+.MainContainer2{
+    display: flex;
+    height: 100%;
+}
 .GroupsL {
     display: flex;
     flex-direction: column;
-    width: 48%;
-    justify-content: space-between;
+    width: 90%;
     align-items: left;
     border: 1px solid #030303;
-    margin: 30px 15px 15px;
-    height: auto;
+    margin: 30px 15px 15px 30px;
+    height: 700px;
+    background-color: rgba(255, 166, 0, 0.678);
+    overflow:auto;
+    border-radius: 10px;
 }
 
 .CreateGroup {
     display: flex;
     flex-direction: column;
-    width: 48%;
-    justify-content: space-between;
+    width: 90%;
     align-items: left;
     border: 1px solid #030303;
-    margin: 30px 15px 15px;
-    height: auto;
+    margin: 30px 15px 15px 30px;
+    background-color: rgba(255, 166, 0, 0.678);
+    border-radius: 10px;
 }
 
 .GroupDropdown {
     display: flex;
+    flex-direction: column;
+}
+.NewsElement{
+    display: flex;
+    background-color: rgba(255, 165, 0,0.4);
+}
+.NewsContent{
+    display: flex;
+    border-style: double;
+    border-width: 1px;
+    flex-basis: 100%;
+    flex-direction: column;
+}
+.NewsHeader, .NewsContent, .NewsDate{
+    display: flex;
+}
+.NewsHeader{
+    font-size: 20px;
+    font-weight: bold;
+}
+.GroupDetailsMenu{
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex-grow: 1;
+}
+.DetailElement{
+    flex-basis: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(255, 165, 0,0.4);
+}
+.GroupMembers{
+    flex-basis:100%;
+    display: flex;
+    flex-direction: column;
+}
+.NewsFeedContainer{
+    display: flex;
+    flex-basis: 33%;
+    flex-direction: column;
+}
+.GroupFlexContainer{
+    display: flex;
+    width: 100%;
+}
+.MainContainer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.manage-member-menu{
+    display: flex;
+}
+.NewsMainHeader{
+    font-size: 25px;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+}
+
+.DropdownButton {
+    background-color: rgba(255, 166, 0, 1);
+    width: auto;
+}
+
+.CreateGroupHeader{
+    background-color: rgba(255, 166, 0, 0.678);
+    border: 1px solid #030303;
+    border-radius: 10px;
+}
+
+.CreateGroupHeader h1{
+    text-align: center;
+    font-size: xx-large;
+}
+
+.GroupInput{
+    display:flex;
+    flex-basis: 100%;
+}
+
+.GroupInput form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.GroupInput form h3{
+    text-align: center;
+    font-size: x-large;
+}
+
+.GroupInput form button{
+    margin-top: 20px;
+    height: 75px;
+    width: 50%;
+    justify-content: center;
+    background-color: orange;
+    border-radius: 10px;
+}
+
+.GroupInput form button:hover{
+    margin-top: 20px;
+    height: 75px;
+    width: 50%;
+    justify-content: center;
+    background-color: darkorange;
+    cursor:pointer;
+    border-radius: 500px;
+}
+
+.GroupInput form input{
+    width: 90%;
+    height: 20px;
+    border-radius: 10px;
+}
+
+.GroupInput form textarea{
+    width: 90%;
+    border-radius: 10px;
+}
+
+@media only screen and (min-width: 768px) {
+    .GroupMainMenu{
+        flex-direction: row;
+    }
+    .GroupsL{
+        width: 90%;
+    }
+    .CreateGroup{
+        width: 90%;
+    }
+}
+
+.requestButton{
+        width: 50%;
+        height: 100px;
+        background-color: orange;
+        border-radius: 10px;
+}
+
+.requestContainer{
+    flex: auto;
+    text-align: center;
+}
+
+.groupDesc{
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.requestButton:hover{
+    width: 50%;
+    height: 100px;
+    background-color: darkorange;
+    cursor:pointer;
+    border-radius: 500px;
+}
+
+@media only screen and (min-width: 968px) {
+    .GroupDetailsMenu{
+        display: flex;
+        flex-direction: row;
+        flex-basis: 100%;
+        flex-grow: 1;
+    }
 }

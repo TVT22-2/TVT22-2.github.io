@@ -3,6 +3,8 @@ import "./GroupPage.css"
 import GroupListG from "./GroupList";
 import { userID } from "../components/react-signals"
 
+const userId = userID.value;
+
 console.log(userID);
 
 function GroupMainMenu() {
@@ -21,6 +23,7 @@ function GroupsL() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+         selectedOption = 'AllGroups';
         getGroups();
     }, []);
 
@@ -56,7 +59,7 @@ function GroupsL() {
     return (
         <div className="GroupsL">
             <div className="GroupDropdown">
-                <select onChange={buttonHandler}>
+                <select className="DropdownButton" onChange={buttonHandler}>
                     <option value="AllGroups">All groups</option>
                     <option value="OwnGroups">Own groups</option>
                 </select>
@@ -101,12 +104,17 @@ function GroupInput() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+
+
         if (details.name.trim() === "" || details.description.trim() === "") {
             alert("Name and description cannot be empty");
             return;
         }
 
-
+        if (userId.trim() === "") {
+            alert("Please log in to create a group");
+            return;
+        }
         fetch('http://localhost:3001/Groups/', {
             method: 'POST',
             headers: {
@@ -125,7 +133,7 @@ function GroupInput() {
         <div className="GroupInput">
             <form onSubmit={handleSubmit}>
                 <h3>Group name:</h3> <input type='name' name="name" value = {details.name} onChange={handleChange} />
-                <h3>Group description:</h3> <textarea name="description" value = {details.description} onChange={handleChange} />
+                <h3>Group description:</h3> <textarea name="description" rows = "20" value = {details.description} onChange={handleChange} />
                 <button type="create">Create group</button>
             </form>
         </div>

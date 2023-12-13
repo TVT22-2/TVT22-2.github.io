@@ -47,10 +47,11 @@ router.post('/forgot', upload.none(), async (req, res) => {
 router.put('/change', upload.none(), async (req, res) => {
     let pw = req.body.password;
     let name = req.body.username;
-    console.log(name   + "/" + pw)
+    console.log(pw +" / "+name)
     const passHash = await bcrypt.hash(pw, 10)
     const check = await getNamedUsers(name);
-    const passCheck = await bcrypt.compare(pw, check)
+    console.log(check);
+    let passCheck = await bcrypt.compare(pw, check[0].password)
     console.log(passCheck);
     if(!passCheck){
         passput(passHash,name);
@@ -58,7 +59,6 @@ router.put('/change', upload.none(), async (req, res) => {
     }else{
         res.status(404).json({ error: 'Password same as new password' });
     }
-
 })
 router.post('/login', upload.none(), async (req, res) => {
     const name = req.body.username;
@@ -77,7 +77,7 @@ router.post('/login', upload.none(), async (req, res) => {
             res.status(401).json({ error: 'Password or Username incorrect' })
         }
     } 
-}else {
+ }else {
     res.status(404).json({ error: 'User not found' });
 }
 });

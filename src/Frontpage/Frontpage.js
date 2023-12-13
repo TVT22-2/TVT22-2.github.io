@@ -70,6 +70,7 @@ export default function Frontpage() {
                 {userID.value ?  
                 <div className="MovieNewsDate" id="MovieNewsDate"><button className="MovieNewsButton" onClick={()=>profilesender(i)}>Add to profile</button></div>
          : <></>}
+                <GroupSelectRender/>
                 <div className="MovieNewsPr"><p>{NewsArray[i].content}</p></div>
             </article>
         </li> 
@@ -82,6 +83,9 @@ export default function Frontpage() {
         console.log(NewsRow)
     return NewsRow;
         
+    }
+    function GroupSelectRender(){
+
     }
     function profilesender(i){
     console.log(NewsArray[i].title);
