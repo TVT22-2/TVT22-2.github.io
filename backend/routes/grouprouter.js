@@ -14,7 +14,6 @@ router.post('/Groups', async (req,res) => {
     const gname = req.body.name;
     const desc = req.body.description;
     const owner = req.body.ownerid;
-
     try {
         const groupid = await addGroup(gname, desc, owner);
         await addUserToGroup(owner,groupid);

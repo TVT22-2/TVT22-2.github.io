@@ -120,7 +120,7 @@ function GroupDetailsMenu() {
   const manageMembersButtonText = showManageMembersMenu ? 'Close' : 'Manage members';
 
   const isOwner = groupDetails.ownerid === parseInt(userID);
-
+  
   return (
     <div className="GroupDetailsMenu">
       <h1>Group Details</h1>

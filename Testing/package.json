@@ -11,10 +11,12 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.3.10",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
-    "axios": "^1.6.2"
+    "axios": "^1.6.2",
+    "chai-as-promised": "^7.1.1"
   },
   "transform": {
     "\\.js$": "<rootDir>/node_modules/babel-jest"
