@@ -84,7 +84,7 @@ function OwnReviews() {
     const [reviewsWithTitles, setReviewsWithTitles] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const reviewsPerPage = 2; // Number of reviews to display per page
-    const [totalPages, setTotalPages] = useState(1); 
+    const [totalPages, setTotalPages] = useState(1);
 
     /* Get reviews from the database */
     const fetchData = async () => {
@@ -263,7 +263,7 @@ function PostsAndNews() {
         setCurrentHeaderCurrentPage(3);
     };
 
-    const HandleEditPost = () => {
+    const HandleEditPost = async () => {
         setIsEditing(true);
     };
 
@@ -313,7 +313,7 @@ function PostsAndNews() {
                     {(() => {
                         switch (currentHeaderPage) {
                             case 1:
-                                return  <h1>Posts</h1>;
+                                return <h1>Posts</h1>;
                             case 2:
                                 return <h1>Newsfeed</h1>;
                             case 3:
@@ -338,9 +338,9 @@ function PostsAndNews() {
                                             <Timestamp date={post.date} />
                                             <Text Content={post.posttext} />
                                             <div className="ButtonDeleteAndEditPost">
-                                            <DeletePostButton postID={post.id} fetchPosts={fetchPosts} />
-                                            <button id="ButtonEditPost" onClick={HandleEditPost}>Edit Post</button>
-                                            </div>      
+                                                <DeletePostButton postID={post.id} fetchPosts={fetchPosts} />
+                                                <button id="ButtonEditPost" onClick={() => setIsEditing(true) }>Edit Post</button>
+                                            </div>
                                         </div>) : (
                                         <EditPostButton postID={post.id}
                                             fetchPosts={fetchPosts}
