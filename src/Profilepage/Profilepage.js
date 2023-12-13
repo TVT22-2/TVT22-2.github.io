@@ -84,7 +84,7 @@ function OwnReviews() {
     const [reviewsWithTitles, setReviewsWithTitles] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const reviewsPerPage = 2; // Number of reviews to display per page
-    const [totalPages, setTotalPages] = useState(1);
+    const [totalPages, setTotalPages] = useState(1); 
 
     /* Get reviews from the database */
     const fetchData = async () => {
