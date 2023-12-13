@@ -28,7 +28,6 @@ router.get('/getownreviewbydate/:id', async (req,res) => {
     }
 });
 
-
 router.get('/getmoviereview/:idmovie', async (req,res) => {
     try{
         res.json(await getMovieReview(req.params.idmovie));
@@ -44,7 +43,6 @@ router.get('/getmoviereviewbyrating/:idmovie', async (req,res) => {
         res.status(500).json({error: error.message})
     }
 });
-
 
 router.post('/addReview', async (req,res) => {
     const content = req.body.content;
@@ -63,7 +61,6 @@ router.post('/addReview', async (req,res) => {
         res.status(500).json({ error: 'Failed to add review' });
     }
 });
-
 
 router.post('/addFavorite', async (req,res) => {
     const user_id = req.body.user_id;
