@@ -89,6 +89,7 @@ function Moviepage() {
 
     const handleSortingChange = (event) => {
         setSortingOption(event.target.value);
+        setCurrentIndex(0);
     };
 
     useEffect(() => {
@@ -123,7 +124,6 @@ function Moviepage() {
         return (
             <div className="Moviepage">
                 <AvgScore averageScore={averageScore} />
-                {/* Pass handleSortingChange to InfoFooter */}
                 <InfoFooter
                     movieData={movieData}
                     reviews={reviews}
@@ -204,7 +204,7 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
                         <Genres movieData={movieData} />
                         <PG movieData={movieData} />
                         <ReleaseDate movieData={movieData} />
-                    </div>
+                        </div>
                     <Thumbnail movieData={movieData} />
                 </div>
                 <Description movieData={movieData} />
@@ -223,8 +223,8 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
                         <div className="buttonContainer">
                             {reviews.length > 0 && (
                                 <>
-                                    <button onClick={handlePrevReview}>Previous Review</button>
-                                    <button onClick={handleNextReview}>Next</button>
+                                    <button className='rating-button' onClick={handlePrevReview}>Previous Review</button>
+                                    <button className='rating-button' onClick={handleNextReview}>Next</button>
                                 </>
                             )}
                         </div>
@@ -405,7 +405,7 @@ function AddReview({ movieId, content, review }) {
 function AddReviewContent({ content, handleChange }) {
     return (
         <div className="AddReviewContent">
-            <textarea
+            <textarea className='ReviewContent'
                 name="content"
                 value={content}
                 onChange={handleChange}
