@@ -215,6 +215,7 @@ function GroupDetailsMenu() {
       ) : (
         <div className="MainContainer">
           {isUserInGroup ? (
+            <>
             <div className="MainContainer2"> 
               <div className="DetailElement">
               <h1>Group Details</h1>
@@ -256,24 +257,30 @@ function GroupDetailsMenu() {
               )}
                </div>
             </div>
+          <div className="NewsFeedContainer">
+          <NewsFeed/>
+          </div>
+          </>
           ) : (
             <>
+            <div className = "requestContainer">
+            <h1>{groupDetails.name}</h1>
+            <h4 className = "groupDesc">{groupDetails.description}</h4>
             <p>You are not part of this group</p>
-            <button onClick = {() => requestGroupJoin()}>Request to join</button>
+            <button className = "requestButton" onClick = {() => requestGroupJoin()}>Request to join</button>
+            </div>
             </>
           )}
         </div>
       )}
-    <div className="NewsFeedContainer">
-    <NewsFeed/>
-    </div>
+
     </div>
     </div>
     </>
   );
   function NewsFeed(){
     if(loading){
-      return <>Loading</>
+      return <></>
     } else {
       return <><h className="NewsMainHeader">News</h><NewsContainers/></>
     }
