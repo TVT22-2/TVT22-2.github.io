@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { userID } from "../components/react-signals";
 import { useNavigate } from "react-router-dom";
-
+import "./GroupPage.css"
 let requestArray = [];
+let newsArray = [];
 
 function GroupDetailsMenu() {
   const navigate = useNavigate();
@@ -24,11 +25,11 @@ function GroupDetailsMenu() {
     async function fetchData() {
       try {
         setLoading(true);
-
+       
         const groupDetailsData = await fetchGroupDetails(id);
         setGroupDetails(groupDetailsData);
 
-
+        NewsSetter();
         const userIDsFromGroup = await fetchUserIDs(id);
         const userIsInGroup = await checkIfUserInGroup(userIDsFromGroup, userID);
         setIsUserInGroup(userIsInGroup);
@@ -93,9 +94,11 @@ function GroupDetailsMenu() {
   useEffect(() => {
     async function fetchOwnerUsername() {
       try {
+        console.log("Userid" + id);
         const response = await fetch(`http://localhost:3001/ownerUsername/${id}`);
         const data = await response.json();
         setOwnerUsername(data.ownerUsername);
+        console.log(data.ownerUsername);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -202,19 +205,23 @@ function GroupDetailsMenu() {
   const manageMembersButtonText = showManageMembersMenu ? 'Close' : 'Manage members';
 
   const isOwner = groupDetails.ownerid === parseInt(userID);
-
+  
   return (
+    <>
+    <div className="GroupFlexContainer">
     <div className="GroupDetailsMenu">
-      <h1>Group Details</h1>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div>
+        <div className="MainContainer">
           {isUserInGroup ? (
-            <div>
+            <div className="MainContainer2"> 
+              <div className="DetailElement">
+              <h1>Group Details</h1>
               <p>Name: {groupDetails.name}</p>
               <p>Description: {groupDetails.description}</p>
               <p>Owner ID: {groupDetails.ownerid}</p>
+              </div>
               <div className="GroupMembers">
                 <h1>Member List</h1>
                 {groupUsernames.length > 0 ? (
@@ -228,7 +235,7 @@ function GroupDetailsMenu() {
                 ) : (
                   <p>No usernames available</p>
                 )}
-              </div>
+
               {isOwner && (
                 <button onClick={toggleManageMembersMenu}>{manageMembersButtonText}</button>
               )}
@@ -247,6 +254,7 @@ function GroupDetailsMenu() {
                   <Requestdata/>
                 </div>
               )}
+               </div>
             </div>
           ) : (
             <>
@@ -256,8 +264,53 @@ function GroupDetailsMenu() {
           )}
         </div>
       )}
+    <div className="NewsFeedContainer">
+    <NewsFeed/>
     </div>
+    </div>
+    </div>
+    </>
   );
+  function NewsFeed(){
+    if(loading){
+      return <>Loading</>
+    } else {
+      return <><h className="NewsMainHeader">News</h><NewsContainers/></>
+    }
+  }
+  function NewsContainers(){
+    let rows = [];
+    newsArray.forEach(element => {
+    console.log(element)
+    rows.push(
+    <div className="NewsElement">
+      <div className="NewsContent">
+        <h className="NewsHeader">{element.title}</h>
+        <p className="NewsDate">{element.date}</p>
+        <p className="NewsContent">{element.content}</p>
+      </div>
+    </div>
+    );
+  });
+  return rows;
+  }
+  async function NewsSetter(){
+    const jsondata = await NewsFetcher(); 
+    for(let i = 0; i<jsondata.length;i++){
+      let temparray = []
+      temparray ={
+        title: jsondata[i].title,
+        content: jsondata[i].posttext,
+        date: jsondata[i].date
+      }
+      newsArray.push(temparray);
+    }
+  }
+  async function NewsFetcher(){
+     let fetchresponse = fetch(`http://localhost:3001/post/groupBydate/${id}`)
+     .then(response => fetchresponse = response.json())
+     return fetchresponse;   
+  }
 }
 
 export default GroupDetailsMenu;

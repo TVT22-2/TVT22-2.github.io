@@ -46,6 +46,7 @@ async function getPostsByDateUser(end_user_id){
 
 async function getPostsByDateGroup(group_id){
     const result = await pgPool.query(sql.GET_POSTS_BY_DATE_GROUP, [group_id]);
+    console.log(result.rows);
     const rows = result.rows;
     return rows;
 }
