@@ -9,6 +9,8 @@ const sql = {
     GET_OWN_REVIEWS: 'SELECT * FROM review WHERE iduser = ($1)',
     GET_MOVIE_REVIEW: 'SELECT * FROM review where idmovie = ($1) ORDER BY date DESC',
     GET_MOVIE_REVIEW_BY_RATING: 'SELECT * FROM review where idmovie = ($1) ORDER BY review DESC'
+    GET_OWN_REVIEWS_BY_DATE: 'SELECT * FROM review WHERE iduser = ($1) ORDER BY date DESC',
+    GET_MOVIE_REVIEW: 'SELECT * FROM review where idmovie = ($1) ORDER BY date DESC'
 }
 
 async function addReview(content,date,review,iduser,idmovie){
@@ -36,6 +38,13 @@ async function getRecentReview(){
 
 async function getOwnReview(iduser){
     const result = await pgPool.query(sql.GET_OWN_REVIEWS, [iduser]);
+    const rows = result.rows;
+    return rows;
+
+}
+
+async function getOwnReviewByDate(iduser){
+    const result = await pgPool.query(sql.GET_OWN_REVIEWS_BY_DATE, [iduser]);
     const rows = result.rows;
     return rows;
 
