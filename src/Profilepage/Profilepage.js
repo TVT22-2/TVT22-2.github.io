@@ -204,8 +204,23 @@ function PostsAndNews() {
             let url = `http://localhost:3001/post/userByDate/${userId}`;
             const response = await fetch(url);
             const data = await response.json();
+            console.log(data[0]);
+            let urlParsed = [];
+            for(let i = 0;i<data.length;i++){
+                let temparray = [];
+                const link = (data[i].posttext.split("https"));
+                temparray = {
+                    id:data[i].id,
+                    title:data[i].title,
+                    date:data[i].date,
+                    posttext:link[0],
+                    link:"https"+link[1]
+                }
+                urlParsed.push(temparray);
+            }
+            console.log(urlParsed);
             setTotalPostPages(Math.ceil(data.length / postsPerPage));
-            setPosts(data);
+            setPosts(urlParsed);
         } catch (error) {
             console.error('Error fetching data at Profile / Posts:', error);
         } finally {
@@ -334,7 +349,9 @@ function PostsAndNews() {
                                 <div>
                                     {displayedItems.map((post, index) => (!isEditing ? (
                                         <div key={index} className="ProfilePagePosts">
-                                            <ProfileMovieTitle Title={post.title} />
+                                            {post.link !== "httpsundefined" ? 
+                                            <Link to = {post.link}><ProfileMovieTitle Title={post.title} /></Link>
+                                            : <ProfileMovieTitle Title={post.title} />}
                                             <Timestamp date={post.date} />
                                             <Text Content={post.posttext} />
                                             <div className="ButtonDeleteAndEditPost">
