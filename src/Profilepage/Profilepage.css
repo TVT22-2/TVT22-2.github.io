@@ -124,7 +124,7 @@
     border-bottom: 1px solid #030303;
 }
 
-/* Button sytling */
+/* Button styling */
 .PostsAndNews .Buttons {
     display: flex;
     width: 90%;
@@ -223,7 +223,6 @@
     margin: 0 0px 0px 35px;
     padding: 0;
     height: 100%;
-    /* Make the list take up the full height of the container */
 }
 
 /* Loading text styling */
@@ -272,13 +271,11 @@
     flex-direction: column;
     align-items: center;
     width: 70%;
-    /* Adjust as needed */
     margin: 15px 50px 365px 15px;
 }
 
 .NewPostForm {
     width: 80%;
-    /* Adjust as needed */
 }
 
 .InputField {
@@ -327,6 +324,7 @@
     .placeholderImage {
         margin-left: 15px;
     }
+    
     .ButtonDeleteContainer {
         display: flex;
         justify-content: center;  
