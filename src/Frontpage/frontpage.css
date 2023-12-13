@@ -246,6 +246,28 @@ width: 99vw;
     width: 100px;
     background-color: orange;
 }
+.GrouselectionContainer{
+    display: flex;
+    width: 100%;
+    min-width: 30ch;
+    height:30px;
+    justify-content: center;
+}
+.GroupSelection{
+    width: 6000px;
+    height: 60px;
+    font-size: 15px;
+}
+.GroupSubmitButton{
+    background-color: orange;
+}
+.optionValue{
+font-size: 20px;
+}
+.MovieNewsButton{
+    font-size: 15px;
+    width: 150px;
+}
 @media screen and (min-width: 768px) {
     .moviecontainer{
         flex-grow: 1;
