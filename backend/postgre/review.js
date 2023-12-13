@@ -7,7 +7,8 @@ const sql = {
     CHECK_FAVORITE: 'SELECT * FROM favorites WHERE user_id = ($1) and movie_id = ($2)',
     GET_RECENT_REVIEW: 'SELECT * FROM review ORDER BY date DESC LIMIT 5',
     GET_OWN_REVIEWS: 'SELECT * FROM review WHERE iduser = ($1)',
-    GET_MOVIE_REVIEW: 'SELECT * FROM review where idmovie = ($1) ORDER BY date DESC'
+    GET_MOVIE_REVIEW: 'SELECT * FROM review where idmovie = ($1) ORDER BY date DESC',
+    GET_MOVIE_REVIEW_BY_RATING: 'SELECT * FROM review where idmovie = ($1) ORDER BY review DESC'
 }
 
 async function addReview(content,date,review,iduser,idmovie){
@@ -46,5 +47,11 @@ async function getMovieReview(idmovie){
     return rows;
 }
 
+async function getMovieReviewByRating(idmovie){
+    const result = await pgPool.query(sql.GET_MOVIE_REVIEW_BY_RATING, [idmovie]);
+    const rows = result.rows;
+    return rows;
+}
 
-module.exports = {addReview, addFavorite, getRecentReview, getOwnReview, getMovieReview, deleteFavorite, checkFavorites};
+
+module.exports = {addReview, addFavorite, getRecentReview, getOwnReview, getMovieReview, deleteFavorite, checkFavorites, getMovieReviewByRating};
