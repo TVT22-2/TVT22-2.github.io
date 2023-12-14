@@ -180,11 +180,11 @@ function Home() {
                 let url = "https://image.tmdb.org/t/p/w500" + searcharray[i].posterpath;
                 if (searcharray[i].posterpath) {
                     row.push(
-                        <div className="searches"><img src={url} alt="No poster found" className="thumbnail"></img><Link to={"http://localhost:3000/" + movietv + "/" + searcharray[i].id} className="SearchTitle">{searcharray[i].title}</Link></div>
+                        <div className="searches"><img src={url} alt="No poster found" className="thumbnail"></img><Link to={"/" + movietv + "/" + searcharray[i].id} className="SearchTitle">{searcharray[i].title}</Link></div>
                     )
                 } else {
                     row.push(
-                        <div className="searches"><img src={noposter} alt="No poster found" className="thumbnail"></img><Link to={"http://localhost:3000/" + movietv + "/" + searcharray[i].id} className="SearchTitle">{searcharray[i].title}</Link></div>
+                        <div className="searches"><img src={noposter} alt="No poster found" className="thumbnail"></img><Link to={"/" + movietv + "/" + searcharray[i].id} className="SearchTitle">{searcharray[i].title}</Link></div>
                     )
                 }
             } else {

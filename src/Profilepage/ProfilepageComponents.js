@@ -60,7 +60,7 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl, fetchPo
             return;
         } else {
             // Use the updated state in the fetch request
-            fetch('http://localhost:3001/post/insertPostUser', {
+            fetch('/post/insertPostUser', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -97,7 +97,7 @@ function DeleteReviewButton({ reviewID, fetchReviews }) {
         let reviewid = reviewID
         const confirmation = window.confirm("Delete review?");
         if (confirmation) {
-            const response = await fetch(`http://localhost:3001/deleteReview`, {
+            const response = await fetch(`/deleteReview`, {
                 method: 'DELETE',
                 headers: {
                     'Content-type': 'application/json'
@@ -130,7 +130,7 @@ function DeletePostButton({ postID, fetchPosts }) {
         let postid = postID
         const confirmation = window.confirm("Delete post?");
         if (confirmation) {
-            const response = await fetch(`http://localhost:3001/deletePost`, {
+            const response = await fetch(`/deletePost`, {
                 method: 'DELETE',
                 headers: {
                     'Content-type': 'application/json'

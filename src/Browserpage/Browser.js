@@ -62,7 +62,7 @@ const [index3, setIndex3] = useState(1);
             let url = "https://image.tmdb.org/t/p/w500/" + props.var[i].posterpath;
             row.push(
                 <div className="Moviecontainer">
-                    <Link to={"http://localhost:3000/movie/" + props.var[i].id}>
+                    <Link to={"/movie/" + props.var[i].id}>
                     <img src={url} className="placeholderimage" alt="Hello"></img>
                     </Link>
                     <div className='infocontainer'>

@@ -39,7 +39,7 @@ function Profilepage() {
         //console.log(userid);
         const confirmation = window.confirm("Are you sure you want to delete your profile?");
         if (confirmation) {
-            const response = await fetch(`http://localhost:3001/delete`, {
+            const response = await fetch(`/delete`, {
                 method: 'DELETE',
                 headers: {
                     'Content-type': 'application/json'
@@ -70,7 +70,7 @@ function OwnReviews() {
     const fetchData = async () => {
         setLoading(true);
         try {
-            let url = `http://localhost:3001/getownreviewbydate/${userId}`;
+            let url = `/getownreviewbydate/${userId}`;
             const response = await fetch(url);
             const data = await response.json();
             //console.log(data);
@@ -137,7 +137,7 @@ function OwnReviews() {
                 displayedReviews.map((review, index) => (
                     /* Map the reviews to the page */
                     <div key={index} className="ProfilePageReview">
-                        <Link to={`http://localhost:3000/movie/${review.idmovie}`}><ProfileMovieTitle Title={review.title} /></Link>
+                        <Link to={`/movie/${review.idmovie}`}><ProfileMovieTitle Title={review.title} /></Link>
                         <Rating Rating={review.review} />
                         <Text Content={review.content} />
                         <DeleteReviewButton reviewID={review.id} fetchReviews={fetchData} />
@@ -181,7 +181,7 @@ function PostsAndNews() {
     const fetchPosts = async () => {
         setLoading(true);
         try {
-            let url = `http://localhost:3001/post/userByDate/${userId}`;
+            let url = `/post/userByDate/${userId}`;
             const response = await fetch(url);
             const data = await response.json();
             let urlParsed = [];
@@ -398,7 +398,7 @@ function FavouriteMovies() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/favorites/${userId}`;
+                let url = `/favorites/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 //console.log(data);
@@ -446,7 +446,7 @@ function FavouriteMovies() {
                 ) : (
                     favoritesWithTitles.map((favorite, index) => (
                         <li key={index} className="FavouriteMoviesListItem">
-                            <Link to={`http://localhost:3000/movie/${favorite.movie_id}`}><ProfileMovieTitle Title={favorite.title} /></Link>
+                            <Link to={`/movie/${favorite.movie_id}`}><ProfileMovieTitle Title={favorite.title} /></Link>
                         </li>
                     )))}
             </ol>
@@ -467,7 +467,7 @@ function Groups() {
         const fetchData = async () => {
             setLoading(true);
             try {
-                let url = `http://localhost:3001/Groups/${userId}`;
+                let url = `/Groups/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 setTotalPages(Math.ceil(data.length / groupsPerPage));
@@ -509,7 +509,7 @@ function Groups() {
                     displayedGroups.map((group, index) => (
                         /* Map the groups to the page */
                         <li key={index}>
-                            <Link to={`http://localhost:3000/Groupspage/${group.id}`} ><ProfileGroupName Name={group.name} /></Link>
+                            <Link to={`/Groupspage/${group.id}`} ><ProfileGroupName Name={group.name} /></Link>
                         </li>
                     ))
                 )}
@@ -557,7 +557,7 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
                 return;
 
             } else {
-                fetch('http://localhost:3001/post/insertPostUser', {
+                fetch('/post/insertPostUser', {
                     method: 'POST',
                     headers: {
                         "Content-Type": "application/json",
@@ -637,7 +637,7 @@ function EditPostButton({ postID, fetchPosts, postText, postTitle, onButtonCance
             setError("You must be logged in to edit a post.");
             return;
         } else {
-            fetch('http://localhost:3001/post/updatePostUser', {
+            fetch('/post/updatePostUser', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -78,7 +78,7 @@ async function idParser(movie_id){
 }
  }
  async function Reviewreg(){
-  let data = fetch("http://localhost:3001/getrecentreview")
+  let data = fetch("/getrecentreview")
   .then(response => data = response.json())
   .catch(error => console.log(error.message));
   return data; 

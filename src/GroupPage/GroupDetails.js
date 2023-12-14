@@ -47,7 +47,7 @@ function GroupDetailsMenu() {
 
     async function fetchGroupDetails(id) {
       try {
-        const response = await fetch(`http://localhost:3001/Groupspage/${id}`);
+        const response = await fetch(`/Groupspage/${id}`);
         const data = await response.json();
         return data[0];
       } catch (error) {
@@ -57,7 +57,7 @@ function GroupDetailsMenu() {
 
     async function fetchUserIDs(id) {
       try {
-        const response = await fetch(`http://localhost:3001/Groupuser/${id}`);
+        const response = await fetch(`/Groupuser/${id}`);
         const data = await response.json();
         return data;
       } catch (error) {
@@ -81,7 +81,7 @@ function GroupDetailsMenu() {
   useEffect(() => {
     async function fetchUsernameData() {
       try {
-        const groupUsernameData = await fetch(`http://localhost:3001/GetUsers/${id}`);
+        const groupUsernameData = await fetch(`/GetUsers/${id}`);
         const data = await groupUsernameData.json();
         setGroupUsernames(data.filter(username => username !== currentUserID));
       } catch (error) {
@@ -95,7 +95,7 @@ function GroupDetailsMenu() {
   useEffect(() => {
     async function fetchOwnerUsername() {
       try {
-        const response = await fetch(`http://localhost:3001/ownerUsername/${id}`);
+        const response = await fetch(`/ownerUsername/${id}`);
         const data = await response.json();
         setOwnerUsername(data.ownerUsername);
       } catch (error) {
@@ -115,7 +115,7 @@ function GroupDetailsMenu() {
       return;
     }
 
-    await fetch('http://localhost:3001/joinRequest', {
+    await fetch('/joinRequest', {
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({ userid, groupid })
@@ -127,7 +127,7 @@ function GroupDetailsMenu() {
   async function getRequests() {
     let groupid = id;
 
-    let response = await fetch('http://localhost:3001/getRequests/' + groupid, {
+    let response = await fetch('/getRequests/' + groupid, {
       headers: { 'Content-type': 'application/json' }
     })
     const data = await response.json();
@@ -138,7 +138,7 @@ function GroupDetailsMenu() {
     const confirmation = window.confirm(`Are you sure you want to remove ${userToRemove} from the group?`);
     if (confirmation) {
       try {
-        const response = await fetch(`http://localhost:3001/removeUserFromGroup/${userToRemove}/${id}`, {
+        const response = await fetch(`/removeUserFromGroup/${userToRemove}/${id}`, {
           method: 'DELETE'
         });
         const result = await response.json();
@@ -147,7 +147,7 @@ function GroupDetailsMenu() {
       }
     }
     try {
-      const groupUsernameData = await fetch(`http://localhost:3001/GetUsers/${id}`);
+      const groupUsernameData = await fetch(`/GetUsers/${id}`);
       const data = await groupUsernameData.json();
       setGroupUsernames(data.filter(username => username !== currentUserID));
     } catch (error) {
@@ -176,21 +176,21 @@ function GroupDetailsMenu() {
 
     if (confirmation) {
       const value = true;
-      await fetch("http://localhost:3001/joinRequest", {
+      await fetch("/joinRequest", {
         method: 'PUT',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ userid, groupid, value })
       })
     } else {
       const value = false;
-      await fetch("http://localhost:3001/joinRequest", {
+      await fetch("/joinRequest", {
         method: 'PUT',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ userid, groupid, value })
       })
     }
     try {
-      const groupUsernameData = await fetch(`http://localhost:3001/GetUsers/${id}`);
+      const groupUsernameData = await fetch(`/GetUsers/${id}`);
       const data = await groupUsernameData.json();
       setGroupUsernames(data.filter(username => username !== currentUserID));
     } catch (error) {
@@ -310,7 +310,7 @@ function GroupDetailsMenu() {
         alert("Title and content cannot be empty");
         return;
       }
-      await fetch('http://localhost:3001/post/insertPostGroup', {
+      await fetch('/post/insertPostGroup', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
@@ -374,7 +374,7 @@ function GroupDetailsMenu() {
     setNews(!newsLoader);
   }
   async function NewsFetcher() {
-    let fetchresponse = fetch(`http://localhost:3001/post/groupBydate/${id}`)
+    let fetchresponse = fetch(`/post/groupBydate/${id}`)
       .then(response => fetchresponse = response.json())
     return fetchresponse;
   }

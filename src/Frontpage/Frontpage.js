@@ -54,7 +54,7 @@ export default function Frontpage() {
     );
     } 
     function fetchgroups(){
-        let fetchresponse = fetch(`http://localhost:3001/Groups/${userID.value}`)
+        let fetchresponse = fetch(`/Groups/${userID.value}`)
         .then(response => fetchresponse = response.json())
         return fetchresponse;
     }
@@ -112,7 +112,7 @@ export default function Frontpage() {
             date: date,
             group_id: Groupselection
         }
-     fetch("http://localhost:3001/post/insertPostGroup",{
+     fetch("/post/insertPostGroup",{
         method: 'POST',
         headers: {'Content-type': 'application/json'}, 
         body: JSON.stringify(updatedDetails)
@@ -141,7 +141,7 @@ export default function Frontpage() {
         date: dateString.toISOString(),
         end_user_id: userID.value
     }
-    fetch('http://localhost:3001/post/insertPostUser', {
+    fetch('/post/insertPostUser', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -175,7 +175,7 @@ export default function Frontpage() {
         if(ReviewArray[i]!==undefined){
          reviews.push(
         <div className="FrontpageReviewContainer">
-        <Link to={"http://localhost:3000/movie/" + ReviewArray[i].id}>
+        <Link to={"/movie/" + ReviewArray[i].id}>
         <div className="verticaltextTitle">{ReviewArray[i].movietitle}</div>
         </Link>
         <div className="verticaltextScore">{ReviewArray[i].review}/5</div>
@@ -204,7 +204,7 @@ export default function Frontpage() {
         return (
             <>
             <li className="moviecontainer">
-                <Link to={"http://localhost:3000/movie/" + RecentMovies[index].id}>
+                <Link to={"/movie/" + RecentMovies[index].id}>
                 <img src={url} alt="bigdogstatus" className="recentImage"></img>
                 </Link>
                 <article className="movieinfo">
@@ -228,7 +228,7 @@ export default function Frontpage() {
         return (
         <div className="verticalcontainer">
         <div className="ImageContainer">
-        <Link to={"http://localhost:3000/"+props.movie+"/" + props.id}>
+        <Link to={"/"+props.movie+"/" + props.id}>
         <img src={imageurl} alt="bigdogstatus" className="elementimage"/>
         </Link>
         </div>

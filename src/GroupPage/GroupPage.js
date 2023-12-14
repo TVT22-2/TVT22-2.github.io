@@ -33,9 +33,9 @@ function GroupsL() {
             setLoading(true);
             console.log('set loading true' + selectedOption);
             let data = "";
-            let url = 'http://localhost:3001/Groups/';
+            let url = '/Groups/';
             if (selectedOption === 'OwnGroups') {
-                url = `http://localhost:3001/Groups/${userID.value}`;
+                url = `/Groups/${userID.value}`;
             }
 
             data = await fetch(url)
@@ -113,7 +113,7 @@ function GroupInput() {
             alert("Please log in to create a group");
             return;
         }
-        fetch('http://localhost:3001/Groups/', {
+        fetch('/Groups/', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

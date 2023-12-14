@@ -22,7 +22,7 @@ const GroupListG = (props) => {
             onMouseEnter={() => handleMouseEnter(group)}
             onMouseLeave={handleMouseLeave}
           >
-            <Link to={`http://localhost:3000/Groupspage/${group.id}`}>
+            <Link to={`/Groupspage/${group.id}`}>
               {group.name}
             </Link>
             {hoveredGroup && hoveredGroup.id === group.id && (

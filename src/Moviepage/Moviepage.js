@@ -53,13 +53,13 @@ async function GetMovieData(movieId) {
 }
 
 async function GetReviews(movieId) {
-    const response = await fetch(`http://localhost:3001/getmoviereview/${movieId}`);
+    const response = await fetch(`/getmoviereview/${movieId}`);
     const reviews = await response.json();
     return reviews;
 }
 
 async function GetReviewsByRating(movieId){
-    const response = await fetch(`http://localhost:3001/getmoviereviewbyrating/${movieId}`)
+    const response = await fetch(`/getmoviereviewbyrating/${movieId}`)
     const reviews = await response.json();
     return reviews;
 }
@@ -250,7 +250,7 @@ function AddFavorite({ movieId }) {
         const checkIfFavorite = async () => {
             try {
                 const response = await fetch(
-                    `http://localhost:3001/checkFavorites?user_id=${userID}&movie_id=${movieId}`,
+                    `/checkFavorites?user_id=${userID}&movie_id=${movieId}`,
                     {
                         method: 'GET',
                         headers: {
@@ -278,7 +278,7 @@ function AddFavorite({ movieId }) {
     const handleToggleFavorite = async () => {
         try {
             const response = await fetch(
-                `http://localhost:3001/checkFavorites?user_id=${userID}&movie_id=${movieId}`,
+                `/checkFavorites?user_id=${userID}&movie_id=${movieId}`,
                 {
                     method: 'GET',
                     headers: {
@@ -291,7 +291,7 @@ function AddFavorite({ movieId }) {
                 const { isFavorite } = await response.json();
                 if (isFavorite === true) {
                     const deleteResponse = await fetch(
-                        `http://localhost:3001/deleteFavorite?user_id=${userID}&movie_id=${movieId}`,
+                        `/deleteFavorite?user_id=${userID}&movie_id=${movieId}`,
                         {
                             method: 'DELETE',
                             headers: {
@@ -308,7 +308,7 @@ function AddFavorite({ movieId }) {
                         alert('Failed to remove from favorites. Please try again.');
                     }
                 } else {
-                    const addResponse = await fetch('http://localhost:3001/addFavorite', {
+                    const addResponse = await fetch('/addFavorite', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -366,7 +366,7 @@ function AddReview({ movieId, content, review }) {
         try {
             const currentDate = new Date();
             const formattedDate = currentDate.toISOString();
-            const response = await fetch('http://localhost:3001/addReview', {
+            const response = await fetch('/addReview', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
