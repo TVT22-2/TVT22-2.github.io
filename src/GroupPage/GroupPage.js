@@ -3,15 +3,14 @@ import "./GroupPage.css"
 import GroupListG from "./GroupList";
 import { userID } from "../components/react-signals"
 
-const userId = userID.value;
-
 console.log(userID);
 
 function GroupMainMenu() {
+
     return (
         <div className="GroupMainMenu">
-            <GroupsL />
-            <CreateGroup />
+            <GroupsL/>
+            <CreateGroup/>
         </div>
     )
 }
@@ -31,7 +30,6 @@ function GroupsL() {
 
         const fetchData = async () => {
             setLoading(true);
-            console.log('set loading true' + selectedOption);
             let data = "";
             let url = 'http://localhost:3001/Groups/';
             if (selectedOption === 'OwnGroups') {
@@ -44,7 +42,6 @@ function GroupsL() {
                 )
                 .catch(err => console.error(err));
             setGroups(data);
-            console.log(data);
 
         };
         await fetchData();
@@ -103,7 +100,6 @@ function GroupInput() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (details.name.trim() === "" || details.description.trim() === "") {
             alert("Name and description cannot be empty");
             return;
@@ -113,7 +109,7 @@ function GroupInput() {
             alert("Please log in to create a group");
             return;
         }
-        fetch('http://localhost:3001/Groups/', {
+        await fetch('http://localhost:3001/Groups/', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -123,7 +119,6 @@ function GroupInput() {
         }).then(() => {
             console.log('new group added');
             setDetails(initialDetails);
-            window.location.reload();
         })
     }
 
