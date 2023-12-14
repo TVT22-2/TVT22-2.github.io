@@ -14,6 +14,16 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static('public'));
 
+const path = require('path');
+
+app.all("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "./public/index.html"), function (err) {
+      if (err) {
+        res.status(500).send(err);
+      }
+    });
+  });
+
 app.use('/', deleteRouter);
 app.use('/', loginRouter);
 app.use('/', groupRouter);
