@@ -158,7 +158,7 @@ function OwnReviews() {
                 displayedReviews.map((review, index) => (
                     /* Map the reviews to the page */
                     <div key={index} className="ProfilePageReview">
-                        <ProfileMovieTitle Title={review.title} />
+                        <Link to={`http://localhost:3000/movie/${review.idmovie}`}><ProfileMovieTitle Title={review.title} /></Link>
                         <Rating Rating={review.review} />
                         <Text Content={review.content} />
                         <DeleteReviewButton reviewID={review.id} fetchReviews={fetchData} />
@@ -348,7 +348,7 @@ function PostsAndNews() {
                     switch (currentHeaderPage) {
                         case 1:
                             return (
-                                <div className="TyhjaDivi">
+                                <div className="ProfilePagePostsContainer">
                                     {displayedItems.map((post, index) => (
                                         <div key={index} className="ProfilePagePosts">
                                             {post.link !== "httpsundefined" ?
@@ -468,8 +468,8 @@ function FavouriteMovies() {
                     <p className="Loader">Loading...</p>
                 ) : (
                     favoritesWithTitles.map((favorite, index) => (
-                        <li key={index}>
-                            <ProfileMovieTitle Title={favorite.title} />
+                        <li key={index} className="FavouriteMoviesListItem">
+                            <Link to={`http://localhost:3000/movie/${favorite.movie_id}`}><ProfileMovieTitle Title={favorite.title} /></Link>
                         </li>
                     )))}
             </ol>

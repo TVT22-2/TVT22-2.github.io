@@ -84,6 +84,7 @@
 .ProfilePagePosts .Text {
     height: 400px;
     text-align: left;
+    overflow: auto;
 }
 
 .ProfilePageNews .Text {
@@ -156,13 +157,13 @@ a.NewsfeedLink {
 .ButtonDeleteAndEditPost {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;  
+    justify-content: space-between;
     width: 90%;
 }
 
 .ButtonDeleteContainer {
     display: flex;
-    justify-content: center;  
+    justify-content: center;
 }
 
 #ButtonLeft,
@@ -217,7 +218,21 @@ a.NewsfeedLink {
 }
 
 .FavouriteMoviesList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     overflow: auto;
+    vertical-align: middle;
+}
+
+.FavouriteMoviesListItem {
+    display: flex;
+    justify-content: left;
+    width: 100%;
+}
+
+.FavouriteMoviesList a {
+    width: 90%;
 }
 
 .FavouriteMoviesAndGroups .Groups {
@@ -323,7 +338,8 @@ a.NewsfeedLink {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
-    box-sizing: border-box;;
+    box-sizing: border-box;
+    ;
 }
 
 
@@ -332,15 +348,18 @@ a.NewsfeedLink {
     padding: 8px;
     height: 200px;
     margin-bottom: 10px;
-    box-sizing: border-box;;
+    box-sizing: border-box;
+    ;
 }
 
 .ErrorMessage {
     color: red;
 }
-.TyhjaDivi{ 
-    width: 400px;
+
+.ProfilePagePostsContainer {
+    width: 90%;
 }
+
 /*Mobile*/
 @media only screen and (max-width: 900px) {
 
@@ -370,8 +389,9 @@ a.NewsfeedLink {
 
     .ButtonDeleteContainer {
         display: flex;
-        justify-content: center;  
+        justify-content: center;
     }
+
     .ButtonDelete {
         margin-left: 0px;
     }
