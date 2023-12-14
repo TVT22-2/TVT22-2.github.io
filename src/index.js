@@ -22,7 +22,7 @@ root.render(
         <Route path="/login" element={<Login />}/>
         <Route path="/" element={<Frontpage />} />
         <Route path="/Profile/:userId" element={<Profilepage />} />
-        <Route path="/Groups" element={<GroupPage />} />  
+        <Route path="/GroupsMenu" element={<GroupPage />} />  
         <Route path="/Groupspage/:id" element={<GroupDetails />} />
         <Route path="/movie/:movieId" element={<Moviepage />} />
         <Route path="/tv/:movieId" element={<Moviepage />} />

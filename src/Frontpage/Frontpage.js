@@ -13,7 +13,10 @@ export default function Frontpage() {
     const [isLoading, setLoading] = useState(true); 
     useEffect(() => {
         const fetchdata = async () => {
+            console.log(userID.value)
+            if(userID.value){
             parsegroups();
+            }
             window.scrollTo(0, 0)
             await ReviewGetter();   
             await MovieDBRegData("trend", 1,1)

@@ -20,6 +20,7 @@ import {
 } from "./ProfilepageComponents.js";
 
 function Profilepage() {
+    console.log(userID.value);
     const navigate = useNavigate();
     return (
         <>
@@ -549,10 +550,10 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
     const submitHandler = async (e) => {
         e.preventDefault();
         if (details.title !== "" && details.posttext !== "") {
-            if (userID.value !== userId) {
+            if (userID.value !== parseInt(userId)) {
                 setError("You cannot add posts to another user's profile.");
                 return;
-            } else if (userID === "" || userID === null || userID === undefined) {
+            } else if (userID.value === "" || userID === null || userID === undefined) {
                 setError("You must be logged in to add a post.");
                 return;
 
@@ -628,9 +629,8 @@ function EditPostButton({ postID, fetchPosts, postText, postTitle, onButtonCance
     };
 
     const submitHandler = async (e) => {
-        e.preventDefault();
-
-        if (userID.value !== userId) {
+        e.preventDefault(); 
+        if (userID.value !== parseInt(userId)) {
             setError("You cannot edit another user's posts.");
             return;
         } else if (userID === "" || userID === null || userID === undefined) {
