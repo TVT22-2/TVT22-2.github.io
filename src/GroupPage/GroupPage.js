@@ -104,14 +104,12 @@ function GroupInput() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-
-
         if (details.name.trim() === "" || details.description.trim() === "") {
             alert("Name and description cannot be empty");
             return;
         }
 
-        if (userId.trim() === "") {
+        if (userID.value.trim() === "") {
             alert("Please log in to create a group");
             return;
         }
