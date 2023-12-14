@@ -38,6 +38,7 @@ function Home() {
     useEffect(() => {
         if (searchbaropen) {
             adult = false;
+            year = "";
         }
     }, [searchbaropen])
     return (
@@ -50,8 +51,10 @@ function Home() {
                     <div className={`dropdownmenu ${open ? 'active' : 'inactive'}`}>
                         <Dropdownelements text="Home" href="/" Header="Login" />
                         <Dropdownelements text="Browse" href="/Browse" Header="Browse" />
-                        <Dropdownelements text="Profile" href={`/Profile/${userID}`} Header="Profile" />
-                        <Dropdownelements text="Groups" href="/Groups" Header="Groups" />
+                        {token.value.length > 0 ?  <Dropdownelements text="Profile" href={`/Profile/${userID}`} Header="Profile" /> : 
+                        <></>
+                        }
+                        <Dropdownelements text="Groups" href="/GroupsMenu" Header="GroupsMenu" />
                         <Dropdownelements text={`${token.value.length > 0 ? 'Logout' : 'Login'}`} href="/login" Header="Login" />
                         {token.value.length > 0 ? <></> :
                             <Dropdownelements text="Register" href="/Register" Header="Register" />
@@ -99,9 +102,9 @@ function Home() {
                 <>
                     <Result state={state} />
                     <div className="SearchButtonContainer">
-                        <button onClick={() => uiPage !== 1 ? refreshminus() : console.log("hello")} className="SearchButtonPrev">prev</button>
+                        <button onClick={() => uiPage !== 1 ? refreshminus() : <></>} className="SearchButtonPrev">prev</button>
                         {totalpages !== 1 ? <p>{uiPage + "/" + totalpages * multiplication}</p> : <p>{uiPage + "/" + totalpages}</p>}
-                        <button onClick={() => curpage < totalpages ? refresh() : console.log("hello")} className="SearchButtonNext">next</button>
+                        <button onClick={() => curpage < totalpages ? refresh() : <></>} className="SearchButtonNext">next</button>
                     </div>
                 </>
                 :
@@ -122,7 +125,6 @@ function Home() {
     }
     function adultsetter(event) {
         adult = event.target.checked;
-        console.log(event.target.checked);
     }
     async function sumbit(e) {
         if (e.key === "Enter") {
@@ -131,7 +133,6 @@ function Home() {
             if (!searchbaropen) {
                 year = "";
                 adult = false;
-
             }
             curquery = message;
             setsearches(false);

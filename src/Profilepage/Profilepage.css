@@ -83,8 +83,8 @@
 
 .ProfilePagePosts .Text {
     height: 400px;
-    overflow: auto;
     text-align: left;
+    overflow: auto;
 }
 
 .ProfilePageNews .Text {
@@ -115,6 +115,7 @@
 .ProfilePagePosts .ProfileMovieTitle {
     border-bottom: 1px solid #030303;
     width: 90%;
+    justify-content: center;
 }
 
 .Timestamp {
@@ -124,7 +125,11 @@
     border-bottom: 1px solid #030303;
 }
 
-/* Button sytling */
+a.NewsfeedLink {
+    margin-left: 35px;
+}
+
+/* Button styling */
 .PostsAndNews .Buttons {
     display: flex;
     width: 90%;
@@ -149,19 +154,16 @@
     margin: 0px 35px 5px 40px;
 }
 
-.ButtonDeleteContainer {
-    display: flex;
-    justify-content: center;  
-}
-
-.DeletePostButton {
+.ButtonDeleteAndEditPost {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     width: 90%;
 }
 
-.DeletePostButton #DeletePostButton {
-    justify-content: left;
+.ButtonDeleteContainer {
+    display: flex;
+    justify-content: center;
 }
 
 #ButtonLeft,
@@ -173,7 +175,9 @@
 #Button,
 #ButtonDelete,
 #DeleteReviewButton,
-#DeletePostButton {
+#DeletePostButton,
+#ButtonEditPost,
+#ButtonOpenEditPost {
     background-color: orange;
     border: 1px solid #030303;
 }
@@ -185,7 +189,9 @@
 #ButtonCancel:hover,
 #ButtonCopyProfileLink:hover,
 #Button:hover,
-#ButtonDelete:hover {
+#ButtonDelete:hover,
+#ButtonEditPost:hover,
+#ButtonOpenEditPost:hover {
     background-color: #FFFF00;
 }
 
@@ -212,7 +218,21 @@
 }
 
 .FavouriteMoviesList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     overflow: auto;
+    vertical-align: middle;
+}
+
+.FavouriteMoviesListItem {
+    display: flex;
+    justify-content: left;
+    width: 100%;
+}
+
+.FavouriteMoviesList a {
+    width: 90%;
 }
 
 .FavouriteMoviesAndGroups .Groups {
@@ -224,7 +244,6 @@
     margin: 0 0px 0px 35px;
     padding: 0;
     height: 100%;
-    /* Make the list take up the full height of the container */
 }
 
 /* Loading text styling */
@@ -273,16 +292,21 @@
     flex-direction: column;
     align-items: center;
     width: 70%;
-    /* Adjust as needed */
     margin: 15px 50px 365px 15px;
 }
 
 .NewPostForm {
     width: 80%;
-    /* Adjust as needed */
 }
 
-.InputField {
+.NewPost .InputTitleField {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.NewPost .InputContentField {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
@@ -298,12 +322,46 @@
     width: 50%;
 }
 
+.EditPost {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    margin: 15px 50px 15px 15px;
+}
+
+.EditPostForm {
+    width: 100%;
+}
+
+.EditPost .InputTitleField {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    ;
+}
+
+
+.EditPost .InputContentField {
+    width: 100%;
+    padding: 8px;
+    height: 200px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    ;
+}
+
 .ErrorMessage {
     color: red;
 }
 
+.ProfilePagePostsContainer {
+    width: 90%;
+}
+
 /*Mobile*/
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 900px) {
 
     /*Main container*/
     .Profilepage {
@@ -328,10 +386,12 @@
     .placeholderImage {
         margin-left: 15px;
     }
+
     .ButtonDeleteContainer {
         display: flex;
-        justify-content: center;  
+        justify-content: center;
     }
+
     .ButtonDelete {
         margin-left: 0px;
     }

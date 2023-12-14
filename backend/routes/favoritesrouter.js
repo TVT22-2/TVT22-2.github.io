@@ -20,7 +20,6 @@ router.post('/addFavorite', async (req, res) => {
         await insertFavoritesUser(user_id, movie_id);
         res.status(200).send('InsertFavorites added successfully');
     } catch (error) {
-        console.error(error);
         res.status(500).send('InsertFavorites failed to add');
     }
 });

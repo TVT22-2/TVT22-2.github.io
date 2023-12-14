@@ -1,5 +1,5 @@
 import image from "../resources/postsplaceholder.png";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profilepage.css";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -52,7 +52,7 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl, fetchPo
             date: article.date,
         };
 
-        if (userID != userIdUrl) {
+        if (userID.value != userIdUrl) {
             setError("You cannot add news to another user's profile.");
             return;
         } else if (userID === "" || userID === null || userID === undefined) {
@@ -68,7 +68,6 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl, fetchPo
                 body: JSON.stringify(updatedDetails) // Use the updated details
 
             }).then(() => {
-                console.log('New newspost added');
                 setDetails(initialDetails);
                 fetchPosts();
             })
@@ -89,7 +88,7 @@ function AddNewsToProfileButtonAndLink({ ButtonText, article, userIdUrl, fetchPo
     );
 }
 
-function DeleteReviewButton ({ reviewID, fetchReviews }){
+function DeleteReviewButton({ reviewID, fetchReviews }) {
 
     const navigate = useNavigate();
 
@@ -122,14 +121,13 @@ function DeleteReviewButton ({ reviewID, fetchReviews }){
     );
 }
 
-function DeletePostButton ({ postID, fetchPosts }){
+function DeletePostButton({ postID, fetchPosts }) {
 
     const navigate = useNavigate();
 
     async function deletePost() {
         let userid = userID.value;
         let postid = postID
-        console.log("USER and POST ID:" +userid, postid)
         const confirmation = window.confirm("Delete post?");
         if (confirmation) {
             const response = await fetch(`http://localhost:3001/deletePost`, {
@@ -153,6 +151,16 @@ function DeletePostButton ({ postID, fetchPosts }){
             <button id="DeletePostButton" onClick={deletePost}>
                 Delete</button>
         </div>
+    );
+}
+
+function ButtonOpenEditPost({ ButtonOpenEditPost, onButtonOpenEditPostClick }) {
+
+    return (
+        <>
+            <button id="ButtonOpenEditPost" onClick={onButtonOpenEditPostClick}>
+                {ButtonOpenEditPost}</button>
+        </>
     );
 }
 
@@ -239,4 +247,4 @@ function Text({ Content }) {
     );
 }
 
-export { Image, Timestamp, AddNewsToProfileButtonAndLink, DeleteReviewButton, DeletePostButton, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, ButtonsGroups };
+export { Image, Timestamp, AddNewsToProfileButtonAndLink, DeleteReviewButton, DeletePostButton, ButtonOpenEditPost, Buttons, ButtonsPostsAndNewsfeed, ProfileGroupName, ProfileMovieTitle, Rating, Text, ButtonsGroups };

@@ -47,12 +47,9 @@ router.post('/forgot', upload.none(), async (req, res) => {
 router.put('/change', upload.none(), async (req, res) => {
     let pw = req.body.password;
     let name = req.body.username;
-    console.log(pw +" / "+name)
     const passHash = await bcrypt.hash(pw, 10)
     const check = await getNamedUsers(name);
-    console.log(check);
     let passCheck = await bcrypt.compare(pw, check[0].password)
-    console.log(passCheck);
     if(!passCheck){
         passput(passHash,name);
         res.status(200).json({ Success: true });
@@ -63,7 +60,7 @@ router.put('/change', upload.none(), async (req, res) => {
 router.post('/login', upload.none(), async (req, res) => {
     const name = req.body.username;
     const pw = req.body.password;
-    console.log(name + " / " +pw)
+    console.log(name + " / " + pw)
     const array = await getNamedUsers(name);
     if(array != null){
     const pwCheck = array[0].password;

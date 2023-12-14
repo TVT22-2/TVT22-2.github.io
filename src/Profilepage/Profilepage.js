@@ -16,31 +16,12 @@ import {
     Rating,
     Text,
     ButtonsGroups,
+    ButtonOpenEditPost
 } from "./ProfilepageComponents.js";
 
 function Profilepage() {
+    console.log(userID.value);
     const navigate = useNavigate();
-
-    // Placeholder for checking if the user is logged in
-    /*if (userID.value === "" || userID.value === null) {
-        return (
-            <div className="Profilepage">
-                <h1>You must be logged in to view this page</h1>
-            </div>
-        )
-    } else {
-        return (
-            <>
-                <div className="Profilepage">
-                    <OwnReviews />
-                    <FavouriteMoviesAndGroups />
-                    <PostsAndNews />
-                </div>
-                <button onClick={Deletion}>hello</button>
-            </>
-        )
-    }*/
-
     return (
         <>
             <div className="Profilepage">
@@ -157,10 +138,10 @@ function OwnReviews() {
                 displayedReviews.map((review, index) => (
                     /* Map the reviews to the page */
                     <div key={index} className="ProfilePageReview">
-                        <ProfileMovieTitle Title={review.title} />
+                        <Link to={`http://localhost:3000/movie/${review.idmovie}`}><ProfileMovieTitle Title={review.title} /></Link>
                         <Rating Rating={review.review} />
                         <Text Content={review.content} />
-                        <DeleteReviewButton reviewID={review.id} fetchReviews={fetchData}/>
+                        <DeleteReviewButton reviewID={review.id} fetchReviews={fetchData} />
                     </div>
                 ))
             )}
@@ -193,6 +174,7 @@ function PostsAndNews() {
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
     const [totalPostPages, setTotalPostPages] = useState(1);
     const [totalNewsPages, setTotalNewsPages] = useState(1);
+    const [isEditing, setIsEditing] = useState(false);
     const postsPerPage = 1;
     const newsPerPage = 2;
 
@@ -203,8 +185,21 @@ function PostsAndNews() {
             let url = `http://localhost:3001/post/userByDate/${userId}`;
             const response = await fetch(url);
             const data = await response.json();
+            let urlParsed = [];
+            for (let i = 0; i < data.length; i++) {
+                let temparray = [];
+                const link = (data[i].posttext.split("https"));
+                temparray = {
+                    id: data[i].id,
+                    title: data[i].title,
+                    date: data[i].date,
+                    posttext: link[0],
+                    link: "https" + link[1]
+                }
+                urlParsed.push(temparray);
+            }
             setTotalPostPages(Math.ceil(data.length / postsPerPage));
-            setPosts(data);
+            setPosts(urlParsed);
         } catch (error) {
             console.error('Error fetching data at Profile / Posts:', error);
         } finally {
@@ -255,14 +250,24 @@ function PostsAndNews() {
 
     const handlePostPage = () => {
         setCurrentHeaderCurrentPage(1);
+        setCurrentPage(1);
     };
 
     const HandleNewPost = () => {
         setCurrentHeaderCurrentPage(3);
     };
 
+    const HandleEditPost = () => {
+        setIsEditing(true);
+    };
+
+    const handleCancelEditClick = () => {
+        setIsEditing(false);
+    };
+
     const handleNewsfeedPage = () => {
         setCurrentHeaderCurrentPage(2);
+        setCurrentPage(1);
     };
 
     const handleNextPage = () => {
@@ -321,18 +326,36 @@ function PostsAndNews() {
                     switch (currentHeaderPage) {
                         case 1:
                             return (
-                                <div>
+                                <div className="ProfilePagePostsContainer">
                                     {displayedItems.map((post, index) => (
                                         <div key={index} className="ProfilePagePosts">
-                                            <ProfileMovieTitle Title={post.title} />
+                                            {post.link !== "httpsundefined" ?
+                                                <Link to={post.link} className="NewsfeedLink"><ProfileMovieTitle Title={post.title} /></Link>
+                                                : <ProfileMovieTitle Title={post.title} />}
                                             <Timestamp date={post.date} />
                                             <Text Content={post.posttext} />
-                                            <DeletePostButton postID={post.id} fetchPosts={fetchPosts}  />
-                                            {/*<Image />*/}
+                                            <div className="ButtonDeleteAndEditPost">
+                                                <DeletePostButton postID={post.id} fetchPosts={fetchPosts} />
+                                                {/* Toggle rendering based on isEditing */}
+                                                {isEditing && post.link === "httpsundefined" ? (
+                                                    <EditPostButton
+                                                        postID={post.id}
+                                                        fetchPosts={fetchPosts}
+                                                        postText={post.posttext}
+                                                        postTitle={post.title}
+                                                        onButtonCancelEditClick={handleCancelEditClick}
+                                                    />
+                                                ) : (
+                                                    <ButtonOpenEditPost
+                                                        ButtonOpenEditPost="Edit Post"
+                                                        onButtonOpenEditPostClick={()=> post.link === "httpsundefined" ? HandleEditPost() : <></>}
+                                                    />
+                                                )}
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
-                            );
+                            )
                         case 2:
                             return <div>
                                 {displayedItems.map((article, index) => (
@@ -350,6 +373,7 @@ function PostsAndNews() {
                             return null;
                     }
                 })()}
+
                 <ButtonsPostsAndNewsfeed
                     ButtonLeft="Previous"
                     ButtonMiddle="New Post"
@@ -422,8 +446,8 @@ function FavouriteMovies() {
                     <p className="Loader">Loading...</p>
                 ) : (
                     favoritesWithTitles.map((favorite, index) => (
-                        <li key={index}>
-                            <ProfileMovieTitle Title={favorite.title} />
+                        <li key={index} className="FavouriteMoviesListItem">
+                            <Link to={`http://localhost:3000/movie/${favorite.movie_id}`}><ProfileMovieTitle Title={favorite.title} /></Link>
                         </li>
                     )))}
             </ol>
@@ -447,7 +471,6 @@ function Groups() {
                 let url = `http://localhost:3001/Groups/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
                 setTotalPages(Math.ceil(data.length / groupsPerPage));
                 setGroups(data);
             } catch (error) {
@@ -474,7 +497,6 @@ function Groups() {
     const startIndex = (currentPage - 1) * groupsPerPage;
     const endIndex = startIndex + groupsPerPage;
     const displayedGroups = groups.slice(startIndex, endIndex);
-
     return (
         <div className="Groups">
             <div className="GroupsHeader">
@@ -488,7 +510,7 @@ function Groups() {
                     displayedGroups.map((group, index) => (
                         /* Map the groups to the page */
                         <li key={index}>
-                            <Link to = {`http://localhost:3000/Groupspage/${group.id}`} ><ProfileGroupName Name={group.name} /></Link>
+                            <Link to={`http://localhost:3000/Groupspage/${group.id}`} ><ProfileGroupName Name={group.name} /></Link>
                         </li>
                     ))
                 )}
@@ -527,28 +549,31 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
 
     const submitHandler = async (e) => {
         e.preventDefault();
+        if (details.title !== "" && details.posttext !== "") {
+            if (userID.value !== parseInt(userId)) {
+                setError("You cannot add posts to another user's profile.");
+                return;
+            } else if (userID.value === "" || userID === null || userID === undefined) {
+                setError("You must be logged in to add a post.");
+                return;
 
-        if (userID != userId) {
-            setError("You cannot add posts to another user's profile.");
-            return;
-        } else if (userID === "" || userID === null || userID === undefined) {
-            setError("You must be logged in to add a post.");
-            return;
-
+            } else {
+                fetch('http://localhost:3001/post/insertPostUser', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(details)
+                }).then(() => {
+                    setDetails(initialDetails);
+                    fetchPosts();
+                }).catch((error) => {
+                    console.error('Error adding new post:', error);
+                    // Handle error appropriately, e.g., setError("Failed to add new post.")
+                });
+            }
         } else {
-            fetch('http://localhost:3001/post/insertPostUser', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(details)
-            }).then(() => {
-                setDetails(initialDetails);
-                fetchPosts();
-            }).catch((error) => {
-                console.error('Error adding new post:', error);
-                // Handle error appropriately, e.g., setError("Failed to add new post.")
-            });
+            alert("Check the input fields!")
         }
     };
 
@@ -563,7 +588,7 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
                     placeholder="Add title"
                     value={details.title}
                     onChange={handleChange}
-                    className="InputField"
+                    className="InputTitleField"
                 />
                 <h3>Content:</h3>
                 <textarea
@@ -571,12 +596,95 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
                     placeholder="Add text"
                     value={details.posttext}
                     onChange={handleChange}
-                    className="InputField"
+                    rows={10}
+                    className="InputContentField"
                 />
                 <button type="submit" id="ButtonSubmit" className="NewPostButtons">
                     Add post
                 </button>
                 <button type="button" id="ButtonCancel" className="NewPostButtons" onClick={onButtonCancelClick}>
+                    Cancel
+                </button>
+            </form>
+        </div>
+    );
+}
+
+function EditPostButton({ postID, fetchPosts, postText, postTitle, onButtonCancelEditClick }) {
+    const { userId } = useParams();
+    const [details, setDetails] = useState({
+        title: postTitle,
+        posttext: postText,
+        end_user_id: userID,
+        id: postID
+    });
+
+    const [error, setError] = useState(null);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setDetails((prev) => {
+            return { ...prev, [name]: value };
+        });
+    };
+
+    const submitHandler = async (e) => {
+        e.preventDefault(); 
+        if (userID.value !== parseInt(userId)) {
+            setError("You cannot edit another user's posts.");
+            return;
+        } else if (userID === "" || userID === null || userID === undefined) {
+            setError("You must be logged in to edit a post.");
+            return;
+        } else {
+            fetch('http://localhost:3001/post/updatePostUser', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(details),
+            })
+                .then(() => {
+                    setDetails({
+                        title: postTitle,
+                        posttext: postText,
+                        end_user_id: userID,
+                        id: postID
+                    });
+                    fetchPosts();
+                })
+                .catch((error) => {
+                    console.error('Error updating post:', error);
+                    setError('Failed to update post.');
+                });
+        }
+    };
+
+    return (
+        <div className="EditPost">
+            {error && <div className="ErrorMessage">{error}</div>}
+            <form onSubmit={submitHandler} className="EditPostForm">
+                <h3>Title:</h3>
+                <input
+                    type="title"
+                    name="title"
+                    placeholder="Edit title"
+                    value={details.title}
+                    onChange={handleChange}
+                    className="InputTitleField"
+                />
+                <h3>Content:</h3>
+                <textarea
+                    name="posttext"
+                    placeholder="Edit text"
+                    value={details.posttext}
+                    onChange={handleChange}
+                    className="InputContentField"
+                />
+                <button type="submit" id="ButtonSubmit" className="NewPostButtons">
+                    Edit post
+                </button>
+                <button type="button" id="ButtonCancel" className="NewPostButtons" onClick={onButtonCancelEditClick}>
                     Cancel
                 </button>
             </form>

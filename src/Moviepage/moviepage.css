@@ -197,6 +197,9 @@
     cursor: pointer;
     
 }
+.Description h6{
+    font-size:15px ;
+}
 
 .AddRemoveFavoritesConteiner{
     display: flex;

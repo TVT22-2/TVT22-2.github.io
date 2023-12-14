@@ -7,6 +7,7 @@
 .MainContainer2{
     display: flex;
     height: 100%;
+    flex-direction: column;
 }
 .GroupsL {
     display: flex;
@@ -65,12 +66,25 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: rgba(255, 165, 0,0.4);
+    background-color: rgba(255, 166, 0, 0.822);
+    border: 1px solid black;
+    text-align: center;
 }
 .GroupMembers{
     flex-basis:100%;
     display: flex;
     flex-direction: column;
+    background-color: rgba(255, 166, 0, 0.699);
+    border: 1px solid black;
+}
+
+.manageButtonContainer{
+    display: flex;
+    justify-content: center;
+}
+
+.GroupMembers h1{
+    text-align: center;
 }
 .NewsFeedContainer{
     display: flex;
@@ -205,4 +219,94 @@
         flex-basis: 100%;
         flex-grow: 1;
     }
+    .MainContainer2{
+        flex-direction: row;
+    }
+}
+
+.formContainer form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color:rgba(233, 165, 40, 0.842);
+    border:1px solid black;
+}
+
+.titleInput{
+    display: flex;
+    width: 50%;
+}
+
+.textInput{
+    display: flex;
+    width: 50%;
+}
+
+.formContainer h1{
+    text-align: center;
+}
+
+.formContainer button{
+    height: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 500px;
+    background-color: orange;
+    border-radius: 10px;
+}
+
+.formContainer button:hover{
+    height: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 500px;
+    background-color: darkorange;
+    border-radius: 500px;
+    
+}
+
+.NewsMainHeader{
+    background-color: orange;
+}
+
+.manageMembersButton{
+    height: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 500px;
+    background-color: orange;
+    border-radius: 10px;
+}
+
+.manageMembersButton:hover{
+    height: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 500px;
+    background-color: darkorange;
+    border-radius: 500px;
+    
+}
+
+.acceptButton{
+    height: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 500px;
+    background-color: orange;
+    border-radius: 10px;
+}
+
+.acceptButton:hover{
+    height: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 500px;
+    background-color: darkorange;
+    border-radius: 500px;
+}
+
+.acceptButtonContainer{
+    display: flex;
+    justify-content: center;
 }
