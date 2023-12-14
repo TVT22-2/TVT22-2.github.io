@@ -3,22 +3,20 @@ const multer = require('multer');
 const upload = multer({ dest: 'upload/' });
 const { Removeuser, RemoveReview, RemovePost } = require('../postgre/delete.js');
 
-router.delete('/delete', async (req, res) => {
+router.delete('/delete',async (req, res) => {
     let id = req.body.userid;
-    let response = await Removeuser(id);
-    console.log(req.body)
-    if(response){
-        res.status(200).json({rows: response});
-    } else {
-        res.status(500);
-    }
+  if(id){
+    await Removeuser(id);
+    res.status(200).json({status: 200});
+ } else {
+    res.status(500);
+}
 });
 
 router.delete('/deleteReview', async (req, res) => {
     let id = req.body.userid;
     let reviewid = req.body.reviewid;
     let response = await RemoveReview(id, reviewid);
-    console.log(req.body)
     if(response){
         res.status(200).json({rows: response});
     } else {
@@ -30,7 +28,6 @@ router.delete('/deletePost', async (req, res) => {
     let id = req.body.userid;
     let postid = req.body.postid;
     let response = await RemovePost(id, postid);
-    console.log(req.body)
     if(response){
         res.status(200).json({rows: response});
     } else {

@@ -106,8 +106,6 @@ router.put('/joinRequest', async (req,res) =>{
     const groupid = req.body.groupid;
     const value = req.body.value;
     const username = await getUsernameFromID(userid);
-    console.log(value);
-
     if(value === true){
             requestAssessed(value, userid, groupid, username);
             res.status(200).json();
@@ -120,7 +118,6 @@ router.put('/joinRequest', async (req,res) =>{
 
 router.get('/getUsername', async (req,res) => {
     const userid = req.body.userid;
-    console.log(req.body.userid);
     const rows = await getUsernameFromID(userid);
     res.status(200).json({userid:rows});
 });

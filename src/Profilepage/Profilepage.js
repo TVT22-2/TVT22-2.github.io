@@ -346,7 +346,7 @@ function PostsAndNews() {
                     switch (currentHeaderPage) {
                         case 1:
                             return (
-                                <div>
+                                <div className="TyhjaDivi">
                                     {displayedItems.map((post, index) => (
                                         <div key={index} className="ProfilePagePosts">
                                             {post.link !== "httpsundefined" ?
@@ -571,7 +571,7 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-
+        if(details.title!=="" && details.posttext!==""){
         if (userID != userId) {
             setError("You cannot add posts to another user's profile.");
             return;
@@ -593,6 +593,9 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
                 console.error('Error adding new post:', error);
                 // Handle error appropriately, e.g., setError("Failed to add new post.")
             });
+        }
+    }else {
+            alert("Check the input fields!")
         }
     };
 

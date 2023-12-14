@@ -50,7 +50,9 @@ function Home() {
                     <div className={`dropdownmenu ${open ? 'active' : 'inactive'}`}>
                         <Dropdownelements text="Home" href="/" Header="Login" />
                         <Dropdownelements text="Browse" href="/Browse" Header="Browse" />
-                        <Dropdownelements text="Profile" href={`/Profile/${userID}`} Header="Profile" />
+                        {token.value.length > 0 ?  <Dropdownelements text="Profile" href={`/Profile/${userID}`} Header="Profile" /> : 
+                        <></>
+                        }
                         <Dropdownelements text="Groups" href="/Groups" Header="Groups" />
                         <Dropdownelements text={`${token.value.length > 0 ? 'Logout' : 'Login'}`} href="/login" Header="Login" />
                         {token.value.length > 0 ? <></> :

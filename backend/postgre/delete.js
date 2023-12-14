@@ -10,12 +10,12 @@ const sql = {
     REMOVE_POST_BY_ID:'DELETE FROM posts WHERE end_user_id=$1 AND id=$2'
 }
 async function Removeuser(id){
-    response = await pgPool.query(sql.REMOVE_POST, [id]);
+    let response = await pgPool.query(sql.REMOVE_POST, [id]);
     response = await pgPool.query(sql.REMOVE_USERHAS, [id]);
     response = await pgPool.query(sql.REMOVE_FAVORITES, [id]);
     response = await pgPool.query(sql.REMOVE_REVIEW, [id]); 
     response = await pgPool.query(sql.REMOVE_USER, [id]);
-    return results;
+    return response;
 }
 
 async function RemoveReview (userID, reviewID) {
