@@ -1,4 +1,6 @@
-
+.body::-webkit-scrollbar {
+    display: none;
+  } 
 .moviecontainer{
     display: flex;
     margin-top:2px;

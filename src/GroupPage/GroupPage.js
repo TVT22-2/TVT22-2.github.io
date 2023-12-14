@@ -4,18 +4,15 @@ import GroupListG from "./GroupList";
 import { userID } from "../components/react-signals"
 
 console.log(userID);
-
+let selectedOption = 'AllGroups';
 function GroupMainMenu() {
-
+    const [hook, setHook] = useState(true);
     return (
         <div className="GroupMainMenu">
             <GroupsL/>
             <CreateGroup/>
         </div>
     )
-}
-
-let selectedOption = 'AllGroups';
 
 function GroupsL() {
     const [groups, setGroups] = useState([]);
@@ -23,8 +20,10 @@ function GroupsL() {
 
     useEffect(() => {
          selectedOption = 'AllGroups';
+         setLoading(true);
         getGroups();
-    }, []);
+        setLoading(false);
+    }, [setHook]);
 
     async function getGroups() {
 
@@ -120,6 +119,7 @@ function GroupInput() {
             console.log('new group added');
             setDetails(initialDetails);
         })
+        setHook(!hook); 
     }
 
     return (
@@ -132,5 +132,5 @@ function GroupInput() {
         </div>
     )
 }
-
+}
 export default GroupMainMenu;

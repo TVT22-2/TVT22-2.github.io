@@ -52,19 +52,8 @@ async function GetMovieData(movieId) {
 }
 }
 
-async function GetReviews(movieId) {
-    const response = await fetch(`http://localhost:3001/getmoviereview/${movieId}`);
-    const reviews = await response.json();
-    return reviews;
-}
 
-async function GetReviewsByRating(movieId){
-    const response = await fetch(`http://localhost:3001/getmoviereviewbyrating/${movieId}`)
-    const reviews = await response.json();
-    return reviews;
-}
-
-
+let sort ="";
 function Moviepage() {
     window.scrollTo(0, 0)
     const { movieId } = useParams();
@@ -88,6 +77,7 @@ function Moviepage() {
     const [sortingOption, setSortingOption] = useState('rating');
 
     const handleSortingChange = (event) => {
+        sort = event.target.value;
         setSortingOption(event.target.value);
         setCurrentIndex(0);
     };
@@ -117,6 +107,18 @@ function Moviepage() {
         fetchData();
     }, [movieId, sortingOption]);
 
+    async function GetReviews(movieId) {
+        const response = await fetch(`http://localhost:3001/getmoviereview/${movieId}`);
+        const reviews = await response.json();
+        return reviews;
+    }
+    
+    async function GetReviewsByRating(movieId){
+        const response = await fetch(`http://localhost:3001/getmoviereviewbyrating/${movieId}`)
+        const reviews = await response.json();
+        return reviews;
+    }
+    
 
     if (isLoading) {
         return <img src={placeholdergif} alt="gif" />;
@@ -142,7 +144,7 @@ function Moviepage() {
             </div>
         );
     }
-}
+
 
 function ReviewContent({ reviews, currentIndex }) {
     if (!reviews || reviews.length === 0) {
@@ -185,7 +187,6 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
     const { movieId } = useParams();
     const [content, setContent] = useState('');
     const [review, setReview] = useState(0);
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === 'content') {
@@ -194,7 +195,6 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
             setReview(value);
         }
     };
-
     return (
         <div className="InfoFooter">
             <div className="MovieDetail">
@@ -224,7 +224,7 @@ function InfoFooter({ movieData, reviews, currentIndex, handleNextReview, handle
                             {reviews.length > 0 && (
                                 <>
                                     <button className='rating-button' onClick={handlePrevReview}>Previous Review</button>
-                                    <button className='rating-button' onClick={handleNextReview}>Next</button>
+                                    <button className='rating-button' onClick={handleNextReview}>Next Review</button>
                                 </>
                             )}
                         </div>
@@ -333,7 +333,6 @@ function AddFavorite({ movieId }) {
         } catch (error) {
             console.error('Error checking if the movie is a favorite:', error);
         } finally {
-            window.location.reload();
         }
     };
 
@@ -382,10 +381,10 @@ function AddReview({ movieId, content, review }) {
 
             if (response.ok) {
                 alert("Review added successfully");
-                window.location.reload();
             } else {
                 alert("Failed to submit review. Please login");
             }
+            
         } catch (error) {
             console.error('Error submitting review:', error);
         }
@@ -520,6 +519,7 @@ function AddReviewsHeader() {
             <h2>Add Reviews</h2>
         </div>
     );
+}
 }
 
 export default Moviepage;
