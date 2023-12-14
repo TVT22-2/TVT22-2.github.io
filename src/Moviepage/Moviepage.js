@@ -262,7 +262,6 @@ function AddFavorite({ movieId }) {
                 if (response.ok) {
                     const isMovieFavorite = await response.json();
                     isFavoriteVar = isMovieFavorite.isFavorite;
-                    console.log(isFavoriteVar);
                 } else {
                     console.error('Failed to check if the movie is a favorite:', response.status, response.statusText);
                 }
@@ -302,7 +301,6 @@ function AddFavorite({ movieId }) {
                     );
 
                     if (deleteResponse.ok) {
-                        console.log('Removed from favorites successfully');
                         alert('Removed from favorites successfully');
                         isFavoriteVar = false;
                     } else {
@@ -322,7 +320,6 @@ function AddFavorite({ movieId }) {
                     });
 
                     if (addResponse.ok) {
-                        console.log('Added to favorites successfully');
                         alert('Added to favorites successfully');
                         isFavoriteVar = true;
                     } else {
@@ -340,7 +337,6 @@ function AddFavorite({ movieId }) {
         }
     };
 
-    console.log('isFavorite:', isFavoriteVar);
 
     if (loading) {
         return <p>Loading...</p>;
@@ -385,11 +381,9 @@ function AddReview({ movieId, content, review }) {
             });
 
             if (response.ok) {
-                console.log('Review submitted successfully');
                 alert("Review added successfully");
                 window.location.reload();
             } else {
-                console.error('Failed to submit review');
                 alert("Failed to submit review. Please login");
             }
         } catch (error) {

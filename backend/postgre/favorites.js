@@ -8,7 +8,6 @@ const sql = {
 async function getFavoritesByUser(user_id) {
     const result = await pgPool.query(sql.GET_FAVORITES_BY_USER, [user_id]);
     const rows = result.rows;
-    console.log(rows);
     return rows;
 }
 

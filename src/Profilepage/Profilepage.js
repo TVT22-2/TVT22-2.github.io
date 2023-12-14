@@ -21,27 +21,6 @@ import {
 
 function Profilepage() {
     const navigate = useNavigate();
-
-    // Placeholder for checking if the user is logged in
-    /*if (userID.value === "" || userID.value === null) {
-        return (
-            <div className="Profilepage">
-                <h1>You must be logged in to view this page</h1>
-            </div>
-        )
-    } else {
-        return (
-            <>
-                <div className="Profilepage">
-                    <OwnReviews />
-                    <FavouriteMoviesAndGroups />
-                    <PostsAndNews />
-                </div>
-                <button onClick={Deletion}>hello</button>
-            </>
-        )
-    }*/
-
     return (
         <>
             <div className="Profilepage">
@@ -205,7 +184,6 @@ function PostsAndNews() {
             let url = `http://localhost:3001/post/userByDate/${userId}`;
             const response = await fetch(url);
             const data = await response.json();
-            console.log(data[0]);
             let urlParsed = [];
             for (let i = 0; i < data.length; i++) {
                 let temparray = [];
@@ -219,7 +197,6 @@ function PostsAndNews() {
                 }
                 urlParsed.push(temparray);
             }
-            console.log(urlParsed);
             setTotalPostPages(Math.ceil(data.length / postsPerPage));
             setPosts(urlParsed);
         } catch (error) {
@@ -359,7 +336,7 @@ function PostsAndNews() {
                                             <div className="ButtonDeleteAndEditPost">
                                                 <DeletePostButton postID={post.id} fetchPosts={fetchPosts} />
                                                 {/* Toggle rendering based on isEditing */}
-                                                {isEditing ? (
+                                                {isEditing && post.link === "httpsundefined" ? (
                                                     <EditPostButton
                                                         postID={post.id}
                                                         fetchPosts={fetchPosts}
@@ -370,7 +347,7 @@ function PostsAndNews() {
                                                 ) : (
                                                     <ButtonOpenEditPost
                                                         ButtonOpenEditPost="Edit Post"
-                                                        onButtonOpenEditPostClick={HandleEditPost}
+                                                        onButtonOpenEditPostClick={()=> post.link === "httpsundefined" ? HandleEditPost() : <></>}
                                                     />
                                                 )}
                                             </div>
@@ -493,7 +470,6 @@ function Groups() {
                 let url = `http://localhost:3001/Groups/${userId}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log(data);
                 setTotalPages(Math.ceil(data.length / groupsPerPage));
                 setGroups(data);
             } catch (error) {
@@ -520,7 +496,6 @@ function Groups() {
     const startIndex = (currentPage - 1) * groupsPerPage;
     const endIndex = startIndex + groupsPerPage;
     const displayedGroups = groups.slice(startIndex, endIndex);
-
     return (
         <div className="Groups">
             <div className="GroupsHeader">
@@ -573,30 +548,30 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        if(details.title!=="" && details.posttext!==""){
-        if (userID != userId) {
-            setError("You cannot add posts to another user's profile.");
-            return;
-        } else if (userID === "" || userID === null || userID === undefined) {
-            setError("You must be logged in to add a post.");
-            return;
+        if (details.title !== "" && details.posttext !== "") {
+            if (userID.value !== userId) {
+                setError("You cannot add posts to another user's profile.");
+                return;
+            } else if (userID === "" || userID === null || userID === undefined) {
+                setError("You must be logged in to add a post.");
+                return;
 
+            } else {
+                fetch('http://localhost:3001/post/insertPostUser', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(details)
+                }).then(() => {
+                    setDetails(initialDetails);
+                    fetchPosts();
+                }).catch((error) => {
+                    console.error('Error adding new post:', error);
+                    // Handle error appropriately, e.g., setError("Failed to add new post.")
+                });
+            }
         } else {
-            fetch('http://localhost:3001/post/insertPostUser', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(details)
-            }).then(() => {
-                setDetails(initialDetails);
-                fetchPosts();
-            }).catch((error) => {
-                console.error('Error adding new post:', error);
-                // Handle error appropriately, e.g., setError("Failed to add new post.")
-            });
-        }
-    }else {
             alert("Check the input fields!")
         }
     };
@@ -652,12 +627,10 @@ function EditPostButton({ postID, fetchPosts, postText, postTitle, onButtonCance
         });
     };
 
-    console.log("USER:" + userID);
-
     const submitHandler = async (e) => {
         e.preventDefault();
 
-        if (userID != userId) {
+        if (userID.value !== userId) {
             setError("You cannot edit another user's posts.");
             return;
         } else if (userID === "" || userID === null || userID === undefined) {

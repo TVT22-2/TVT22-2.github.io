@@ -38,6 +38,7 @@ function Home() {
     useEffect(() => {
         if (searchbaropen) {
             adult = false;
+            year = "";
         }
     }, [searchbaropen])
     return (
@@ -101,9 +102,9 @@ function Home() {
                 <>
                     <Result state={state} />
                     <div className="SearchButtonContainer">
-                        <button onClick={() => uiPage !== 1 ? refreshminus() : console.log("hello")} className="SearchButtonPrev">prev</button>
+                        <button onClick={() => uiPage !== 1 ? refreshminus() : <></>} className="SearchButtonPrev">prev</button>
                         {totalpages !== 1 ? <p>{uiPage + "/" + totalpages * multiplication}</p> : <p>{uiPage + "/" + totalpages}</p>}
-                        <button onClick={() => curpage < totalpages ? refresh() : console.log("hello")} className="SearchButtonNext">next</button>
+                        <button onClick={() => curpage < totalpages ? refresh() : <></>} className="SearchButtonNext">next</button>
                     </div>
                 </>
                 :
@@ -124,7 +125,6 @@ function Home() {
     }
     function adultsetter(event) {
         adult = event.target.checked;
-        console.log(event.target.checked);
     }
     async function sumbit(e) {
         if (e.key === "Enter") {
@@ -133,7 +133,6 @@ function Home() {
             if (!searchbaropen) {
                 year = "";
                 adult = false;
-
             }
             curquery = message;
             setsearches(false);
