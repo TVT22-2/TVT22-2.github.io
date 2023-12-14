@@ -121,7 +121,7 @@ function GroupDetailsMenu() {
       body: JSON.stringify({ userid, groupid })
     })
       .then(alert("The request has been sent"))
-      .then(navigate("/Groups"))
+      .then(navigate("/GroupsMenu"))
   }
 
   async function getRequests() {
