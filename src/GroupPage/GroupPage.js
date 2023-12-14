@@ -109,7 +109,7 @@ function GroupInput() {
             return;
         }
 
-        if (userID.value.trim() === "") {
+        if (userID.value === "") {
             alert("Please log in to create a group");
             return;
         }

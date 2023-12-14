@@ -60,6 +60,7 @@ router.put('/change', upload.none(), async (req, res) => {
 router.post('/login', upload.none(), async (req, res) => {
     const name = req.body.username;
     const pw = req.body.password;
+    console.log(name + " / " + pw)
     const array = await getNamedUsers(name);
     if(array != null){
     const pwCheck = array[0].password;
