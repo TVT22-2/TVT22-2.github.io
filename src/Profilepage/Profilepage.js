@@ -532,7 +532,7 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
         title: "",
         posttext: "",
         date: new Date().toISOString(),
-        end_user_id: userID
+        end_user_id: userID.value
     };
 
     const [details, setDetails] = useState(initialDetails);
@@ -552,7 +552,7 @@ function NewPost({ fetchPosts, onButtonCancelClick }) {
             if (userID.value !== userId) {
                 setError("You cannot add posts to another user's profile.");
                 return;
-            } else if (userID === "" || userID === null || userID === undefined) {
+            } else if (userID.value === "" || userID.value === null || userID.value === undefined) {
                 setError("You must be logged in to add a post.");
                 return;
 
@@ -614,7 +614,7 @@ function EditPostButton({ postID, fetchPosts, postText, postTitle, onButtonCance
     const [details, setDetails] = useState({
         title: postTitle,
         posttext: postText,
-        end_user_id: userID,
+        end_user_id: userID.value,
         id: postID
     });
 
@@ -633,7 +633,7 @@ function EditPostButton({ postID, fetchPosts, postText, postTitle, onButtonCance
         if (userID.value !== userId) {
             setError("You cannot edit another user's posts.");
             return;
-        } else if (userID === "" || userID === null || userID === undefined) {
+        } else if (userID.value === "" || userID.value === null || userID.value === undefined) {
             setError("You must be logged in to edit a post.");
             return;
         } else {
@@ -648,7 +648,7 @@ function EditPostButton({ postID, fetchPosts, postText, postTitle, onButtonCance
                     setDetails({
                         title: postTitle,
                         posttext: postText,
-                        end_user_id: userID,
+                        end_user_id: userID.value,
                         id: postID
                     });
                     fetchPosts();
