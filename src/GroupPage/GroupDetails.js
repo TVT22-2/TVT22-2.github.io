@@ -112,6 +112,11 @@ function GroupDetailsMenu() {
     let userid = userID.value;
     let groupid = id;
 
+    if(userid === ""){
+      alert("You need to be logged in to send a join request");
+      return;
+    }
+
     await fetch('http://localhost:3001/joinRequest', {
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
