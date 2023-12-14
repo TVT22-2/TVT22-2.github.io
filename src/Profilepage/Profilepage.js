@@ -272,6 +272,7 @@ function PostsAndNews() {
 
     const handlePostPage = () => {
         setCurrentHeaderCurrentPage(1);
+        setCurrentPage(1);
     };
 
     const HandleNewPost = () => {
@@ -288,6 +289,7 @@ function PostsAndNews() {
 
     const handleNewsfeedPage = () => {
         setCurrentHeaderCurrentPage(2);
+        setCurrentPage(1);
     };
 
     const handleNextPage = () => {
