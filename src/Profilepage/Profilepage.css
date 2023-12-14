@@ -83,7 +83,6 @@
 
 .ProfilePagePosts .Text {
     height: 400px;
-    overflow: auto;
     text-align: left;
 }
 
@@ -339,7 +338,9 @@ a.NewsfeedLink {
 .ErrorMessage {
     color: red;
 }
-
+.TyhjaDivi{ 
+    width: 400px;
+}
 /*Mobile*/
 @media only screen and (max-width: 900px) {
 

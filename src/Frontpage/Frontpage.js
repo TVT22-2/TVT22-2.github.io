@@ -87,7 +87,7 @@ export default function Frontpage() {
                 {userID.value ?  
                 <>
                 <div className="MovieNewsDate" id="MovieNewsDate"><button className="MovieNewsButton" onClick={()=>profilesender(i)}>Add to profile</button></div>
-                <div className="GrouselectionContainer"><GroupSelectRender/><button className="GroupSubmitButton" onClick={()=>GroupPagePost(NewsArray[i].title,NewsArray[i].date,NewsArray[i].content+NewsArray[i].link)}>Send to selected group</button></div>
+               {GroupArray.length>0 ? <div className="GrouselectionContainer"><GroupSelectRender/><button className="GroupSubmitButton" onClick={()=>GroupPagePost(NewsArray[i].title,NewsArray[i].date,NewsArray[i].content+NewsArray[i].link)}>Send to selected group</button></div> : <></>}
                 </>
          : <></>}
                 <div className="MovieNewsPr"><p>{NewsArray[i].content}</p></div>

@@ -51,7 +51,7 @@ export default function Login() {
     async function returnvalues() {
         if (password !== "" && username !== "") {
             let response = await axios.postForm('/login', { username, password })
-                .catch(error => console.log(error) + setAlert(error.message + ". Please try again!") + setTimeout(function() {
+                .catch(error => setAlert(error.response.statusText + ". Please try again!") + setTimeout(function() {
                     setAlert("")
                    }, 6000))
                    if(response){
@@ -71,7 +71,7 @@ export default function Login() {
         if (stage === 1) {
             await axios.postForm('/forgot', { username, recovery })
                 .then(resp => success = resp.data.Success)
-                .catch(error => setAlert(error.message + ". Please try again later!") + setTimeout(function() {
+                .catch(error => setAlert(error.response.statusText + ". Please try again later!") + setTimeout(function() {
                     setAlert("")
                    }, 6000))
             if (success === true) {
