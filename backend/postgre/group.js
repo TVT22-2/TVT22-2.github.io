@@ -81,7 +81,6 @@ async function getOwnerName(groupid) {
 }
 
 async function requestAssessed(value, userid, groupid, username) {
-  console.log(value);
   await pgPool.query(sql.REQUEST_ASSESSED, [value, userid, groupid]);
 
 }

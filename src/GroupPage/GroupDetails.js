@@ -95,11 +95,9 @@ function GroupDetailsMenu() {
   useEffect(() => {
     async function fetchOwnerUsername() {
       try {
-        console.log("Userid" + id);
         const response = await fetch(`http://localhost:3001/ownerUsername/${id}`);
         const data = await response.json();
         setOwnerUsername(data.ownerUsername);
-        console.log(data.ownerUsername);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -133,9 +131,7 @@ function GroupDetailsMenu() {
       headers: { 'Content-type': 'application/json' }
     })
     const data = await response.json();
-    console.log(data);
     requestArray.push(await data.rows);
-    console.log(requestArray[0][0]);
   }
 
   async function removeUserFromGroupFrontend(userToRemove) {
@@ -146,7 +142,6 @@ function GroupDetailsMenu() {
           method: 'DELETE'
         });
         const result = await response.json();
-        console.log(result);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -176,7 +171,6 @@ function GroupDetailsMenu() {
   }
 
   async function requestMenu(userid, username) {
-    console.log(userid);
     const groupid = id;
     const confirmation = window.confirm(`Are you sure you want to accept ${username} to the group?`);
 
@@ -207,7 +201,6 @@ function GroupDetailsMenu() {
   const toggleManageMembersMenu = async () => {
     requestArray = [];
     await getRequests();
-    console.log(requestArray);
     setShowManageMembersMenu(!showManageMembersMenu);
   };
 
@@ -325,7 +318,6 @@ function GroupDetailsMenu() {
         body: JSON.stringify(details)
 
       }).then(() => {
-        console.log('new post created');
         setDetails(initialDetails);
       })
       setTimeout(() => { NewsSetter() }, 1);
@@ -367,7 +359,6 @@ function GroupDetailsMenu() {
   async function NewsSetter() {
     newsArray = [];
     const jsondata = await NewsFetcher();
-    console.log(jsondata);
     for (let i = 0; i < jsondata.length; i++) {
       let temparray = []
       let date = new Date(jsondata[i].date).toLocaleDateString();
@@ -380,7 +371,6 @@ function GroupDetailsMenu() {
       }
       newsArray.push(temparray);
     }
-    console.log(newsArray);
     setNews(!newsLoader);
   }
   async function NewsFetcher() {

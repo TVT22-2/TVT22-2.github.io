@@ -60,6 +60,7 @@ export default function Frontpage() {
     }
     async function parsegroups(){
       let data = await fetchgroups();
+      GroupArray = []; 
       data.forEach( element => {
       let array = {
         id: element.id,
@@ -133,7 +134,6 @@ export default function Frontpage() {
     );
     }
     function profilesender(i){
-    console.log(NewsArray[i].title);
     var dateString = new Date(NewsArray[i].date);
     const updatedDetails = {
         title: NewsArray[i].title,
